@@ -215,6 +215,5 @@ docs/                   report, manual, evidence and team metadata
 - seq_file: https://docs.kernel.org/6.8/filesystems/seq_file.html
 - Kbuild: https://docs.kernel.org/6.8/kbuild/modules.html
 - Python standard library: tkinter, dataclasses, unittest, subprocess.
-- F.CSM302 Бие даалт 1-ийн удирдамж (2026).
 
 Kernel source: SPDX GPL-2.0; бусад төслийн эх код мөн GPL-2.0-only.
