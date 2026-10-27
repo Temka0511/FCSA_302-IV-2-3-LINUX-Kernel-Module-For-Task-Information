@@ -210,7 +210,7 @@ docs/                   report, manual, evidence and team metadata
 ## Эх сурвалж
 
 - Silberschatz, Galvin, Gagne. Operating System Concepts, 10th ed. (2018),
-  Chapter 3, Programming Projects, Project 3, P-17..P-19 (PDF 209..211).
+  Chapter 3, Programming Projects, Project 3, P-17..P-19
 - Linux 6.8: https://docs.kernel.org/6.8/RCU/listRCU.html
 - seq_file: https://docs.kernel.org/6.8/filesystems/seq_file.html
 - Kbuild: https://docs.kernel.org/6.8/kbuild/modules.html
