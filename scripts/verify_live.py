@@ -7,6 +7,7 @@ import subprocess
 import sys
 import time
 from taskgraph.model import read_snapshot
+from taskgraph.verification import compare_ps, dfs_errors
 
 
 def main():
@@ -29,6 +30,22 @@ def main():
         rows, total = current.view(root=child.pid, limit=100)
         check("L3 tree creation", total == 7, f"root={child.pid}, subtree={total}, expected=7")
         (out / "created.tsv").write_text(current.dump(), encoding="utf-8")
+        ps_outputs = {}
+        for filename, command in [
+            ("ps-el.txt", ["ps", "-el"]), ("ps-eLf.txt", ["ps", "-eLf"]),
+            ("ps_processes.txt", ["ps", "-e", "-o", "pid=,ppid=,state=,comm="]),
+            ("ps_threads.txt", ["ps", "-eL", "-o", "lwp=,pid=,ppid=,state=,comm="]),
+        ]:
+            text = subprocess.check_output(command, text=True,
+                env={**os.environ, "LC_ALL": "C", "COLUMNS": "4096"})
+            (out / filename).write_text(text, encoding="utf-8")
+            ps_outputs[filename] = text
+        comparison = compare_ps(current, ps_outputs["ps_processes.txt"],
+            ps_outputs["ps_threads.txt"], ps_outputs["ps-el.txt"], ps_outputs["ps-eLf.txt"],
+            stable_pids=[t.pid for t in rows])
+        (out / "ps_comparison.json").write_text(json.dumps(comparison, ensure_ascii=False, indent=2))
+        check("L7 textbook ps comparison", comparison["passed"], "Seven workload processes match ps")
+        check("L8 DFS subtree contiguity", not dfs_errors(current), "All subtrees are contiguous")
         os.kill(child.pid, signal.SIGSTOP)
         time.sleep(.15)
         stopped = read_snapshot("/proc/taskgraph")

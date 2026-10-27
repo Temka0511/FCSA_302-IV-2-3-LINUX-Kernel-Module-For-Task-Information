@@ -1,0 +1,315 @@
+{
+  "snapshot_tasks": 73,
+  "ps_el_tasks": 70,
+  "ps_eLf_tasks": 72,
+  "dfs_errors": [],
+  "workload": [
+    {
+      "pid": 90,
+      "comm": "tg-root",
+      "kind": "process",
+      "ppid": 1,
+      "tgid": 90,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    },
+    {
+      "pid": 91,
+      "comm": "tg-child",
+      "kind": "process",
+      "ppid": 90,
+      "tgid": 91,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    },
+    {
+      "pid": 92,
+      "comm": "tg-child",
+      "kind": "process",
+      "ppid": 90,
+      "tgid": 92,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    },
+    {
+      "pid": 93,
+      "comm": "tg-leaf",
+      "kind": "process",
+      "ppid": 91,
+      "tgid": 93,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    },
+    {
+      "pid": 94,
+      "comm": "tg-leaf",
+      "kind": "process",
+      "ppid": 92,
+      "tgid": 94,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    },
+    {
+      "pid": 95,
+      "comm": "tg-worker",
+      "kind": "thread",
+      "ppid": 1,
+      "tgid": 90,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    },
+    {
+      "pid": 96,
+      "comm": "tg-worker",
+      "kind": "thread",
+      "ppid": 1,
+      "tgid": 90,
+      "module_state": "S",
+      "ps_state": "S",
+      "passed": true
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "LINEAR / ps -el",
+      "module_count": 70,
+      "ps_count": 70,
+      "common": 69,
+      "name_matches": 54,
+      "state_matches": 67,
+      "parent_matches": 69,
+      "tgid_matches": 69,
+      "name_differences": [
+        {
+          "pid": 3,
+          "module": "pool_workqueue_",
+          "ps": "pool_workqueue_release"
+        },
+        {
+          "pid": 8,
+          "module": "kworker/0:0",
+          "ps": "kworker/0:0-pm"
+        },
+        {
+          "pid": 9,
+          "module": "kworker/0:0H",
+          "ps": "kworker/0:0H-events_highpri"
+        },
+        {
+          "pid": 11,
+          "module": "kworker/u4:0",
+          "ps": "kworker/u4:0-events_unbound"
+        },
+        {
+          "pid": 13,
+          "module": "rcu_tasks_kthre",
+          "ps": "rcu_tasks_kthread"
+        },
+        {
+          "pid": 14,
+          "module": "rcu_tasks_rude_",
+          "ps": "rcu_tasks_rude_kthread"
+        },
+        {
+          "pid": 15,
+          "module": "rcu_tasks_trace",
+          "ps": "rcu_tasks_trace_kthread"
+        },
+        {
+          "pid": 25,
+          "module": "kworker/1:0",
+          "ps": "kworker/1:0-slub_flushwq"
+        },
+        {
+          "pid": 26,
+          "module": "kworker/1:0H",
+          "ps": "kworker/1:0H-events_highpri"
+        },
+        {
+          "pid": 29,
+          "module": "kworker/u4:1",
+          "ps": "kworker/u4:1-events_unbound"
+        },
+        {
+          "pid": 33,
+          "module": "kworker/u4:2",
+          "ps": "kworker/u4:2-events_power_efficient"
+        },
+        {
+          "pid": 41,
+          "module": "kworker/1:1",
+          "ps": "kworker/1:1-events"
+        },
+        {
+          "pid": 49,
+          "module": "kworker/1:1H",
+          "ps": "kworker/1:1H-kblockd"
+        },
+        {
+          "pid": 51,
+          "module": "ecryptfs-kthrea",
+          "ps": "ecryptfs-kthread"
+        },
+        {
+          "pid": 59,
+          "module": "kworker/u4:3",
+          "ps": "kworker/u4:3-events_unbound"
+        }
+      ],
+      "state_differences": [
+        {
+          "pid": 18,
+          "module": "R",
+          "ps": "S"
+        },
+        {
+          "pid": 23,
+          "module": "R",
+          "ps": "S"
+        }
+      ],
+      "only_module": [
+        {
+          "pid": 102,
+          "comm": "cat"
+        }
+      ],
+      "only_ps": [
+        {
+          "pid": 106,
+          "tgid": 106,
+          "ppid": 1,
+          "state": "R",
+          "comm": "ps"
+        }
+      ]
+    },
+    {
+      "name": "DFS / ps -eLf",
+      "module_count": 72,
+      "ps_count": 72,
+      "common": 71,
+      "name_matches": 56,
+      "state_matches": 69,
+      "parent_matches": 71,
+      "tgid_matches": 71,
+      "name_differences": [
+        {
+          "pid": 3,
+          "module": "pool_workqueue_",
+          "ps": "pool_workqueue_release"
+        },
+        {
+          "pid": 8,
+          "module": "kworker/0:0",
+          "ps": "kworker/0:0-mm_percpu_wq"
+        },
+        {
+          "pid": 9,
+          "module": "kworker/0:0H",
+          "ps": "kworker/0:0H-events_highpri"
+        },
+        {
+          "pid": 11,
+          "module": "kworker/u4:0",
+          "ps": "kworker/u4:0-events_unbound"
+        },
+        {
+          "pid": 13,
+          "module": "rcu_tasks_kthre",
+          "ps": "rcu_tasks_kthread"
+        },
+        {
+          "pid": 14,
+          "module": "rcu_tasks_rude_",
+          "ps": "rcu_tasks_rude_kthread"
+        },
+        {
+          "pid": 15,
+          "module": "rcu_tasks_trace",
+          "ps": "rcu_tasks_trace_kthread"
+        },
+        {
+          "pid": 25,
+          "module": "kworker/1:0",
+          "ps": "kworker/1:0-slub_flushwq"
+        },
+        {
+          "pid": 26,
+          "module": "kworker/1:0H",
+          "ps": "kworker/1:0H-events_highpri"
+        },
+        {
+          "pid": 29,
+          "module": "kworker/u4:1",
+          "ps": "kworker/u4:1-events_unbound"
+        },
+        {
+          "pid": 33,
+          "module": "kworker/u4:2",
+          "ps": "kworker/u4:2-events_power_efficient"
+        },
+        {
+          "pid": 41,
+          "module": "kworker/1:1",
+          "ps": "kworker/1:1-mm_percpu_wq"
+        },
+        {
+          "pid": 49,
+          "module": "kworker/1:1H",
+          "ps": "kworker/1:1H-kblockd"
+        },
+        {
+          "pid": 51,
+          "module": "ecryptfs-kthrea",
+          "ps": "ecryptfs-kthread"
+        },
+        {
+          "pid": 59,
+          "module": "kworker/u4:3",
+          "ps": "kworker/u4:3-events_unbound"
+        }
+      ],
+      "state_differences": [
+        {
+          "pid": 18,
+          "module": "R",
+          "ps": "S"
+        },
+        {
+          "pid": 23,
+          "module": "R",
+          "ps": "S"
+        }
+      ],
+      "only_module": [
+        {
+          "pid": 102,
+          "comm": "cat"
+        }
+      ],
+      "only_ps": [
+        {
+          "pid": 107,
+          "tgid": 107,
+          "ppid": 1,
+          "state": "R",
+          "comm": "ps"
+        }
+      ]
+    }
+  ],
+  "init_log": {
+    "linear_tasks": 70,
+    "dfs_tasks": 73,
+    "linear_common": 69,
+    "dfs_common": 71
+  },
+  "passed": true
+}

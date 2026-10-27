@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0
-/* F.CSM302 / Project 3: real task snapshot, linear listing and iterative DFS.
+/* F.CSM302 / Project 3: for_each_process and direct children/sibling DFS.
  * Target: Ubuntu 24.04 GA kernel 6.8. Rebuild for the running kernel.
- * Never traverses children/sibling without tasklist_lock: the mutable tree is
- * reconstructed from scalar parent IDs copied while holding the RCU read lock.
+ * tasklist_lock is not exported to modules. stop_machine() quiesces all CPUs
+ * for the bounded, allocation-free capture and direct process-tree walk.
+ * Intended for an educational VM, not latency-sensitive production systems.
  */
 #include <linux/module.h>
 #include <linux/init_task.h>
@@ -13,6 +14,8 @@
 #include <linux/slab.h>
 #include <linux/hashtable.h>
 #include <linux/ktime.h>
+#include <linux/stop_machine.h>
+#include <linux/err.h>
 
 #define TG_NAME "taskgraph"
 #define TG_MAX 16384U
@@ -26,14 +29,19 @@ MODULE_PARM_DESC(log_on_load, "Print both textbook traversals at module init");
 struct tg_row {
 	pid_t pid, ppid, tgid, parent;
 	char state, comm[TASK_COMM_LEN];
-	int first, last, next, prev;
 	unsigned int dfs, depth;
 	bool thread, orphan, visited;
 	struct hlist_node index;
 };
+struct tg_frame {
+	struct task_struct *leader, *owner;
+	struct list_head *next_child;
+	unsigned int depth;
+};
 struct tg_snapshot {
 	struct tg_row *rows;
-	unsigned int *stack;
+	struct tg_frame *stack;
+	unsigned int *order;
 	unsigned int count;
 	bool truncated;
 	u64 start_ns, duration_ns;
@@ -50,7 +58,7 @@ static struct tg_row *tg_lookup(struct tg_snapshot *s, pid_t pid)
 	return NULL;
 }
 
-/* Called only under rcu_read_lock(); buffers were allocated beforehand. */
+/* Called only inside stop_machine + RCU; buffers allocated beforehand. */
 static bool tg_copy(struct tg_snapshot *s, struct task_struct *task)
 {
 	struct tg_row *r;
@@ -69,7 +77,6 @@ static bool tg_copy(struct tg_snapshot *s, struct task_struct *task)
 	r->parent = r->thread ? r->tgid : r->ppid;
 	r->state = task_state_to_char(task);
 	get_task_comm(r->comm, task);
-	r->first = r->last = r->next = r->prev = -1;
 	hash_add(s->index, &r->index, (unsigned int)r->pid);
 	return true;
 }
@@ -80,82 +87,140 @@ static void tg_free(struct tg_snapshot *s)
 		return;
 	kvfree(s->rows);
 	kvfree(s->stack);
+	kvfree(s->order);
 	kvfree(s);
 }
 
-static void tg_tree(struct tg_snapshot *s)
+/* Enter a process, then its thread members. Child processes are visited by
+ * following each member's real children/sibling lists, including children
+ * forked by a non-leader thread. No parent-ID reconstruction is used. */
+static bool tg_enter(struct tg_snapshot *s, struct task_struct *leader,
+		     unsigned int depth, unsigned int *serial)
 {
-	unsigned int i, serial = 0, top;
-	struct tg_row *r, *p;
-	int child;
-	for (i = 1; i < s->count; i++) {
-		r = &s->rows[i];
-		p = tg_lookup(s, r->parent);
-		if (!p || p == r) {
-			p = &s->rows[0];
-			r->orphan = true;
-		}
-		if (p->last >= 0) {
-			s->rows[p->last].next = i;
-			r->prev = p->last;
-		} else {
-			p->first = i;
-		}
-		p->last = i;
-	}
-	/* Iterative, bounded stack: no recursive use of the small kernel stack.
-	 * The extra outer pass retains components disconnected by process churn. */
-	for (i = 0; i < s->count; i++) {
-		if (s->rows[i].visited)
+	struct task_struct *thread;
+	struct tg_row *r = tg_lookup(s, task_pid_nr(leader));
+	if (!r || r->visited)
+		return false;
+	r->visited = true;
+	r->dfs = (*serial)++;
+	r->depth = depth;
+	for_each_thread(leader, thread) {
+		if (thread == leader)
 			continue;
-		top = 0;
-		s->stack[top++] = i;
-		while (top) {
-			r = &s->rows[s->stack[--top]];
-			if (r->visited)
-				continue;
+		r = tg_lookup(s, task_pid_nr(thread));
+		if (r && !r->visited) {
 			r->visited = true;
-			r->dfs = serial++;
-			for (child = r->last; child >= 0;
-			     child = s->rows[child].prev) {
-				if (!s->rows[child].visited && top < max_tasks) {
-					s->rows[child].depth = r->depth + 1;
-					s->stack[top++] = child;
-				}
-			}
+			r->dfs = (*serial)++;
+			r->depth = depth + 1;
 		}
+	}
+	return true;
+}
+
+static void tg_walk(struct tg_snapshot *s, struct task_struct *leader,
+		    unsigned int depth, unsigned int *serial)
+{
+	struct tg_frame *f;
+	struct task_struct *child;
+	struct list_head *link;
+	unsigned int top = 0;
+	if (!tg_enter(s, leader, depth, serial))
+		return;
+	s->stack[top++] = (struct tg_frame) {
+		leader, leader, leader->children.next, depth
+	};
+	while (top) {
+		f = &s->stack[top - 1];
+		if (f->next_child == &f->owner->children) {
+			f->owner = next_thread(f->owner);
+			if (f->owner == f->leader) {
+				top--;
+				continue;
+			}
+			f->next_child = f->owner->children.next;
+			continue;
+		}
+		link = f->next_child;
+		f->next_child = link->next;
+		child = list_entry(link, struct task_struct, sibling)->group_leader;
+		depth = f->depth + 1;
+		if (top < max_tasks && tg_enter(s, child, depth, serial))
+			s->stack[top++] = (struct tg_frame) {
+				child, child, child->children.next, depth
+			};
 	}
 }
 
-static struct tg_snapshot *tg_capture(void)
+/* stop_machine callback: never allocate, sleep, print or call user space. */
+static int tg_capture_stopped(void *data)
 {
-	struct tg_snapshot *s;
+	struct tg_snapshot *s = data;
 	struct task_struct *leader, *thread;
-	s = kvzalloc(sizeof(*s), GFP_KERNEL);
-	if (!s)
-		return NULL;
-	s->rows = kvcalloc(max_tasks, sizeof(*s->rows), GFP_KERNEL);
-	s->stack = kvcalloc(max_tasks, sizeof(*s->stack), GFP_KERNEL);
-	if (!s->rows || !s->stack) {
-		tg_free(s);
-		return NULL;
-	}
-	hash_init(s->index);
+	struct tg_row *r;
+	unsigned int i, serial = 0;
 	s->start_ns = ktime_get_boottime_ns();
 	rcu_read_lock();
 	tg_copy(s, &init_task);
 	for_each_process(leader) {
 		if (!tg_copy(s, leader))
-			goto unlock;
+			goto captured;
 		for_each_thread(leader, thread) {
 			if (thread != leader && !tg_copy(s, thread))
-				goto unlock;
+				goto captured;
 		}
 	}
-unlock:
+captured:
+	for (i = 1; i < s->count; i++) {
+		r = &s->rows[i];
+		if (!tg_lookup(s, r->parent)) {
+			r->parent = 0;
+			r->orphan = true;
+		}
+	}
+	tg_walk(s, &init_task, 0, &serial);
+	/* A capped capture may omit an ancestor of a retained task. Preserve
+	 * those rows, mark the missing edge, and walk their actual child lists. */
+	for_each_process(leader) {
+		r = tg_lookup(s, task_pid_nr(leader));
+		if (r && !r->visited)
+			tg_walk(s, leader, 1, &serial);
+	}
+	for (i = 0; i < s->count; i++) {
+		r = &s->rows[i];
+		if (!r->visited) {
+			r->visited = true;
+			r->orphan = true;
+			r->parent = 0;
+			r->depth = 1;
+			r->dfs = serial++;
+		}
+		s->order[r->dfs] = i;
+	}
 	rcu_read_unlock();
-	tg_tree(s);
 	s->duration_ns = ktime_get_boottime_ns() - s->start_ns;
+	return 0;
+}
+
+static struct tg_snapshot *tg_capture(void)
+{
+	struct tg_snapshot *s;
+	int ret;
+	s = kvzalloc(sizeof(*s), GFP_KERNEL);
+	if (!s)
+		return ERR_PTR(-ENOMEM);
+	s->rows = kvcalloc(max_tasks, sizeof(*s->rows), GFP_KERNEL);
+	s->stack = kvcalloc(max_tasks, sizeof(*s->stack), GFP_KERNEL);
+	s->order = kvcalloc(max_tasks, sizeof(*s->order), GFP_KERNEL);
+	if (!s->rows || !s->stack || !s->order) {
+		tg_free(s);
+		return ERR_PTR(-ENOMEM);
+	}
+	hash_init(s->index);
+	ret = stop_machine(tg_capture_stopped, s, NULL);
+	if (ret) {
+		tg_free(s);
+		return ERR_PTR(ret);
+	}
 	return s;
 }
 
@@ -165,7 +230,7 @@ static int tg_show(struct seq_file *m, void *v)
 	struct tg_snapshot *s = m->private;
 	struct tg_row *r;
 	unsigned int i, j;
-	seq_printf(m, "# taskgraph version=1 source=kernel count=%u cap=%u truncated=%u boot_ns=%llu duration_ns=%llu\n",
+	seq_printf(m, "# taskgraph version=1 source=kernel count=%u cap=%u truncated=%u boot_ns=%llu duration_ns=%llu traversal=children_sibling synchronization=stop_machine\n",
 		   s->count, max_tasks, s->truncated,
 		   (unsigned long long)s->start_ns,
 		   (unsigned long long)s->duration_ns);
@@ -193,8 +258,8 @@ static int tg_open(struct inode *inode, struct file *file)
 {
 	struct tg_snapshot *s = tg_capture();
 	int ret;
-	if (!s)
-		return -ENOMEM;
+	if (IS_ERR(s))
+		return PTR_ERR(s);
 	ret = single_open(file, tg_show, s);
 	if (ret)
 		tg_free(s);
@@ -224,8 +289,8 @@ static int __init tg_init(void)
 		return -EINVAL;
 	/* Make the capture even if logging is disabled: detect allocation errors. */
 	s = tg_capture();
-	if (!s)
-		return -ENOMEM;
+	if (IS_ERR(s))
+		return PTR_ERR(s);
 	tg_entry = proc_create(TG_NAME, 0444, NULL, &tg_ops);
 	if (!tg_entry) {
 		tg_free(s);
@@ -238,11 +303,8 @@ static int __init tg_init(void)
 				pr_info("taskgraph LINEAR pid=%d state=%c comm=%s\n",
 					r->pid, r->state, r->comm);
 		}
-		/* Invert DFS ranks using the already allocated work array. */
-		for (i = 0; i < s->count; i++)
-			s->stack[s->rows[i].dfs] = i;
 		for (i = 0; i < s->count; i++) {
-			r = &s->rows[s->stack[i]];
+			r = &s->rows[s->order[i]];
 			pr_info("taskgraph DFS order=%u depth=%u pid=%d ppid=%d state=%c comm=%s\n",
 				r->dfs, r->depth, r->pid, r->ppid, r->state, r->comm);
 		}
@@ -263,4 +325,4 @@ module_exit(tg_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("F.CSM302 Project 3 team");
 MODULE_DESCRIPTION("Task listing and real process graph snapshot");
-MODULE_VERSION("1.0");
+MODULE_VERSION("1.1");

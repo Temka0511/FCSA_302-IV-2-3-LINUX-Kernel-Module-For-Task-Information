@@ -2,6 +2,8 @@
 
 F.CSM302 Үйлдлийн систем / Бие даалт 1 / **IV-2-3** / Chapter 3, Project 3.
 
+Хувилбар: **v1.1-bd1**. Тайлан, гарын авлага: [docs/](docs/).
+
 Багийн бүрэлдэхүүн: [docs/TEAM.md](docs/TEAM.md). Шалгасан багш: **Г.Ганбат**.
 
 Repository: https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information
@@ -21,7 +23,7 @@ VirtualBox ашиглавал 2 CPU, 4 GB RAM, 40 GB диск тохиромжт
 
 ```bash
 sudo apt update
-sudo apt install -y build-essential linux-headers-$(uname -r) python3 python3-tk git
+sudo apt install -y build-essential linux-headers-$(uname -r) python3 python3-tk git procps
 git clone https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information.git taskgraph
 cd taskgraph
 ```
@@ -68,7 +70,9 @@ PID 0 нь модулийн нэмсэн жинхэнэ `init_task`; энгий�
 
 ```bash
 export PYTHONPATH="$PWD/src"
-python3 -m taskgraph.workload --depth 2 --fanout 2 --seconds 45
+python3 -m taskgraph.workload --depth 2 --fanout 2 --seconds 300 &
+ROOT_PID=$!
+echo "ROOT_PID=$ROOT_PID"
 ```
 
 Эхний мөрийн root PID-г UI-ийн `Root PID` талбарт оруулж `Хэрэглэх` дарна.
@@ -79,17 +83,17 @@ python3 -m taskgraph.workload --depth 2 --fanout 2 --seconds 45
 
 ### Төлөвийн өөрчлөлт шалгах
 
-Workload ажиллаж байх үед өөр Terminal нээгээд `ROOT_PID`-ийн оронд
-өмнөх командын хэвлэсэн тоог бичнэ:
+Workload-ийг эхлүүлсэн тэр Terminal-д дараах командыг ажиллуулна.
+`"$ROOT_PID"` хувьсагч процессын дугаарыг автоматаар ашиглана:
 
 ```bash
-kill -STOP ROOT_PID
+kill -STOP "$ROOT_PID"
 ```
 
 UI-д `Шинэчлэх` дарахад root-ийн төлөв `T` болж шарлана. Дараа нь:
 
 ```bash
-kill -CONT ROOT_PID
+kill -CONT "$ROOT_PID"
 ```
 
 Дахин шинэчлэхэд root үргэлжлүүлэн ажиллана. Дээрх workload зөвхөн process
@@ -119,21 +123,38 @@ python3 scripts/verify_live.py
 ```
 
 Эхний команд parser, DFS, subtree, boundary/error, export/import болон бодит
-procfs уншилтын 23 тест ажиллуулна. Хоёр дахь команд нь ачаалагдсан kernel
-module шаардсан 6 интеграцийн шалгалт хийж `evidence/` хавтсанд үр дүнг хадгална.
+procfs уншилтын 28 тест ажиллуулна. Хоёр дахь команд нь ачаалагдсан kernel
+module шаардсан 8 интеграцийн шалгалт хийж `evidence/` хавтсанд үр дүнг хадгална.
 Үр дүнг үүссэн JSON болон log файлаас харна.
 
-Бэлтгэх үед 23/23 автомат тест, Linux 6.8.0-31 дээр QEMU TCG-ийн 12/12
+Бэлтгэх үед 28/28 автомат тест, Linux 6.8.0-31 дээр QEMU TCG-ийн 17/17
 бодит kernel шалгалт тэнцсэн. Бүтэн нотолгоо: `docs/evidence/kernel_results.json`,
 `docs/evidence/qemu-serial.log`, `docs/unit-tests.log`. QEMU туршилт нь initramfs
 орчин; Desktop VM дээр UI-г шууд `/proc/taskgraph`-тай ажиллуулан давтахыг
 хэрэглэгчийн гарын авлагад заасан. Тайлангийн kernel UI зураг нь энэ QEMU-аас
 авсан бодит snapshot-ийг импортолсон дэлгэц юм.
 
+
+### `ps`-тэй тулгасан нотолгоо
+
+Linux 6.8.0-31, procps-ng 4.0.4 дээр модулийн entry log болон snapshot-ийг
+`ps -el`, `ps -eLf`-тэй тулгасан. Туршилтын 5 process + 2 thread-ийн 7 task-ийн
+PID, PPID, TGID, нэр, төлөв таарсан. Бүх системийн нийтлэг 69 process,
+71 task-ийн PPID/TGID мөн таарсан. PID 0 нь ps-д харагдахгүй; түр cat/ps/insmod
+процессууд, kernel thread-ийн урт нэр болон хэмжилтийн хооронд өөрчлөгдсөн
+төлөвийг зөрүүний жагсаалтад тайлбарласан.
+
+- `docs/evidence/ps-el.txt`, `ps-eLf.txt`: номын командуудын бодит гаралт.
+- `docs/evidence/ps_processes.txt`, `ps_threads.txt`: талбаруудын нэмэлт гаралт.
+- `docs/evidence/comparison-kernel.log`: workload ажиллаж байх үеийн entry log.
+- `docs/evidence/ps_comparison.json`: харьцуулалтын тоо, зөрүү, task бүрийн дүн.
+- `python3 scripts/verify_live.py`: өөр Ubuntu дээр нотолгоог дахин үүсгэнэ
+  (төслийн хавтас, `PYTHONPATH=src`, ачаалсан module шаардлагатай).
+
 QEMU шалгалтыг дахин хийх бол нэмэлт орчин:
 
 ```bash
-sudo apt install -y qemu-system-x86 busybox-static
+sudo apt install -y qemu-system-x86 busybox-static procps
 PYTHONPATH=src python3 scripts/qemu_smoke.py --kernel /boot/vmlinuz-$(uname -r)
 ```
 
@@ -179,13 +200,18 @@ parent (thread-ийн хувьд TGID) нь зориуд тусдаа баган
 
 ## Зохиомж ба хязгаарлалт
 
-`task_struct` -> RCU хамгаалсан scalar snapshot -> parent индекс -> iterative DFS
+`task_struct` -> stop_machine + RCU -> for_each_process + children/sibling DFS
 -> `/proc/taskgraph` (seq_file) -> shared parser -> Tkinter graph/table.
 
-- RCU нь task бүтцийн амьдралыг хамгаална; snapshot нь бүх системийн нэг агшны
-  атомик зураг биш. Fork/exit/reparent үед missing parent-г root-д холбоно.
-- Номын `children/sibling` жагсаалтын утгыг parent ID-уудаас сэргээнэ. Mutable
-  children жагсаалтыг түгжээгүй дагаж kernel stack дээр рекурс хийдэггүй.
+- `init_task`-аас `children/sibling` холбоосоор шууд DFS хийнэ. Стек дээр
+  iterator хадгалдаг тул kernel stack дээр рекурс ашиглахгүй. Thread бүрийн
+  children жагсаалтыг шалгаж, thread-ээс үүсгэсэн хүүхдийг мөн хамруулна.
+- `tasklist_lock` module-д export хийгдээгүй тул `stop_machine()` ашиглан
+  жагсаалт өөрчлөгдөхгүй үед хуулна. Санах ойг урьдчилан хуваарилна;
+  callback дотор allocation, sleep, log хийхгүй. Snapshot бүр CPU-уудыг түр
+  саатуулдаг учраас сургалтын VM-д зориулагдсан.
+- Snapshot хооронд task-ууд өөрчлөгдөнө. Хязгаараас болж parent багтаагүй бол
+  root-д холбож `orphan=1` гэж тэмдэглэнэ.
 - LINEAR log нь process leader-ууд, DFS нь root+process+thread-үүдийг харуулна.
 - `max_tasks=16..16384`, default 4096. Хүрсэн бол `truncated=1` ил тод гарна.
 - Нэр нь Linux `TASK_COMM_LEN`-ээр хязгаарлагдана; бүтэн command line биш.
@@ -201,7 +227,7 @@ parent (thread-ийн хувьд TGID) нь зориуд тусдаа баган
 ```text
 src/kernel/             C module + Kbuild Makefile
 src/taskgraph/          shared model, GUI, CLI, workload
-tests/                  23 automated checks
+tests/                  28 automated checks
 examples/               explicit fixture data
 scripts/                environment and live verification
 docs/                   report, manual, evidence and team metadata
@@ -217,3 +243,5 @@ docs/                   report, manual, evidence and team metadata
 - Python standard library: tkinter, dataclasses, unittest, subprocess.
 
 Kernel source: SPDX GPL-2.0; бусад төслийн эх код мөн GPL-2.0-only.
+
+Код, тест, баримт бичгийг боловсруулахад ChatGPT/Codex-ийн туслалцаа ашигласан.

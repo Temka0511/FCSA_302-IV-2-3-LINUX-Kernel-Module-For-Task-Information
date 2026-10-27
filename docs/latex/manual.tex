@@ -11,8 +11,8 @@ TaskGraph нь Linux-ийн process, thread-ийн холбоос, төлөви�
 \centering\small
 \begin{tabularx}{\textwidth}{@{}P{3.2cm}Y@{}}\toprule
 Горим & Шаардлагатай орчин \\\midrule
-Linux UI & Python 3, \code{python3-tk}; \code{run.sh}. \\
-Бодит module & Ubuntu 24.04 LTS, GCC/Make, ажиллаж буй kernel-ийн headers. Туршсан target: Linux 6.8.0-31. \\
+Linux UI & Python 3, \code{python3-tk}; \code{run.sh}. Туршсан: Python 3.12, Tk 8.6. \\
+Бодит module & Ubuntu 24.04 LTS, GCC/Make, ажиллаж буй kernel-ийн headers. Туршсан: Linux 6.8.0-31, GCC 13.3, procps-ng 4.0.4. \\
 \end{tabularx}
 \end{table}
 
@@ -22,7 +22,7 @@ Ubuntu Terminal-д dependency суулгаад төслийн хавтас ру�
 \begin{lstlisting}
 sudo apt update
 sudo apt install -y build-essential \
-  linux-headers-$(uname -r) python3 python3-tk git
+  linux-headers-$(uname -r) python3 python3-tk git procps
 git clone https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information.git taskgraph
 cd taskgraph
 bash scripts/check_env.sh
@@ -75,25 +75,27 @@ Module болон UI-г kernel горимд ажиллуулсны дараа ө
 \begin{lstlisting}
 export PYTHONPATH="$PWD/src"
 python3 -m taskgraph.workload \
-  --depth 2 --fanout 2 --seconds 45
+  --depth 2 --fanout 2 --seconds 300 &
+ROOT_PID=$!
+echo "ROOT_PID=$ROOT_PID"
 \end{lstlisting}
-ROOT\_PID мөрийн дугаарыг UI-д оруулж, Шинэчлэх, Хэрэглэх дарна. Энэ workload нь 1+2+4=7 process үүсгэнэ. Авто шинэчлэлтээр хугацаа дуусахад task-ууд алга болохыг ажиглана. Root өөрөө дуусвал талбарыг цэвэрлэнэ.
+ROOT\_PID мөрийн дугаарыг UI-д оруулж, Шинэчлэх, Хэрэглэх дарна. Энэ workload нь 1+2+4=7 process үүсгэнэ; 300 секунд ажиллана. Авто шинэчлэлтээр хугацаа дуусахад task-ууд алга болохыг ажиглана. Root өөрөө дуусвал талбарыг цэвэрлэнэ.
 Depth=0..3, fanout=1..3, seconds=2..300. SIGSTOP/CONT турших бол зөвхөн өөрийн workload-ийн root PID-д дараах дохиог өгнө:
 \begin{lstlisting}
-kill -STOP ROOT_PID
+kill -STOP "$ROOT_PID"
 # Refresh in the UI, then continue:
-kill -CONT ROOT_PID
+kill -CONT "$ROOT_PID"
 \end{lstlisting}
 
-ROOT\_PID гэдэг үгийн оронд Terminal-д хэвлэгдсэн тоог бичнэ. STOP өгөөд Шинэчлэх дарахад root-ийн төлөв T болж шарлана. CONT өгсний дараа дахин шинэчлэхэд task үргэлжлэн ажиллана. Бусад системийн task-д дохио өгөхгүй.
+Дээрх хувьсагчийг үүсгэсэн тэр Terminal-д STOP/CONT командыг ажиллуулна. \code{"\$ROOT\_PID"} нь процессын дугаарыг автоматаар авна; UI-ийн Root PID талбарт хэвлэгдсэн тоог оруулна. STOP өгөөд Шинэчлэх дарахад root-ийн төлөв T болж шарлана. CONT өгсний дараа дахин шинэчлэхэд task үргэлжлэн ажиллана. Бусад системийн task-д дохио өгөхгүй.
 
 \section{Үйлдлүүдийг шалгах}
 \begin{enumerate}
-\item \textbf{LINEAR ба DFS.} Root PID-г цэвэрлэж, DFS сонгоно. Дараах товчоор алхахад эцэг task хүүхдийнхээ өмнө сонгогдоно. Нэг хүүхдийн дэд мод дууссаны дараа дараагийн салаа руу шилжинэ. LINEAR сонгоход жагсаалтын дараалал kernel-ийн шугаман дараалалд шилжинэ; task-ийн PID өөрчлөгдөхгүй.
-\item \textbf{Thread шүүлт.} Жишээ 2-ын created snapshot-д Root PID=90 сонгоно. Threads асаалттай үед 7 task, унтраахад 5 process үлдэнэ. PID 95, 96 нь TGID 90-тай нэмэлт thread-үүд юм. Жишээ 3-ын Python workload зөвхөн process үүсгэдэг.
-\item \textbf{Хадгалах ба нээх.} Snapshot хадгалах товчоор TSV файл үүсгээд Файл нээхээр дахин сонгоно. PID, parent, төлөв ижил байна. File горим нь өмнөх хэмжилтийг харуулна. Бодит хэмжилтэд буцахдаа цонхоо хааж \code{bash run.sh --kernel} ажиллуулна.
-\item \textbf{Буруу оролт.} Root PID-д abc оруулахад алдааны мэдээлэл гарна. Зангилааны хязгаарт 0 оруулахад зөвшөөрөгдөх 1--2000 мужийг мэдээлнэ. Утгыг засаж дахин Хэрэглэх дарна.
-\item \textbf{Дуусах ба Reset.} Workload дууссаны дараа Root PID-г цэвэрлэж шинэчилнэ. Үүсгэсэн процессууд жагсаалтаас алга болно. Reset нь харагдацын тохиргоог сэргээнэ; системийн процессыг зогсоохгүй.
+\item \textbf{LINEAR ба DFS.} Root PID-г цэвэрлээд DFS сонгож Дараах дарна. Эцэг task, түүний дэд мод, дараагийн салаа гэсэн дараалалтай байна. LINEAR нь kernel-ийн шугаман дарааллыг үзүүлнэ.
+\item \textbf{Threads.} Created snapshot-д Root PID=90 үед 7 task байна. Threads-ийг унтраахад PID 95, 96 нуугдаж 5 process үлдэнэ. Python workload нэмэлт thread үүсгэхгүй.
+\item \textbf{Хадгалах ба нээх.} TSV snapshot хадгалаад дахин нээхэд PID, холбоос, төлөв ижил байна. Бодит хэмжилтэд буцахдаа цонхоо хааж \code{bash run.sh --kernel} ажиллуулна.
+\item \textbf{Буруу оролт.} Root PID-д abc, зангилааны хязгаарт 0 оруулахад алдаа мэдээлнэ. Утгыг заасан мужид засаж Хэрэглэх дарна.
+\item \textbf{Дуусах ба Reset.} Workload дуусвал Root PID-г цэвэрлэж шинэчилнэ. Reset харагдацыг сэргээнэ; системийн процессыг зогсоохгүй.
 \end{enumerate}
 
 \clearpage
@@ -108,15 +110,15 @@ ps -el
 ps -eLf
 cat /proc/taskgraph
 \end{lstlisting}
-Python тестийн хүлээгдсэн үр дүн нь Linux дээр 23 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
+Python тестийн хүлээгдсэн үр дүн нь Linux дээр 28 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
 \subsection{Нэмэлт live ба QEMU тест}
 \begin{lstlisting}
 PYTHONPATH=src python3 scripts/verify_live.py
-sudo apt install -y qemu-system-x86 busybox-static
+sudo apt install -y qemu-system-x86 busybox-static procps
 PYTHONPATH=src python3 scripts/qemu_smoke.py \
   --kernel /boot/vmlinuz-$(uname -r)
 \end{lstlisting}
-Эхний скрипт ачаалсан module дээр 6 live шалгалт хийнэ. Хоёр дахь нь тохирох kernel image, build хийсэн module-оор QEMU дотор 12 шалгалт ажиллуулна. Image нь уншигдах боломжтой байна. Алдаа гарвал exit code 1 буцаана. Туршилтын log, JSON, TSV-г тусад нь хадгална.
+Эхний скрипт ачаалсан module дээр 8 live шалгалт хийнэ. Хоёр дахь нь тохирох kernel image, build хийсэн module-оор QEMU дотор 17 шалгалт ажиллуулна. Image нь уншигдах боломжтой байна. Алдаа гарвал exit code 1 буцаана. Live тест нь \code{evidence/ps-el.txt}, \code{ps-eLf.txt}, \code{ps\_comparison.json} үүсгэнэ. QEMU тестийн ижил нотолгоо \code{docs/evidence/}-д хадгалагдана. Туршилтын task-уудын PID, PPID, TGID, нэр, төлөв бүгд таарвал comparison-ийн \code{passed=true} байна. PID 0 болон хэмжилтийн үеийн cat/ps/insmod процессын зөрүүг JSON-д тусад нь харуулна.
 
 \clearpage
 \section{Түгээмэл алдаа ба хязгаарлалт}
@@ -127,7 +129,7 @@ PYTHONPATH=src python3 scripts/qemu_smoke.py \
 \code{/proc/taskgraph} алга & Module build, \code{sudo insmod} хийсэн эсэхийг шалгана. \\
 Invalid module format & \code{uname -r}-тэй таарсан headers суулгаж clean, build хийнэ. \\
 Key was rejected & VM-ийн Secure Boot, module signing тохиргоог шалгана. \\
-File exists & Хуучин module-ийг \code{sudo rmmod taskgraph}-аар буулгаад ачаална. \\
+File exists & Модуль ачаалагдсан байна. Шинэ код суулгаж байгаа бол UI-г хааж, \code{sudo rmmod taskgraph} хийгээд дахин ачаална. \\
 \code{tkinter} олдохгүй & Ubuntu-д \code{sudo apt install python3-tk}. \\
 DISPLAY алдаа & Desktop session-оос UI нээх эсвэл CLI ашиглана. \\
 PID олдохгүй & Дууссан эсвэл тухайн snapshot-д байхгүй PID. Root талбарыг цэвэрлэнэ. \\
@@ -135,7 +137,7 @@ PID олдохгүй & Дууссан эсвэл тухайн snapshot-д бай
 Графын task дутуу & View limit болон Threads шүүлтийг шалгана. \\\bottomrule
 \end{tabularx}
 \end{table}
-Snapshot нь системийн бүх талбарыг нэг агшинд атомикаар хэмжихгүй. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Хадгалсан файл нь бодит хугацааны өөрчлөлтийг хэмжихгүй.
+Snapshot авахад \code{stop\_machine()} CPU-уудыг түр саатуулж children/sibling жагсаалтыг хамгаална. Иймээс тусдаа сургалтын VM-д ашиглана; latency мэдрэмтгий production орчинд зориулаагүй. Тусдаа snapshot болон ps хэмжилтүүдийн хооронд төлөв өөрчлөгдөнө. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Хадгалсан файл нь бодит хугацааны өөрчлөлтийг хэмжихгүй.
 
 \section{Төслийн файлууд}
 \begin{table}[H]

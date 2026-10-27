@@ -58,5 +58,30 @@
     "test": "K12 reload and final unload",
     "passed": true,
     "detail": "Clean end"
+  },
+  {
+    "test": "K13 textbook children/sibling traversal",
+    "passed": true,
+    "detail": "Direct kernel list traversal with stop_machine protection"
+  },
+  {
+    "test": "K14 ps -el and ps -eLf comparison",
+    "passed": true,
+    "detail": "7/7 stable task fields match"
+  },
+  {
+    "test": "K15 repeated snapshots under churn",
+    "passed": true,
+    "detail": "10 captures during concurrent process creation/exit; no read failure"
+  },
+  {
+    "test": "K16 no kernel faults",
+    "passed": true,
+    "detail": "No BUG/Oops/WARNING/lockup in serial log"
+  },
+  {
+    "test": "K17 child forked by non-leader thread",
+    "passed": true,
+    "detail": "root=110; tasks=8; thread-owned child retained"
   }
 ]

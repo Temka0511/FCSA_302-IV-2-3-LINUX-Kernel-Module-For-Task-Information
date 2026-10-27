@@ -1,0 +1,42 @@
+name: Test and publish BD1 release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'docs/**'
+      - '.github/workflows/release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run parser and verification tests
+        run: bash scripts/test.sh
+      - name: Publish immutable assignment version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git ls-remote --exit-code --tags origin refs/tags/v1.1-bd1; then
+            echo 'v1.1-bd1 has already been published; retaining that version.'
+            exit 0
+          fi
+          git tag v1.1-bd1 "$GITHUB_SHA"
+          git push origin refs/tags/v1.1-bd1
+          gh release create v1.1-bd1 \
+            docs/TaskGraph_BD1_Report.pdf docs/TaskGraph_Manual.pdf \
+            --verify-tag --title 'TaskGraph v1.1-bd1' \
+            --notes-file docs/RELEASE_NOTES.md

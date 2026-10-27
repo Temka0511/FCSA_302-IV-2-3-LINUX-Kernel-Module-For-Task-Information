@@ -1,4 +1,4 @@
-# taskgraph version=1 source=kernel count=16 cap=16 truncated=1 boot_ns=4995270271 duration_ns=24900
+# taskgraph version=1 source=kernel count=16 cap=16 truncated=1 boot_ns=6853306331 duration_ns=71340 traversal=children_sibling synchronization=stop_machine
 pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
 0	0	0	0	R	root	0	0	0	0	swapper/0
 1	0	1	0	S	process	1	1	1	0	init
@@ -10,9 +10,9 @@ pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
 7	2	7	2	I	process	7	7	2	0	kworker/R-netns
 8	2	8	2	I	process	8	8	2	0	kworker/0:0
 9	2	9	2	I	process	9	9	2	0	kworker/0:0H
-10	2	10	2	I	process	10	10	2	0	kworker/u4:0
-11	2	11	2	I	process	11	11	2	0	kworker/R-mm_pe
-12	2	12	2	I	process	12	12	2	0	kworker/0:1
+10	2	10	2	I	process	10	10	2	0	kworker/0:1
+11	2	11	2	I	process	11	11	2	0	kworker/u4:0
+12	2	12	2	I	process	12	12	2	0	kworker/R-mm_pe
 13	2	13	2	I	process	13	13	2	0	rcu_tasks_kthre
 14	2	14	2	I	process	14	14	2	0	rcu_tasks_rude_
 15	2	15	2	I	process	15	15	2	0	rcu_tasks_trace

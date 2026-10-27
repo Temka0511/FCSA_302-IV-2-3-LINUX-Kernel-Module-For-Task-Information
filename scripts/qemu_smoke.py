@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import tempfile
 from taskgraph.model import parse
+from taskgraph.verification import compare_ps, dfs_errors
 
 PROJECT = Path(__file__).resolve().parents[1]
 
@@ -27,7 +28,7 @@ def newc_entry(name, data=b"", mode=0o100755, ino=1):
 def inspect(log, out):
     log = log.replace("\r", "")
     snapshots = {}
-    for name in ["BEFORE", "CREATED", "STOPPED", "AFTER", "CAPPED"]:
+    for name in ["BEFORE", "CREATED", "STOPPED", "AFTER", "CAPPED", "THREAD_FORK"]:
         match = re.search(rf"BEGIN_SNAPSHOT_{name}\n(.*?)END_SNAPSHOT_{name}", log, re.S)
         if not match:
             raise ValueError("Missing snapshot " + name)
@@ -51,8 +52,7 @@ def inspect(log, out):
     check("K3 linear and DFS init logs", "taskgraph LINEAR pid=" in log and
           "taskgraph DFS order=" in log, "Both log streams emitted")
     ranks = {t.pid: t.dfs for t in created.tasks}
-    valid = all(t.parent == t.pid or t.parent not in ranks or ranks[t.parent] < t.dfs
-                for t in created.tasks)
+    valid = not dfs_errors(created)
     check("K4 DFS ranks and parents", valid, f"Unique contiguous ranks: {len(ranks)}")
     check("K5 process tree creation", count == 7, f"root={root}; tasks={count}; expected=7")
     threads = [t for t in subtree if t.kind == "thread"]
@@ -71,6 +71,35 @@ def inspect(log, out):
           f"rows={len(capped.tasks)}; truncated={capped.meta['truncated']}")
     check("K12 reload and final unload", "RESULT SMALL_CAP_LOAD= 0" in log and
           "RESULT FINAL_UNLOAD= 0" in log and "SMOKE_DONE" in log, "Clean end")
+    def section(name, filename):
+        value = re.search(rf"BEGIN_{name}\n(.*?)END_{name}", log, re.S)
+        if not value:
+            raise ValueError("Missing evidence: " + name)
+        text = value.group(1)
+        (out / filename).write_text(text, encoding="utf-8")
+        return text
+    comparison = compare_ps(created,
+        section("PS_PROCESS_COLUMNS", "ps_processes.txt"),
+        section("PS_THREAD_COLUMNS", "ps_threads.txt"),
+        section("PS_EL", "ps-el.txt"), section("PS_ELF", "ps-eLf.txt"),
+        stable_pids=[t.pid for t in subtree],
+        kernel_log=section("COMPARISON_LOG", "comparison-kernel.log"))
+    (out / "ps_comparison.json").write_text(json.dumps(comparison, ensure_ascii=False, indent=2))
+    check("K13 textbook children/sibling traversal", created.meta.get("traversal") == "children_sibling",
+          "Direct kernel list traversal with stop_machine protection")
+    check("K14 ps -el and ps -eLf comparison", comparison["passed"],
+          f"{sum(r['passed'] for r in comparison['workload'])}/{count} stable task fields match")
+    check("K15 repeated snapshots under churn", "RESULT CHURN=0" in log,
+          "10 captures during concurrent process creation/exit; no read failure")
+    check("K16 no kernel faults", not re.search(r"BUG:|Oops:|WARNING:|soft lockup", log),
+          "No BUG/Oops/WARNING/lockup in serial log")
+    threaded = snapshots["THREAD_FORK"]
+    threaded_root = int(re.search(r"THREAD_FORK_ROOT=(\d+)", log).group(1))
+    thread_rows, thread_count = threaded.view(root=threaded_root)
+    special = [t for t in thread_rows if t.comm == "tg-thread-child"]
+    check("K17 child forked by non-leader thread", thread_count == 8 and len(special) == 1
+          and special[0].parent == threaded_root and not dfs_errors(threaded),
+          f"root={threaded_root}; tasks={thread_count}; thread-owned child retained")
     (out / "kernel_results.json").write_text(json.dumps(result, ensure_ascii=False, indent=2))
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return all(x["passed"] for x in result)
@@ -81,6 +110,7 @@ def main():
     p.add_argument("--kernel", required=True, type=Path)
     p.add_argument("--module", type=Path, default=PROJECT / "src/kernel/taskgraph.ko")
     p.add_argument("--busybox", type=Path, default=Path("/usr/bin/busybox"))
+    p.add_argument("--ps", type=Path, default=Path("/usr/bin/ps"), help="procps ps, not BusyBox ps")
     p.add_argument("--qemu", default="qemu-system-x86_64")
     p.add_argument("--bios", type=Path)
     p.add_argument("--data-dir", type=Path)
@@ -93,12 +123,19 @@ def main():
         subprocess.run(["gcc", "-static", "-pthread", "-O2", "-Wall", "-Wextra", "-o", str(workload),
                         str(PROJECT / "tests/guest_workload.c")], check=True)
         data = bytearray()
-        for i, d in enumerate(["bin", "dev", "proc", "sys", "tmp"]):
+        for i, d in enumerate(["bin", "dev", "proc", "sys", "tmp", "lib", "lib64", "lib/x86_64-linux-gnu"]):
             data.extend(newc_entry(d, mode=0o040755, ino=i + 1))
         data.extend(newc_entry("bin/busybox", a.busybox.read_bytes()))
         for x in ["sh", "mount", "cat", "echo", "sleep", "insmod", "rmmod", "dmesg",
-                  "ps", "grep", "kill", "poweroff", "uname", "test"]:
+                  "grep", "kill", "poweroff", "uname", "test"]:
             data.extend(newc_entry("bin/" + x, b"busybox", mode=0o120777))
+        data.extend(newc_entry("bin/ps", a.ps.read_bytes()))
+        # Copy the selected, trusted local procps executable's loader/libraries.
+        dependencies = subprocess.check_output(["ldd", str(a.ps)], text=True)
+        if "not found" in dependencies:
+            raise RuntimeError("procps shared library missing: " + dependencies)
+        for lib in sorted(set(re.findall(r"(/[^\s()]+)", dependencies))):
+            data.extend(newc_entry(lib.lstrip("/"), Path(lib).read_bytes()))
         data.extend(newc_entry("taskgraph.ko", a.module.read_bytes()))
         data.extend(newc_entry("guest_workload", workload.read_bytes()))
         data.extend(newc_entry("init", (PROJECT / "tests/qemu_init.sh").read_bytes()))
@@ -114,7 +151,10 @@ def main():
             cmd += ["-L", str(a.data_dir.resolve())]
         with (a.out / "qemu-serial.log").open("w") as output:
             subprocess.run(cmd, stdout=output, stderr=subprocess.STDOUT, check=True, timeout=90)
-    return 0 if inspect((a.out / "qemu-serial.log").read_text(errors="replace"), a.out) else 1
+    log_path = a.out / "qemu-serial.log"
+    normalized = "\n".join(line.rstrip() for line in log_path.read_text(errors="replace").splitlines()) + "\n"
+    log_path.write_text(normalized, encoding="utf-8")
+    return 0 if inspect(normalized, a.out) else 1
 
 
 if __name__ == "__main__":

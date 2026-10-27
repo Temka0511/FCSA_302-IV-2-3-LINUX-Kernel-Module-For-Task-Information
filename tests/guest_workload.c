@@ -7,14 +7,28 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 
 static volatile sig_atomic_t done;
+static int thread_fork;
 static void stop(int sig) { (void)sig; done = 1; }
 static void *worker(void *arg)
 {
-    (void)arg;
+    pid_t owned = -1;
     prctl(PR_SET_NAME, "tg-worker", 0, 0, 0);
+    if (thread_fork && arg) {
+        owned = fork();
+        if (!owned) {
+            prctl(PR_SET_NAME, "tg-thread-child", 0, 0, 0);
+            while (!done) usleep(20000);
+            _exit(0);
+        }
+    }
     while (!done) usleep(20000);
+    if (owned > 0) {
+        kill(owned, SIGTERM);
+        waitpid(owned, NULL, 0);
+    }
     return NULL;
 }
 static void child(void)
@@ -33,13 +47,14 @@ static void child(void)
     waitpid(leaf, NULL, 0);
     _exit(0);
 }
-int main(void)
+int main(int argc, char **argv)
 {
     pid_t kids[2];
     pthread_t threads[2];
     int i;
     signal(SIGTERM, stop);
     signal(SIGINT, stop);
+    thread_fork = argc > 1 && !strcmp(argv[1], "--thread-fork");
     prctl(PR_SET_NAME, "tg-root", 0, 0, 0);
     for (i = 0; i < 2; i++) {
         kids[i] = fork();
@@ -47,7 +62,7 @@ int main(void)
         if (!kids[i]) child();
     }
     for (i = 0; i < 2; i++)
-        if (pthread_create(&threads[i], NULL, worker, NULL)) return 3;
+        if (pthread_create(&threads[i], NULL, worker, (void *)(long)(i == 0))) return 3;
     while (!done) usleep(20000);
     for (i = 0; i < 2; i++) kill(kids[i], SIGTERM);
     for (i = 0; i < 2; i++) waitpid(kids[i], NULL, 0);

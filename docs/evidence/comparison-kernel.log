@@ -1,0 +1,144 @@
+[    3.705947] taskgraph LINEAR pid=1 state=S comm=init
+[    3.706145] taskgraph LINEAR pid=2 state=S comm=kthreadd
+[    3.706210] taskgraph LINEAR pid=3 state=S comm=pool_workqueue_
+[    3.706393] taskgraph LINEAR pid=4 state=I comm=kworker/R-rcu_g
+[    3.706601] taskgraph LINEAR pid=5 state=I comm=kworker/R-rcu_p
+[    3.706746] taskgraph LINEAR pid=6 state=I comm=kworker/R-slub_
+[    3.706815] taskgraph LINEAR pid=7 state=I comm=kworker/R-netns
+[    3.706882] taskgraph LINEAR pid=8 state=I comm=kworker/0:0
+[    3.706945] taskgraph LINEAR pid=9 state=I comm=kworker/0:0H
+[    3.707006] taskgraph LINEAR pid=10 state=I comm=kworker/0:1
+[    3.707072] taskgraph LINEAR pid=11 state=I comm=kworker/u4:0
+[    3.707138] taskgraph LINEAR pid=12 state=I comm=kworker/R-mm_pe
+[    3.707203] taskgraph LINEAR pid=13 state=I comm=rcu_tasks_kthre
+[    3.707270] taskgraph LINEAR pid=14 state=I comm=rcu_tasks_rude_
+[    3.707337] taskgraph LINEAR pid=15 state=I comm=rcu_tasks_trace
+[    3.707402] taskgraph LINEAR pid=16 state=S comm=ksoftirqd/0
+[    3.707465] taskgraph LINEAR pid=17 state=I comm=rcu_preempt
+[    3.707722] taskgraph LINEAR pid=18 state=R comm=migration/0
+[    3.707860] taskgraph LINEAR pid=19 state=S comm=idle_inject/0
+[    3.707944] taskgraph LINEAR pid=20 state=S comm=cpuhp/0
+[    3.708015] taskgraph LINEAR pid=21 state=S comm=cpuhp/1
+[    3.708100] taskgraph LINEAR pid=22 state=S comm=idle_inject/1
+[    3.708165] taskgraph LINEAR pid=23 state=R comm=migration/1
+[    3.708228] taskgraph LINEAR pid=24 state=S comm=ksoftirqd/1
+[    3.708291] taskgraph LINEAR pid=25 state=I comm=kworker/1:0
+[    3.708352] taskgraph LINEAR pid=26 state=I comm=kworker/1:0H
+[    3.708414] taskgraph LINEAR pid=27 state=S comm=kdevtmpfs
+[    3.708599] taskgraph LINEAR pid=28 state=I comm=kworker/R-inet_
+[    3.708761] taskgraph LINEAR pid=29 state=I comm=kworker/u4:1
+[    3.708827] taskgraph LINEAR pid=30 state=S comm=kauditd
+[    3.708888] taskgraph LINEAR pid=31 state=S comm=khungtaskd
+[    3.708952] taskgraph LINEAR pid=32 state=S comm=oom_reaper
+[    3.709068] taskgraph LINEAR pid=33 state=I comm=kworker/u4:2
+[    3.709205] taskgraph LINEAR pid=34 state=I comm=kworker/R-write
+[    3.709304] taskgraph LINEAR pid=35 state=S comm=kcompactd0
+[    3.709416] taskgraph LINEAR pid=36 state=S comm=ksmd
+[    3.709629] taskgraph LINEAR pid=37 state=I comm=kworker/R-kinte
+[    3.709830] taskgraph LINEAR pid=38 state=I comm=kworker/R-kbloc
+[    3.709909] taskgraph LINEAR pid=39 state=I comm=kworker/R-blkcg
+[    3.710010] taskgraph LINEAR pid=40 state=S comm=irq/9-acpi
+[    3.710097] taskgraph LINEAR pid=41 state=I comm=kworker/1:1
+[    3.710162] taskgraph LINEAR pid=42 state=I comm=kworker/R-tpm_d
+[    3.710279] taskgraph LINEAR pid=43 state=I comm=kworker/R-ata_s
+[    3.710348] taskgraph LINEAR pid=44 state=I comm=kworker/R-md
+[    3.710413] taskgraph LINEAR pid=45 state=I comm=kworker/R-md_bi
+[    3.710596] taskgraph LINEAR pid=46 state=I comm=kworker/R-edac-
+[    3.710747] taskgraph LINEAR pid=47 state=I comm=kworker/R-devfr
+[    3.710816] taskgraph LINEAR pid=48 state=S comm=watchdogd
+[    3.710876] taskgraph LINEAR pid=49 state=I comm=kworker/1:1H
+[    3.710940] taskgraph LINEAR pid=50 state=S comm=kswapd0
+[    3.711000] taskgraph LINEAR pid=51 state=S comm=ecryptfs-kthrea
+[    3.711067] taskgraph LINEAR pid=52 state=I comm=kworker/R-kthro
+[    3.711135] taskgraph LINEAR pid=53 state=I comm=kworker/R-acpi_
+[    3.711199] taskgraph LINEAR pid=54 state=S comm=scsi_eh_0
+[    3.711260] taskgraph LINEAR pid=55 state=I comm=kworker/R-scsi_
+[    3.711326] taskgraph LINEAR pid=56 state=S comm=scsi_eh_1
+[    3.711388] taskgraph LINEAR pid=57 state=I comm=kworker/R-scsi_
+[    3.711454] taskgraph LINEAR pid=58 state=I comm=kworker/R-mld
+[    3.711556] taskgraph LINEAR pid=59 state=I comm=kworker/u4:3
+[    3.711635] taskgraph LINEAR pid=60 state=I comm=kworker/0:1H
+[    3.711717] taskgraph LINEAR pid=61 state=I comm=kworker/R-ipv6_
+[    3.711783] taskgraph LINEAR pid=68 state=I comm=kworker/R-kstrp
+[    3.711851] taskgraph LINEAR pid=70 state=I comm=kworker/u5:0
+[    3.711916] taskgraph LINEAR pid=83 state=I comm=kworker/R-charg
+[    3.711983] taskgraph LINEAR pid=90 state=S comm=tg-root
+[    3.712062] taskgraph LINEAR pid=91 state=S comm=tg-child
+[    3.712173] taskgraph LINEAR pid=92 state=S comm=tg-child
+[    3.712240] taskgraph LINEAR pid=93 state=S comm=tg-leaf
+[    3.712299] taskgraph LINEAR pid=94 state=S comm=tg-leaf
+[    3.712360] taskgraph LINEAR pid=99 state=R comm=insmod
+[    3.712568] taskgraph DFS order=0 depth=0 pid=0 ppid=0 state=R comm=swapper/0
+[    3.712728] taskgraph DFS order=1 depth=1 pid=1 ppid=0 state=S comm=init
+[    3.712804] taskgraph DFS order=2 depth=2 pid=90 ppid=1 state=S comm=tg-root
+[    3.712982] taskgraph DFS order=3 depth=3 pid=95 ppid=1 state=S comm=tg-worker
+[    3.713133] taskgraph DFS order=4 depth=3 pid=96 ppid=1 state=S comm=tg-worker
+[    3.713214] taskgraph DFS order=5 depth=3 pid=91 ppid=90 state=S comm=tg-child
+[    3.713293] taskgraph DFS order=6 depth=4 pid=93 ppid=91 state=S comm=tg-leaf
+[    3.713372] taskgraph DFS order=7 depth=3 pid=92 ppid=90 state=S comm=tg-child
+[    3.713447] taskgraph DFS order=8 depth=4 pid=94 ppid=92 state=S comm=tg-leaf
+[    3.713607] taskgraph DFS order=9 depth=2 pid=99 ppid=1 state=R comm=insmod
+[    3.713726] taskgraph DFS order=10 depth=1 pid=2 ppid=0 state=S comm=kthreadd
+[    3.713804] taskgraph DFS order=11 depth=2 pid=3 ppid=2 state=S comm=pool_workqueue_
+[    3.713885] taskgraph DFS order=12 depth=2 pid=4 ppid=2 state=I comm=kworker/R-rcu_g
+[    3.713966] taskgraph DFS order=13 depth=2 pid=5 ppid=2 state=I comm=kworker/R-rcu_p
+[    3.714047] taskgraph DFS order=14 depth=2 pid=6 ppid=2 state=I comm=kworker/R-slub_
+[    3.714134] taskgraph DFS order=15 depth=2 pid=7 ppid=2 state=I comm=kworker/R-netns
+[    3.714215] taskgraph DFS order=16 depth=2 pid=8 ppid=2 state=I comm=kworker/0:0
+[    3.714391] taskgraph DFS order=17 depth=2 pid=9 ppid=2 state=I comm=kworker/0:0H
+[    3.714533] taskgraph DFS order=18 depth=2 pid=10 ppid=2 state=I comm=kworker/0:1
+[    3.714618] taskgraph DFS order=19 depth=2 pid=11 ppid=2 state=I comm=kworker/u4:0
+[    3.714742] taskgraph DFS order=20 depth=2 pid=12 ppid=2 state=I comm=kworker/R-mm_pe
+[    3.714826] taskgraph DFS order=21 depth=2 pid=13 ppid=2 state=I comm=rcu_tasks_kthre
+[    3.714908] taskgraph DFS order=22 depth=2 pid=14 ppid=2 state=I comm=rcu_tasks_rude_
+[    3.714993] taskgraph DFS order=23 depth=2 pid=15 ppid=2 state=I comm=rcu_tasks_trace
+[    3.715077] taskgraph DFS order=24 depth=2 pid=16 ppid=2 state=S comm=ksoftirqd/0
+[    3.715158] taskgraph DFS order=25 depth=2 pid=17 ppid=2 state=I comm=rcu_preempt
+[    3.715238] taskgraph DFS order=26 depth=2 pid=18 ppid=2 state=R comm=migration/0
+[    3.715319] taskgraph DFS order=27 depth=2 pid=19 ppid=2 state=S comm=idle_inject/0
+[    3.715401] taskgraph DFS order=28 depth=2 pid=20 ppid=2 state=S comm=cpuhp/0
+[    3.715523] taskgraph DFS order=29 depth=2 pid=21 ppid=2 state=S comm=cpuhp/1
+[    3.715604] taskgraph DFS order=30 depth=2 pid=22 ppid=2 state=S comm=idle_inject/1
+[    3.715703] taskgraph DFS order=31 depth=2 pid=23 ppid=2 state=R comm=migration/1
+[    3.715783] taskgraph DFS order=32 depth=2 pid=24 ppid=2 state=S comm=ksoftirqd/1
+[    3.715863] taskgraph DFS order=33 depth=2 pid=25 ppid=2 state=I comm=kworker/1:0
+[    3.715944] taskgraph DFS order=34 depth=2 pid=26 ppid=2 state=I comm=kworker/1:0H
+[    3.716025] taskgraph DFS order=35 depth=2 pid=27 ppid=2 state=S comm=kdevtmpfs
+[    3.716127] taskgraph DFS order=36 depth=2 pid=28 ppid=2 state=I comm=kworker/R-inet_
+[    3.716211] taskgraph DFS order=37 depth=2 pid=29 ppid=2 state=I comm=kworker/u4:1
+[    3.716293] taskgraph DFS order=38 depth=2 pid=30 ppid=2 state=S comm=kauditd
+[    3.716370] taskgraph DFS order=39 depth=2 pid=31 ppid=2 state=S comm=khungtaskd
+[    3.716448] taskgraph DFS order=40 depth=2 pid=32 ppid=2 state=S comm=oom_reaper
+[    3.716602] taskgraph DFS order=41 depth=2 pid=33 ppid=2 state=I comm=kworker/u4:2
+[    3.716702] taskgraph DFS order=42 depth=2 pid=34 ppid=2 state=I comm=kworker/R-write
+[    3.716787] taskgraph DFS order=43 depth=2 pid=35 ppid=2 state=S comm=kcompactd0
+[    3.716868] taskgraph DFS order=44 depth=2 pid=36 ppid=2 state=S comm=ksmd
+[    3.716945] taskgraph DFS order=45 depth=2 pid=37 ppid=2 state=I comm=kworker/R-kinte
+[    3.717037] taskgraph DFS order=46 depth=2 pid=38 ppid=2 state=I comm=kworker/R-kbloc
+[    3.717120] taskgraph DFS order=47 depth=2 pid=39 ppid=2 state=I comm=kworker/R-blkcg
+[    3.717204] taskgraph DFS order=48 depth=2 pid=40 ppid=2 state=S comm=irq/9-acpi
+[    3.717281] taskgraph DFS order=49 depth=2 pid=41 ppid=2 state=I comm=kworker/1:1
+[    3.717363] taskgraph DFS order=50 depth=2 pid=42 ppid=2 state=I comm=kworker/R-tpm_d
+[    3.717449] taskgraph DFS order=51 depth=2 pid=43 ppid=2 state=I comm=kworker/R-ata_s
+[    3.717596] taskgraph DFS order=52 depth=2 pid=44 ppid=2 state=I comm=kworker/R-md
+[    3.717697] taskgraph DFS order=53 depth=2 pid=45 ppid=2 state=I comm=kworker/R-md_bi
+[    3.717781] taskgraph DFS order=54 depth=2 pid=46 ppid=2 state=I comm=kworker/R-edac-
+[    3.717866] taskgraph DFS order=55 depth=2 pid=47 ppid=2 state=I comm=kworker/R-devfr
+[    3.717948] taskgraph DFS order=56 depth=2 pid=48 ppid=2 state=S comm=watchdogd
+[    3.718027] taskgraph DFS order=57 depth=2 pid=49 ppid=2 state=I comm=kworker/1:1H
+[    3.718111] taskgraph DFS order=58 depth=2 pid=50 ppid=2 state=S comm=kswapd0
+[    3.718192] taskgraph DFS order=59 depth=2 pid=51 ppid=2 state=S comm=ecryptfs-kthrea
+[    3.718339] taskgraph DFS order=60 depth=2 pid=52 ppid=2 state=I comm=kworker/R-kthro
+[    3.718426] taskgraph DFS order=61 depth=2 pid=53 ppid=2 state=I comm=kworker/R-acpi_
+[    3.718568] taskgraph DFS order=62 depth=2 pid=54 ppid=2 state=S comm=scsi_eh_0
+[    3.718699] taskgraph DFS order=63 depth=2 pid=55 ppid=2 state=I comm=kworker/R-scsi_
+[    3.718787] taskgraph DFS order=64 depth=2 pid=56 ppid=2 state=S comm=scsi_eh_1
+[    3.718867] taskgraph DFS order=65 depth=2 pid=57 ppid=2 state=I comm=kworker/R-scsi_
+[    3.718953] taskgraph DFS order=66 depth=2 pid=58 ppid=2 state=I comm=kworker/R-mld
+[    3.719048] taskgraph DFS order=67 depth=2 pid=59 ppid=2 state=I comm=kworker/u4:3
+[    3.719129] taskgraph DFS order=68 depth=2 pid=60 ppid=2 state=I comm=kworker/0:1H
+[    3.719210] taskgraph DFS order=69 depth=2 pid=61 ppid=2 state=I comm=kworker/R-ipv6_
+[    3.719293] taskgraph DFS order=70 depth=2 pid=68 ppid=2 state=I comm=kworker/R-kstrp
+[    3.719376] taskgraph DFS order=71 depth=2 pid=70 ppid=2 state=I comm=kworker/u5:0
+[    3.719495] taskgraph DFS order=72 depth=2 pid=83 ppid=2 state=I comm=kworker/R-charg
+[    3.719610] taskgraph loaded count=73 truncated=0; read /proc/taskgraph

@@ -21,8 +21,13 @@ test_20_bad_dfs_rank (test_model.SnapshotTests.test_20_bad_dfs_rank) ... ok
 test_21_bad_column_count (test_model.SnapshotTests.test_21_bad_column_count) ... ok
 test_22_bad_escape (test_model.SnapshotTests.test_22_bad_escape) ... ok
 test_23_live_procfs (test_model.SnapshotTests.test_23_live_procfs) ... ok
+test_missing_thread_in_init_log_fails (test_verification.VerificationTests.test_missing_thread_in_init_log_fails) ... ok
+test_parent_first_is_not_enough_for_dfs (test_verification.VerificationTests.test_parent_first_is_not_enough_for_dfs) ... ok
+test_ps_spaces_and_thread_ids (test_verification.VerificationTests.test_ps_spaces_and_thread_ids) ... ok
+test_transient_ps_process_is_reported_not_hidden (test_verification.VerificationTests.test_transient_ps_process_is_reported_not_hidden) ... ok
+test_wrong_state_fails_workload_comparison (test_verification.VerificationTests.test_wrong_state_fails_workload_comparison) ... ok
 
 ----------------------------------------------------------------------
-Ran 23 tests in 0.032s
+Ran 28 tests in 0.016s
 
 OK
