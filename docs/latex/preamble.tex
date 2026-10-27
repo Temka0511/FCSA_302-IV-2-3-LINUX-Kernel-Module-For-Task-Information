@@ -1,0 +1,41 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{DejaVu Serif}[ItalicFont={DejaVu Serif},ItalicFeatures={FakeSlant=0.15},BoldItalicFont={DejaVu Serif Bold},BoldItalicFeatures={FakeSlant=0.15}]}
+\setsansfont{DejaVu Sans}
+\setmonofont[Scale=0.85]{DejaVu Sans Mono}
+\usepackage[left=3cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{graphicx,booktabs,tabularx,array,longtable,float}
+\usepackage{enumitem,setspace,titlesec,fancyhdr,xcolor}
+\usepackage{listings,xurl}
+\usepackage[hidelinks,unicode]{hyperref}
+\usepackage{caption,tocloft}
+\setlength{\cftsecnumwidth}{2.2em}
+\setlength{\cftsubsecnumwidth}{2.7em}
+\setstretch{1.15}
+\setlength{\parindent}{1.1cm}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\setlist{nosep,leftmargin=1.6em,topsep=4pt}
+\renewcommand{\contentsname}{Гарчиг}
+\renewcommand{\figurename}{Зураг}
+\renewcommand{\tablename}{Хүснэгт}
+\captionsetup{font=small,labelfont=bf}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.6em}{}
+\titlespacing*{\section}{0pt}{12pt}{7pt}
+\titlespacing*{\subsection}{0pt}{8pt}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small F.CSM302 Үйлдлийн систем}
+\fancyhead[R]{\small Бие даалт №1}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{16pt}
+\renewcommand{\headrulewidth}{0.3pt}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\docname}{Судалгаа, хэрэгжилт, туршилтын тайлан}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,keepspaces=true,
+ frame=single,rulecolor=\color{black!25},backgroundcolor=\color{black!3},showstringspaces=false,
+ xleftmargin=4pt,xrightmargin=4pt,aboveskip=7pt,belowskip=7pt}
+\hypersetup{pdfauthor={А.Тэмүүлэн B242270063},pdftitle={Linux Kernel Module for Listing Tasks}}

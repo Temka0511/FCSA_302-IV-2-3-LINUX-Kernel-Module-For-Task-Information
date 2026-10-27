@@ -1,0 +1,1139 @@
+c[?7l[2J[0mSeaBIOS (version 1.16.3-debian-1.16.3-2)
+Booting from ROM...
+c[?7l[2J[    0.000000] Linux version 6.8.0-31-generic (buildd@lcy02-amd64-080) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.2.0-23ubuntu4) 13.2.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #31-Ubuntu SMP PREEMPT_DYNAMIC Sat Apr 20 00:40:06 UTC 2024 (Ubuntu 6.8.0-31.31-generic 6.8.1)
+[    0.000000] Command line: console=ttyS0 rdinit=/init panic=-1
+[    0.000000] KERNEL supported cpus:
+[    0.000000]   Intel GenuineIntel
+[    0.000000]   AMD AuthenticAMD
+[    0.000000]   Hygon HygonGenuine
+[    0.000000]   Centaur CentaurHauls
+[    0.000000]   zhaoxin   Shanghai  
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000001ffdffff] usable
+[    0.000000] BIOS-e820: [mem 0x000000001ffe0000-0x000000001fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] APIC: Static calls initialized
+[    0.000000] SMBIOS 3.0.0 present.
+[    0.000000] DMI: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[    0.000000] tsc: Fast TSC calibration using PIT
+[    0.000000] tsc: Detected 2596.095 MHz processor
+[    0.013421] AGP: No AGP bridge found
+[    0.013667] last_pfn = 0x1ffe0 max_arch_pfn = 0x400000000
+[    0.014474] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+[    0.014696] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.037291] found SMP MP-table at [mem 0x000f5480-0x000f548f]
+[    0.042760] RAMDISK: [mem 0x1fc8a000-0x1ffdffff]
+[    0.043327] ACPI: Early table checksum verification disabled
+[    0.043784] ACPI: RSDP 0x00000000000F52B0 000014 (v00 BOCHS )
+[    0.044098] ACPI: RSDT 0x000000001FFE1CE5 000034 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.044791] ACPI: FACP 0x000000001FFE1B91 000074 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.045481] ACPI: DSDT 0x000000001FFE0040 001B51 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.045576] ACPI: FACS 0x000000001FFE0000 000040
+[    0.045634] ACPI: APIC 0x000000001FFE1C05 000080 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.045664] ACPI: HPET 0x000000001FFE1C85 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.045692] ACPI: WAET 0x000000001FFE1CBD 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.045813] ACPI: Reserving FACP table memory at [mem 0x1ffe1b91-0x1ffe1c04]
+[    0.045833] ACPI: Reserving DSDT table memory at [mem 0x1ffe0040-0x1ffe1b90]
+[    0.045841] ACPI: Reserving FACS table memory at [mem 0x1ffe0000-0x1ffe003f]
+[    0.045848] ACPI: Reserving APIC table memory at [mem 0x1ffe1c05-0x1ffe1c84]
+[    0.045855] ACPI: Reserving HPET table memory at [mem 0x1ffe1c85-0x1ffe1cbc]
+[    0.045861] ACPI: Reserving WAET table memory at [mem 0x1ffe1cbd-0x1ffe1ce4]
+[    0.048372] No NUMA configuration found
+[    0.048395] Faking a node at [mem 0x0000000000000000-0x000000001ffdffff]
+[    0.049085] NODE_DATA(0) allocated [mem 0x1fc5f000-0x1fc89fff]
+[    0.052490] Zone ranges:
+[    0.052524]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.052613]   DMA32    [mem 0x0000000001000000-0x000000001ffdffff]
+[    0.052628]   Normal   empty
+[    0.052646]   Device   empty
+[    0.052659] Movable zone start for each node
+[    0.052690] Early memory node ranges
+[    0.052717]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.052900]   node   0: [mem 0x0000000000100000-0x000000001ffdffff]
+[    0.053084] Initmem setup node 0 [mem 0x0000000000001000-0x000000001ffdffff]
+[    0.059383] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.059620] On node 0, zone DMA: 97 pages in unavailable ranges
+[    0.077574] On node 0, zone DMA32: 32 pages in unavailable ranges
+[    0.078203] ACPI: PM-Timer IO Port: 0x608
+[    0.078636] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.079142] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+[    0.079256] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[    0.079549] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.079600] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.079697] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.079708] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.079936] ACPI: Using ACPI (MADT) for SMP configuration information
+[    0.079978] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[    0.080248] smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+[    0.081024] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+[    0.081070] PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+[    0.081093] PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000effff]
+[    0.081100] PM: hibernation: Registered nosave memory: [mem 0x000f0000-0x000fffff]
+[    0.081305] [mem 0x20000000-0xfffbffff] available for PCI devices
+[    0.081377] Booting paravirtualized kernel on bare hardware
+[    0.081661] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+[    0.087846] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:2 nr_cpu_ids:2 nr_node_ids:1
+[    0.094600] percpu: Embedded 86 pages/cpu s229376 r8192 d114688 u1048576
+[    0.096211] Kernel command line: console=ttyS0 rdinit=/init panic=-1
+[    0.097857] Dentry cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.098003] Inode-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[    0.100980] Fallback order for Node 0: 0 
+[    0.101404] Built 1 zonelists, mobility grouping on.  Total pages: 128736
+[    0.101439] Policy zone: DMA32
+[    0.102058] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.102202] AGP: Checking aperture...
+[    0.103378] AGP: No AGP bridge found
+[    0.116762] Memory: 458316K/523768K available (22528K kernel code, 4438K rwdata, 14288K rodata, 4976K init, 4736K bss, 65192K reserved, 0K cma-reserved)
+[    0.313626] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+[    0.316928] ftrace: allocating 57796 entries in 226 pages
+[    0.360858] ftrace: allocated 226 pages with 4 groups
+[    0.378080] Dynamic Preempt: voluntary
+[    0.388033] rcu: Preemptible hierarchical RCU implementation.
+[    0.388079] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=2.
+[    0.388183] 	Trampoline variant of Tasks RCU enabled.
+[    0.388191] 	Rude variant of Tasks RCU enabled.
+[    0.388198] 	Tracing variant of Tasks RCU enabled.
+[    0.388307] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+[    0.388332] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+[    0.418786] NR_IRQS: 524544, nr_irqs: 440, preallocated irqs: 16
+[    0.428285] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.439316] Console: colour *CGA 80x25
+[    0.440936] printk: legacy console [ttyS0] enabled
+[    0.452681] ACPI: Core revision 20230628
+[    0.459341] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+[    0.461518] APIC: Switch to symmetric I/O mode setup
+[    0.470721] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[    0.476025] tsc: Marking TSC unstable due to TSCs unsynchronized
+[    0.476612] Calibrating delay loop (skipped), value calculated using timer frequency.. 5192.19 BogoMIPS (lpj=2596095)
+[    0.481922] process: using AMD E400 aware idle routine
+[    0.482246] Last level iTLB entries: 4KB 512, 2MB 255, 4MB 127
+[    0.482377] Last level dTLB entries: 4KB 512, 2MB 255, 4MB 127, 1GB 0
+[    0.482738] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+[    0.483002] Spectre V2 : Mitigation: Retpolines
+[    0.483090] Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
+[    0.483261] Spectre V2 : Spectre v2 / SpectreRSB : Filling RSB on VMEXIT
+[    0.484180] x86/fpu: x87 FPU will use FXSAVE
+[    0.691132] Freeing SMP alternatives memory: 48K
+[    0.692529] pid_max: default: 32768 minimum: 301
+[    0.710383] LSM: initializing lsm=lockdown,capability,landlock,yama,apparmor,integrity
+[    0.713294] landlock: Up and running.
+[    0.713544] Yama: becoming mindful.
+[    0.719950] AppArmor: AppArmor initialized
+[    0.726075] Mount-cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
+[    0.726322] Mountpoint-cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
+[    0.866235] smpboot: CPU0: AMD QEMU Virtual CPU version 2.5+ (family: 0xf, model: 0x6b, stepping: 0x1)
+[    0.873830] RCU Tasks: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+[    0.875546] RCU Tasks Rude: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+[    0.876204] RCU Tasks Trace: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+[    0.878351] Performance Events: PMU not available due to virtualization, using software events only.
+[    0.879504] signal: max sigframe size: 1440
+[    0.881705] rcu: Hierarchical SRCU implementation.
+[    0.881855] rcu: 	Max phase no-delay instances is 400.
+[    0.890559] NMI watchdog: Perf NMI watchdog permanently disabled
+[    0.894546] smp: Bringing up secondary CPUs ...
+[    0.900447] smpboot: x86: Booting SMP configuration:
+[    0.900612] .... node  #0, CPUs:      #1
+[    0.974159] smp: Brought up 1 node, 2 CPUs
+[    0.974531] smpboot: Max logical packages: 1
+[    0.974766] smpboot: Total of 2 processors activated (10497.07 BogoMIPS)
+[    0.993312] devtmpfs: initialized
+[    0.998304] x86/mm: Memory block size: 128MB
+[    1.008928] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+[    1.009591] futex hash table entries: 512 (order: 3, 32768 bytes, linear)
+[    1.014982] pinctrl core: initialized pinctrl subsystem
+[    1.021730] PM: RTC time: 00:51:06, date: 2026-10-27
+[    1.038805] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    1.043576] DMA: preallocated 128 KiB GFP_KERNEL pool for atomic allocations
+[    1.044312] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    1.044549] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    1.045090] audit: initializing netlink subsys (disabled)
+[    1.046982] audit: type=2000 audit(1793062266.583:1): state=initialized audit_enabled=0 res=1
+[    1.054525] thermal_sys: Registered thermal governor 'fair_share'
+[    1.054605] thermal_sys: Registered thermal governor 'bang_bang'
+[    1.054768] thermal_sys: Registered thermal governor 'step_wise'
+[    1.054962] thermal_sys: Registered thermal governor 'user_space'
+[    1.055043] thermal_sys: Registered thermal governor 'power_allocator'
+[    1.055483] EISA bus registered
+[    1.057427] cpuidle: using governor ladder
+[    1.057695] cpuidle: using governor menu
+[    1.060945] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+[    1.067593] PCI: Using configuration type 1 for base access
+[    1.068683] mtrr: your CPUs had inconsistent fixed MTRR settings
+[    1.068923] mtrr: your CPUs had inconsistent variable MTRR settings
+[    1.069211] mtrr: your CPUs had inconsistent MTRRdefType settings
+[    1.069258] mtrr: probably your BIOS does not setup all CPUs.
+[    1.069339] mtrr: corrected configuration.
+[    1.074842] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+[    1.130010] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    1.130315] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[    1.149708] ACPI: Added _OSI(Module Device)
+[    1.149956] ACPI: Added _OSI(Processor Device)
+[    1.150063] ACPI: Added _OSI(3.0 _SCP Extensions)
+[    1.150166] ACPI: Added _OSI(Processor Aggregator Device)
+[    1.177640] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[    1.209397] ACPI: _OSC evaluation for CPUs failed, trying _PDC
+[    1.212671] ACPI: Interpreter enabled
+[    1.214195] ACPI: PM: (supports S0 S3 S4 S5)
+[    1.214319] ACPI: Using IOAPIC for interrupt routing
+[    1.216577] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    1.216928] PCI: Using E820 reservations for host bridge windows
+[    1.219031] ACPI: Enabled 2 GPEs in block 00 to 0F
+[    1.281796] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    1.282942] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments MSI EDR HPX-Type3]
+[    1.283391] acpi PNP0A03:00: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+[    1.284498] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+[    1.291552] acpiphp: Slot [2] registered
+[    1.291785] acpiphp: Slot [3] registered
+[    1.291925] acpiphp: Slot [4] registered
+[    1.292119] acpiphp: Slot [5] registered
+[    1.292267] acpiphp: Slot [6] registered
+[    1.292382] acpiphp: Slot [7] registered
+[    1.292488] acpiphp: Slot [8] registered
+[    1.292589] acpiphp: Slot [9] registered
+[    1.292720] acpiphp: Slot [10] registered
+[    1.292829] acpiphp: Slot [11] registered
+[    1.292979] acpiphp: Slot [12] registered
+[    1.293088] acpiphp: Slot [13] registered
+[    1.293196] acpiphp: Slot [14] registered
+[    1.293311] acpiphp: Slot [15] registered
+[    1.293558] acpiphp: Slot [16] registered
+[    1.293688] acpiphp: Slot [17] registered
+[    1.293854] acpiphp: Slot [18] registered
+[    1.293976] acpiphp: Slot [19] registered
+[    1.294082] acpiphp: Slot [20] registered
+[    1.294306] acpiphp: Slot [21] registered
+[    1.294456] acpiphp: Slot [22] registered
+[    1.294566] acpiphp: Slot [23] registered
+[    1.294671] acpiphp: Slot [24] registered
+[    1.294775] acpiphp: Slot [25] registered
+[    1.294919] acpiphp: Slot [26] registered
+[    1.295034] acpiphp: Slot [27] registered
+[    1.295139] acpiphp: Slot [28] registered
+[    1.295331] acpiphp: Slot [29] registered
+[    1.295447] acpiphp: Slot [30] registered
+[    1.295581] acpiphp: Slot [31] registered
+[    1.295962] PCI host bridge to bus 0000:00
+[    1.296175] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    1.296390] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    1.296483] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    1.296611] pci_bus 0000:00: root bus resource [mem 0x20000000-0xfebfffff window]
+[    1.296710] pci_bus 0000:00: root bus resource [mem 0x100000000-0x17fffffff window]
+[    1.296981] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.298589] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000 conventional PCI endpoint
+[    1.303342] pci 0000:00:01.0: [8086:7000] type 00 class 0x060100 conventional PCI endpoint
+[    1.304387] pci 0000:00:01.1: [8086:7010] type 00 class 0x010180 conventional PCI endpoint
+[    1.307686] pci 0000:00:01.1: BAR 4 [io  0xc000-0xc00f]
+[    1.308781] pci 0000:00:01.1: BAR 0 [io  0x01f0-0x01f7]: legacy IDE quirk
+[    1.308931] pci 0000:00:01.1: BAR 1 [io  0x03f6]: legacy IDE quirk
+[    1.308931] pci 0000:00:01.1: BAR 2 [io  0x0170-0x0177]: legacy IDE quirk
+[    1.308931] pci 0000:00:01.1: BAR 3 [io  0x0376]: legacy IDE quirk
+[    1.309678] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000 conventional PCI endpoint
+[    1.310197] pci 0000:00:01.3: quirk: [io  0x0600-0x063f] claimed by PIIX4 ACPI
+[    1.310396] pci 0000:00:01.3: quirk: [io  0x0700-0x070f] claimed by PIIX4 SMB
+[    1.316908] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    1.317962] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    1.318678] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    1.319434] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    1.319971] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+[    1.327616] iommu: Default domain type: Translated
+[    1.327616] iommu: DMA domain TLB invalidation policy: lazy mode
+[    1.331663] SCSI subsystem initialized
+[    1.333029] ACPI: bus type USB registered
+[    1.333444] usbcore: registered new interface driver usbfs
+[    1.333745] usbcore: registered new interface driver hub
+[    1.334015] usbcore: registered new device driver usb
+[    1.334621] pps_core: LinuxPPS API ver. 1 registered
+[    1.334711] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    1.334869] PTP clock support registered
+[    1.337451] EDAC MC: Ver: 3.0.0
+[    1.354319] NetLabel: Initializing
+[    1.354520] NetLabel:  domain hash size = 128
+[    1.354644] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+[    1.355708] NetLabel:  unlabeled traffic allowed by default
+[    1.359953] mctp: management component transport protocol core
+[    1.360006] NET: Registered PF_MCTP protocol family
+[    1.360479] PCI: Using ACPI for IRQ routing
+[    1.362452] vgaarb: loaded
+[    1.365325] hpet: 3 channels of 0 reserved for per-cpu timers
+[    1.365668] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[    1.365861] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+[    1.371145] clocksource: Switched to clocksource hpet
+[    1.390992] VFS: Disk quotas dquot_6.6.0
+[    1.391478] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    1.396276] AppArmor: AppArmor Filesystem Enabled
+[    1.396885] pnp: PnP ACPI init
+[    1.402685] pnp: PnP ACPI: found 6 devices
+[    1.449931] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    1.452650] NET: Registered PF_INET protocol family
+[    1.453924] IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    1.567487] tcp_listen_portaddr_hash hash table entries: 256 (order: 0, 4096 bytes, linear)
+[    1.567831] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    1.568117] TCP established hash table entries: 4096 (order: 3, 32768 bytes, linear)
+[    1.568678] TCP bind hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    1.568931] TCP: Hash tables configured (established 4096 bind 4096)
+[    1.571562] MPTCP token hash table entries: 512 (order: 1, 12288 bytes, linear)
+[    1.572225] UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    1.572695] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    1.574329] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.574863] NET: Registered PF_XDP protocol family
+[    1.575762] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+[    1.575905] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+[    1.576051] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+[    1.576172] pci_bus 0000:00: resource 7 [mem 0x20000000-0xfebfffff window]
+[    1.576271] pci_bus 0000:00: resource 8 [mem 0x100000000-0x17fffffff window]
+[    1.576985] pci 0000:00:01.0: PIIX3: Enabling Passive Release
+[    1.577177] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+[    1.577330] PCI: CLS 0 bytes, default 64
+[    1.583283] Trying to unpack rootfs image as initramfs...
+[    1.586198] Initialise system trusted keyrings
+[    1.588733] Key type blacklist registered
+[    1.589799] workingset: timestamp_bits=36 max_order=17 bucket_order=0
+[    1.590295] zbud: loaded
+[    1.604795] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    1.611385] fuse: init (API version 7.39)
+[    1.619245] integrity: Platform Keyring initialized
+[    1.620220] integrity: Machine keyring initialized
+[    1.622200] Freeing initrd memory: 3416K
+[    1.697846] Key type asymmetric registered
+[    1.698083] Asymmetric key parser 'x509' registered
+[    1.698806] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 243)
+[    1.700277] io scheduler mq-deadline registered
+[    1.703307] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+[    1.708529] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[    1.713666] ACPI: button: Power Button [PWRF]
+[    1.720790] Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
+[    1.752831] 00:04: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    1.784575] Linux agpgart interface v0.103
+[    1.813304] loop: module loaded
+[    1.831732] scsi host0: ata_piix
+[    1.834300] scsi host1: ata_piix
+[    1.834929] ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xc000 irq 14 lpm-pol 0
+[    1.835113] ata2: PATA max MWDMA2 cmd 0x170 ctl 0x376 bmdma 0xc008 irq 15 lpm-pol 0
+[    1.836136] ACPI: bus type drm_connector registered
+[    1.839900] tun: Universal TUN/TAP device driver, 1.6
+[    1.841023] PPP generic driver version 2.4.2
+[    1.843988] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[    1.848543] serio: i8042 KBD port at 0x60,0x64 irq 1
+[    1.848846] serio: i8042 AUX port at 0x60,0x64 irq 12
+[    1.852115] mousedev: PS/2 mouse device common for all mice
+[    1.856914] rtc_cmos 00:05: RTC can wake from S4
+[    1.860103] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[    1.862942] rtc_cmos 00:05: registered as rtc0
+[    1.863731] rtc_cmos 00:05: setting system clock to 2026-10-27T00:51:07 UTC (1793062267)
+[    1.865745] rtc_cmos 00:05: alarms up to one day, y3k, 242 bytes nvram, hpet irqs
+[    1.866114] i2c_dev: i2c /dev entries driver
+[    1.866682] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+[    1.867317] device-mapper: uevent: version 1.0.3
+[    1.868399] device-mapper: ioctl: 4.48.0-ioctl (2023-03-01) initialised: dm-devel@redhat.com
+[    1.869200] platform eisa.0: Probing EISA bus 0
+[    1.869584] platform eisa.0: EISA: Cannot allocate resource for mainboard
+[    1.869779] platform eisa.0: Cannot allocate resource for EISA slot 1
+[    1.869952] platform eisa.0: Cannot allocate resource for EISA slot 2
+[    1.870037] platform eisa.0: Cannot allocate resource for EISA slot 3
+[    1.870119] platform eisa.0: Cannot allocate resource for EISA slot 4
+[    1.870237] platform eisa.0: Cannot allocate resource for EISA slot 5
+[    1.870321] platform eisa.0: Cannot allocate resource for EISA slot 6
+[    1.870500] platform eisa.0: Cannot allocate resource for EISA slot 7
+[    1.870588] platform eisa.0: Cannot allocate resource for EISA slot 8
+[    1.870689] platform eisa.0: EISA: Detected 0 cards
+[    1.870861] amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+[    1.871457] ledtrig-cpu: registered to indicate activity on CPUs
+[    1.872864] drop_monitor: Initializing network drop monitor service
+[    1.874925] NET: Registered PF_INET6 protocol family
+[    1.908390] Segment Routing with IPv6
+[    1.909696] In-situ OAM (IOAM) with IPv6
+[    1.910391] NET: Registered PF_PACKET protocol family
+[    1.911540] Key type dns_resolver registered
+[    1.916298] IPI shorthand broadcast: enabled
+[    1.934769] registered taskstats version 1
+[    1.939248] Loading compiled-in X.509 certificates
+[    1.951782] Loaded X.509 cert 'Build time autogenerated kernel key: 06ebe891e0babd04dcef5f73bad66b3a3e5eafa8'
+[    1.961170] Loaded X.509 cert 'Canonical Ltd. Live Patch Signing: 14df34d1a87cf37625abec039ef2bf521249b969'
+[    1.963331] Loaded X.509 cert 'Canonical Ltd. Kernel Module Signing: 88f752e560a1e0737e31163a466ad7b70a850c19'
+[    1.963658] blacklist: Loading compiled-in revocation X.509 certificates
+[    1.965180] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing: 61482aa2830d0ab2ad5af10b7250da9033ddcef0'
+[    1.965652] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2017): 242ade75ac4a15e50d50c84b0d45ff3eae707a03'
+[    1.965982] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (ESM 2018): 365188c1d374d6b07c3c8f240f8ef722433d6a8b'
+[    1.966298] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2019): c0746fd6c5da3ae827864651ad66ae47fe24b3e8'
+[    1.966707] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2021 v1): a8d54bbb3825cfb94fa13c9f8a594a195c107b8d'
+[    1.966965] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2021 v2): 4cf046892d6fd3c9a5b03f98d845f90851dc6a8c'
+[    1.967255] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2021 v3): 100437bb6de6e469b581e61cd66bce3ef4ed53af'
+[    1.967647] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (Ubuntu Core 2019): c1d57b8f6b743f23ee41f4f7ee292f06eecadfb9'
+[    1.993970] ata2: found unknown device (class 0)
+[    1.997682] ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[    2.011062] Key type .fscrypt registered
+[    2.011243] Key type fscrypt-provisioning registered
+[    2.016475] scsi 1:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[    2.026684] Key type encrypted registered
+[    2.027365] AppArmor: AppArmor sha256 policy hashing enabled
+[    2.028163] ima: No TPM chip found, activating TPM-bypass!
+[    2.028392] Loading compiled-in module X.509 certificates
+[    2.030544] Loaded X.509 cert 'Build time autogenerated kernel key: 06ebe891e0babd04dcef5f73bad66b3a3e5eafa8'
+[    2.030762] ima: Allocated hash algorithm: sha256
+[    2.033632] ima: No architecture policies found
+[    2.034573] evm: Initialising EVM extended attributes:
+[    2.034681] evm: security.selinux
+[    2.034745] evm: security.SMACK64
+[    2.034794] evm: security.SMACK64EXEC
+[    2.034842] evm: security.SMACK64TRANSMUTE
+[    2.034907] evm: security.SMACK64MMAP
+[    2.035031] evm: security.apparmor
+[    2.035080] evm: security.ima
+[    2.035121] evm: security.capability
+[    2.035223] evm: HMAC attrs: 0x1
+[    2.038672] PM:   Magic number: 14:390:861
+[    2.041028] powernow_k8: Power state transitions not supported
+[    2.041283] powernow_k8: Power state transitions not supported
+[    2.043939] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+[    2.044304] cdrom: Uniform CD-ROM driver Revision: 3.20
+[    2.057367] sr 1:0:0:0: Attached scsi generic sg0 type 5
+[    2.122594] RAS: Correctable Errors collector initialized.
+[    2.125707] Unstable clock detected, switching default tracing clock to "global"
+[    2.125707] If you want to keep using the local clock, then add:
+[    2.125707]   "trace_clock=local"
+[    2.125707] on the kernel command line
+[    2.127179] clk: Disabling unused clocks
+[    2.148235] Freeing unused decrypted memory: 2028K
+[    2.264314] Freeing unused kernel image (initmem) memory: 4976K
+[    2.265370] Write protecting the kernel read-only data: 36864k
+[    2.267744] Freeing unused kernel image (rodata/data gap) memory: 48K
+[    2.444222] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+[    2.444716] Run /init as init process
+ENV_KERNEL=6.8.0-31-generic
+[    2.615935] taskgraph: loading out-of-tree module taints kernel.
+[    2.616339] taskgraph: module verification failed: signature and/or required key missing - tainting kernel
+[    2.624966] taskgraph LINEAR pid=1 state=S comm=init
+[    2.625096] taskgraph LINEAR pid=2 state=S comm=kthreadd
+[    2.625204] taskgraph LINEAR pid=3 state=S comm=pool_workqueue_
+[    2.625274] taskgraph LINEAR pid=4 state=I comm=kworker/R-rcu_g
+[    2.625343] taskgraph LINEAR pid=5 state=I comm=kworker/R-rcu_p
+[    2.625410] taskgraph LINEAR pid=6 state=I comm=kworker/R-slub_
+[    2.625562] taskgraph LINEAR pid=7 state=I comm=kworker/R-netns
+[    2.625692] taskgraph LINEAR pid=8 state=I comm=kworker/0:0
+[    2.625767] taskgraph LINEAR pid=9 state=I comm=kworker/0:0H
+[    2.625831] taskgraph LINEAR pid=10 state=I comm=kworker/u4:0
+[    2.625896] taskgraph LINEAR pid=11 state=I comm=kworker/R-mm_pe
+[    2.625963] taskgraph LINEAR pid=12 state=I comm=kworker/0:1
+[    2.626028] taskgraph LINEAR pid=13 state=I comm=rcu_tasks_kthre
+[    2.626095] taskgraph LINEAR pid=14 state=I comm=rcu_tasks_rude_
+[    2.626195] taskgraph LINEAR pid=15 state=I comm=rcu_tasks_trace
+[    2.626260] taskgraph LINEAR pid=16 state=S comm=ksoftirqd/0
+[    2.626323] taskgraph LINEAR pid=17 state=I comm=rcu_preempt
+[    2.626385] taskgraph LINEAR pid=18 state=S comm=migration/0
+[    2.626574] taskgraph LINEAR pid=19 state=S comm=idle_inject/0
+[    2.626646] taskgraph LINEAR pid=20 state=S comm=cpuhp/0
+[    2.626716] taskgraph LINEAR pid=21 state=S comm=cpuhp/1
+[    2.626777] taskgraph LINEAR pid=22 state=S comm=idle_inject/1
+[    2.626841] taskgraph LINEAR pid=23 state=S comm=migration/1
+[    2.627015] taskgraph LINEAR pid=24 state=S comm=ksoftirqd/1
+[    2.627086] taskgraph LINEAR pid=25 state=I comm=kworker/1:0
+[    2.627176] taskgraph LINEAR pid=26 state=I comm=kworker/1:0H
+[    2.627245] taskgraph LINEAR pid=27 state=S comm=kdevtmpfs
+[    2.627306] taskgraph LINEAR pid=28 state=I comm=kworker/R-inet_
+[    2.627460] taskgraph LINEAR pid=29 state=I comm=kworker/u4:1
+[    2.627597] taskgraph LINEAR pid=30 state=S comm=kauditd
+[    2.627661] taskgraph LINEAR pid=31 state=S comm=khungtaskd
+[    2.627787] taskgraph LINEAR pid=32 state=I comm=kworker/u4:2
+[    2.627885] taskgraph LINEAR pid=33 state=S comm=oom_reaper
+[    2.627950] taskgraph LINEAR pid=34 state=I comm=kworker/R-write
+[    2.628013] taskgraph LINEAR pid=35 state=S comm=kcompactd0
+[    2.628077] taskgraph LINEAR pid=36 state=S comm=ksmd
+[    2.628135] taskgraph LINEAR pid=37 state=I comm=kworker/1:1
+[    2.628232] taskgraph LINEAR pid=38 state=I comm=kworker/R-kinte
+[    2.628302] taskgraph LINEAR pid=39 state=I comm=kworker/R-kbloc
+[    2.628371] taskgraph LINEAR pid=40 state=I comm=kworker/R-blkcg
+[    2.628521] taskgraph LINEAR pid=41 state=S comm=irq/9-acpi
+[    2.628590] taskgraph LINEAR pid=42 state=I comm=kworker/R-tpm_d
+[    2.628659] taskgraph LINEAR pid=43 state=I comm=kworker/R-ata_s
+[    2.628726] taskgraph LINEAR pid=44 state=I comm=kworker/R-md
+[    2.628845] taskgraph LINEAR pid=45 state=I comm=kworker/R-md_bi
+[    2.628916] taskgraph LINEAR pid=46 state=I comm=kworker/R-edac-
+[    2.628984] taskgraph LINEAR pid=47 state=I comm=kworker/R-devfr
+[    2.629052] taskgraph LINEAR pid=48 state=S comm=watchdogd
+[    2.629114] taskgraph LINEAR pid=49 state=I comm=kworker/0:1H
+[    2.629214] taskgraph LINEAR pid=50 state=S comm=kswapd0
+[    2.629277] taskgraph LINEAR pid=51 state=S comm=ecryptfs-kthrea
+[    2.629530] taskgraph LINEAR pid=52 state=I comm=kworker/R-kthro
+[    2.629609] taskgraph LINEAR pid=53 state=I comm=kworker/R-acpi_
+[    2.629676] taskgraph LINEAR pid=54 state=S comm=scsi_eh_0
+[    2.629781] taskgraph LINEAR pid=55 state=I comm=kworker/R-scsi_
+[    2.629850] taskgraph LINEAR pid=56 state=S comm=scsi_eh_1
+[    2.629913] taskgraph LINEAR pid=57 state=I comm=kworker/R-scsi_
+[    2.629980] taskgraph LINEAR pid=58 state=I comm=kworker/u4:3
+[    2.630044] taskgraph LINEAR pid=59 state=I comm=kworker/R-mld
+[    2.630111] taskgraph LINEAR pid=60 state=I comm=kworker/1:1H
+[    2.630203] taskgraph LINEAR pid=61 state=I comm=kworker/R-ipv6_
+[    2.630270] taskgraph LINEAR pid=68 state=I comm=kworker/R-kstrp
+[    2.630340] taskgraph LINEAR pid=70 state=I comm=kworker/u5:0
+[    2.630405] taskgraph LINEAR pid=83 state=I comm=kworker/R-charg
+[    2.630524] taskgraph LINEAR pid=88 state=R comm=insmod
+[    2.630668] taskgraph DFS order=0 depth=0 pid=0 ppid=0 state=R comm=swapper/0
+[    2.630776] taskgraph DFS order=1 depth=1 pid=1 ppid=0 state=S comm=init
+[    2.630852] taskgraph DFS order=2 depth=2 pid=88 ppid=1 state=R comm=insmod
+[    2.630929] taskgraph DFS order=3 depth=1 pid=2 ppid=0 state=S comm=kthreadd
+[    2.631008] taskgraph DFS order=4 depth=2 pid=3 ppid=2 state=S comm=pool_workqueue_
+[    2.631091] taskgraph DFS order=5 depth=2 pid=4 ppid=2 state=I comm=kworker/R-rcu_g
+[    2.631197] taskgraph DFS order=6 depth=2 pid=5 ppid=2 state=I comm=kworker/R-rcu_p
+[    2.631281] taskgraph DFS order=7 depth=2 pid=6 ppid=2 state=I comm=kworker/R-slub_
+[    2.631367] taskgraph DFS order=8 depth=2 pid=7 ppid=2 state=I comm=kworker/R-netns
+[    2.631506] taskgraph DFS order=9 depth=2 pid=8 ppid=2 state=I comm=kworker/0:0
+[    2.631590] taskgraph DFS order=10 depth=2 pid=9 ppid=2 state=I comm=kworker/0:0H
+[    2.631673] taskgraph DFS order=11 depth=2 pid=10 ppid=2 state=I comm=kworker/u4:0
+[    2.631757] taskgraph DFS order=12 depth=2 pid=11 ppid=2 state=I comm=kworker/R-mm_pe
+[    2.631846] taskgraph DFS order=13 depth=2 pid=12 ppid=2 state=I comm=kworker/0:1
+[    2.631957] taskgraph DFS order=14 depth=2 pid=13 ppid=2 state=I comm=rcu_tasks_kthre
+[    2.632043] taskgraph DFS order=15 depth=2 pid=14 ppid=2 state=I comm=rcu_tasks_rude_
+[    2.632129] taskgraph DFS order=16 depth=2 pid=15 ppid=2 state=I comm=rcu_tasks_trace
+[    2.632232] taskgraph DFS order=17 depth=2 pid=16 ppid=2 state=S comm=ksoftirqd/0
+[    2.632317] taskgraph DFS order=18 depth=2 pid=17 ppid=2 state=I comm=rcu_preempt
+[    2.632438] taskgraph DFS order=19 depth=2 pid=18 ppid=2 state=S comm=migration/0
+[    2.632522] taskgraph DFS order=20 depth=2 pid=19 ppid=2 state=S comm=idle_inject/0
+[    2.632609] taskgraph DFS order=21 depth=2 pid=20 ppid=2 state=S comm=cpuhp/0
+[    2.632687] taskgraph DFS order=22 depth=2 pid=21 ppid=2 state=S comm=cpuhp/1
+[    2.632765] taskgraph DFS order=23 depth=2 pid=22 ppid=2 state=S comm=idle_inject/1
+[    2.632847] taskgraph DFS order=24 depth=2 pid=23 ppid=2 state=S comm=migration/1
+[    2.632928] taskgraph DFS order=25 depth=2 pid=24 ppid=2 state=S comm=ksoftirqd/1
+[    2.633011] taskgraph DFS order=26 depth=2 pid=25 ppid=2 state=I comm=kworker/1:0
+[    2.633096] taskgraph DFS order=27 depth=2 pid=26 ppid=2 state=I comm=kworker/1:0H
+[    2.633196] taskgraph DFS order=28 depth=2 pid=27 ppid=2 state=S comm=kdevtmpfs
+[    2.633340] taskgraph DFS order=29 depth=2 pid=28 ppid=2 state=I comm=kworker/R-inet_
+[    2.633472] taskgraph DFS order=30 depth=2 pid=29 ppid=2 state=I comm=kworker/u4:1
+[    2.633560] taskgraph DFS order=31 depth=2 pid=30 ppid=2 state=S comm=kauditd
+[    2.633641] taskgraph DFS order=32 depth=2 pid=31 ppid=2 state=S comm=khungtaskd
+[    2.633725] taskgraph DFS order=33 depth=2 pid=32 ppid=2 state=I comm=kworker/u4:2
+[    2.633809] taskgraph DFS order=34 depth=2 pid=33 ppid=2 state=S comm=oom_reaper
+[    2.633891] taskgraph DFS order=35 depth=2 pid=34 ppid=2 state=I comm=kworker/R-write
+[    2.633978] taskgraph DFS order=36 depth=2 pid=35 ppid=2 state=S comm=kcompactd0
+[    2.634058] taskgraph DFS order=37 depth=2 pid=36 ppid=2 state=S comm=ksmd
+[    2.634135] taskgraph DFS order=38 depth=2 pid=37 ppid=2 state=I comm=kworker/1:1
+[    2.634260] taskgraph DFS order=39 depth=2 pid=38 ppid=2 state=I comm=kworker/R-kinte
+[    2.634345] taskgraph DFS order=40 depth=2 pid=39 ppid=2 state=I comm=kworker/R-kbloc
+[    2.634480] taskgraph DFS order=41 depth=2 pid=40 ppid=2 state=I comm=kworker/R-blkcg
+[    2.634572] taskgraph DFS order=42 depth=2 pid=41 ppid=2 state=S comm=irq/9-acpi
+[    2.634655] taskgraph DFS order=43 depth=2 pid=42 ppid=2 state=I comm=kworker/R-tpm_d
+[    2.634741] taskgraph DFS order=44 depth=2 pid=43 ppid=2 state=I comm=kworker/R-ata_s
+[    2.634828] taskgraph DFS order=45 depth=2 pid=44 ppid=2 state=I comm=kworker/R-md
+[    2.635026] taskgraph DFS order=46 depth=2 pid=45 ppid=2 state=I comm=kworker/R-md_bi
+[    2.635120] taskgraph DFS order=47 depth=2 pid=46 ppid=2 state=I comm=kworker/R-edac-
+[    2.635789] taskgraph DFS order=48 depth=2 pid=47 ppid=2 state=I comm=kworker/R-devfr
+[    2.635916] taskgraph DFS order=49 depth=2 pid=48 ppid=2 state=S comm=watchdogd
+[    2.636000] taskgraph DFS order=50 depth=2 pid=49 ppid=2 state=I comm=kworker/0:1H
+[    2.636084] taskgraph DFS order=51 depth=2 pid=50 ppid=2 state=S comm=kswapd0
+[    2.636195] taskgraph DFS order=52 depth=2 pid=51 ppid=2 state=S comm=ecryptfs-kthrea
+[    2.636278] taskgraph DFS order=53 depth=2 pid=52 ppid=2 state=I comm=kworker/R-kthro
+[    2.636362] taskgraph DFS order=54 depth=2 pid=53 ppid=2 state=I comm=kworker/R-acpi_
+[    2.636548] taskgraph DFS order=55 depth=2 pid=54 ppid=2 state=S comm=scsi_eh_0
+[    2.636632] taskgraph DFS order=56 depth=2 pid=55 ppid=2 state=I comm=kworker/R-scsi_
+[    2.636716] taskgraph DFS order=57 depth=2 pid=56 ppid=2 state=S comm=scsi_eh_1
+[    2.636796] taskgraph DFS order=58 depth=2 pid=57 ppid=2 state=I comm=kworker/R-scsi_
+[    2.636881] taskgraph DFS order=59 depth=2 pid=58 ppid=2 state=I comm=kworker/u4:3
+[    2.636967] taskgraph DFS order=60 depth=2 pid=59 ppid=2 state=I comm=kworker/R-mld
+[    2.637052] taskgraph DFS order=61 depth=2 pid=60 ppid=2 state=I comm=kworker/1:1H
+[    2.637136] taskgraph DFS order=62 depth=2 pid=61 ppid=2 state=I comm=kworker/R-ipv6_
+[    2.637473] taskgraph DFS order=63 depth=2 pid=68 ppid=2 state=I comm=kworker/R-kstrp
+[    2.637565] taskgraph DFS order=64 depth=2 pid=70 ppid=2 state=I comm=kworker/u5:0
+[    2.637653] taskgraph DFS order=65 depth=2 pid=83 ppid=2 state=I comm=kworker/R-charg
+[    2.637835] taskgraph loaded count=66 truncated=0; read /proc/taskgraph
+RESULT LOAD= 0
+BEGIN_SNAPSHOT_BEFORE
+# taskgraph version=1 source=kernel count=66 cap=4096 truncated=0 boot_ns=2624701171 duration_ns=123010
+pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
+0	0	0	0	R	root	0	0	0	0	swapper/0
+1	0	1	0	S	process	1	1	1	0	init
+2	0	2	0	S	process	2	3	1	0	kthreadd
+3	2	3	2	S	process	3	4	2	0	pool_workqueue_
+4	2	4	2	I	process	4	5	2	0	kworker/R-rcu_g
+5	2	5	2	I	process	5	6	2	0	kworker/R-rcu_p
+6	2	6	2	I	process	6	7	2	0	kworker/R-slub_
+7	2	7	2	I	process	7	8	2	0	kworker/R-netns
+8	2	8	2	I	process	8	9	2	0	kworker/0:0
+9	2	9	2	I	process	9	10	2	0	kworker/0:0H
+10	2	10	2	I	process	10	11	2	0	kworker/u4:0
+11	2	11	2	I	process	11	12	2	0	kworker/R-mm_pe
+12	2	12	2	I	process	12	13	2	0	kworker/0:1
+13	2	13	2	I	process	13	14	2	0	rcu_tasks_kthre
+14	2	14	2	I	process	14	15	2	0	rcu_tasks_rude_
+15	2	15	2	I	process	15	16	2	0	rcu_tasks_trace
+16	2	16	2	S	process	16	17	2	0	ksoftirqd/0
+17	2	17	2	I	process	17	18	2	0	rcu_preempt
+18	2	18	2	S	process	18	19	2	0	migration/0
+19	2	19	2	S	process	19	20	2	0	idle_inject/0
+20	2	20	2	S	process	20	21	2	0	cpuhp/0
+21	2	21	2	S	process	21	22	2	0	cpuhp/1
+22	2	22	2	S	process	22	23	2	0	idle_inject/1
+23	2	23	2	S	process	23	24	2	0	migration/1
+24	2	24	2	S	process	24	25	2	0	ksoftirqd/1
+25	2	25	2	I	process	25	26	2	0	kworker/1:0
+26	2	26	2	I	process	26	27	2	0	kworker/1:0H
+27	2	27	2	S	process	27	28	2	0	kdevtmpfs
+28	2	28	2	I	process	28	29	2	0	kworker/R-inet_
+29	2	29	2	I	process	29	30	2	0	kworker/u4:1
+30	2	30	2	S	process	30	31	2	0	kauditd
+31	2	31	2	S	process	31	32	2	0	khungtaskd
+32	2	32	2	I	process	32	33	2	0	kworker/u4:2
+33	2	33	2	S	process	33	34	2	0	oom_reaper
+34	2	34	2	I	process	34	35	2	0	kworker/R-write
+35	2	35	2	S	process	35	36	2	0	kcompactd0
+36	2	36	2	S	process	36	37	2	0	ksmd
+37	2	37	2	I	process	37	38	2	0	kworker/1:1
+38	2	38	2	I	process	38	39	2	0	kworker/R-kinte
+39	2	39	2	I	process	39	40	2	0	kworker/R-kbloc
+40	2	40	2	I	process	40	41	2	0	kworker/R-blkcg
+41	2	41	2	S	process	41	42	2	0	irq/9-acpi
+42	2	42	2	I	process	42	43	2	0	kworker/R-tpm_d
+43	2	43	2	I	process	43	44	2	0	kworker/R-ata_s
+44	2	44	2	I	process	44	45	2	0	kworker/R-md
+45	2	45	2	I	process	45	46	2	0	kworker/R-md_bi
+46	2	46	2	I	process	46	47	2	0	kworker/R-edac-
+47	2	47	2	I	process	47	48	2	0	kworker/R-devfr
+48	2	48	2	S	process	48	49	2	0	watchdogd
+49	2	49	2	I	process	49	50	2	0	kworker/0:1H
+50	2	50	2	S	process	50	51	2	0	kswapd0
+51	2	51	2	S	process	51	52	2	0	ecryptfs-kthrea
+52	2	52	2	I	process	52	53	2	0	kworker/R-kthro
+53	2	53	2	I	process	53	54	2	0	kworker/R-acpi_
+54	2	54	2	S	process	54	55	2	0	scsi_eh_0
+55	2	55	2	I	process	55	56	2	0	kworker/R-scsi_
+56	2	56	2	S	process	56	57	2	0	scsi_eh_1
+57	2	57	2	I	process	57	58	2	0	kworker/R-scsi_
+58	2	58	2	I	process	58	59	2	0	kworker/u4:3
+59	2	59	2	I	process	59	60	2	0	kworker/R-mld
+60	2	60	2	I	process	60	61	2	0	kworker/1:1H
+61	2	61	2	I	process	61	62	2	0	kworker/R-ipv6_
+68	2	68	2	I	process	62	63	2	0	kworker/R-kstrp
+70	2	70	2	I	process	63	64	2	0	kworker/u5:0
+83	2	83	2	I	process	64	65	2	0	kworker/R-charg
+89	1	89	1	R	process	65	2	2	0	cat
+END_SNAPSHOT_BEFORE
+WORKLOAD_ROOT=90
+BEGIN_SNAPSHOT_CREATED
+# taskgraph version=1 source=kernel count=73 cap=4096 truncated=0 boot_ns=3671901751 duration_ns=130110
+pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
+0	0	0	0	R	root	0	0	0	0	swapper/0
+1	0	1	0	S	process	1	1	1	0	init
+2	0	2	0	S	process	2	10	1	0	kthreadd
+3	2	3	2	S	process	3	11	2	0	pool_workqueue_
+4	2	4	2	I	process	4	12	2	0	kworker/R-rcu_g
+5	2	5	2	I	process	5	13	2	0	kworker/R-rcu_p
+6	2	6	2	I	process	6	14	2	0	kworker/R-slub_
+7	2	7	2	I	process	7	15	2	0	kworker/R-netns
+8	2	8	2	I	process	8	16	2	0	kworker/0:0
+9	2	9	2	I	process	9	17	2	0	kworker/0:0H
+10	2	10	2	I	process	10	18	2	0	kworker/u4:0
+11	2	11	2	I	process	11	19	2	0	kworker/R-mm_pe
+12	2	12	2	I	process	12	20	2	0	kworker/0:1
+13	2	13	2	I	process	13	21	2	0	rcu_tasks_kthre
+14	2	14	2	I	process	14	22	2	0	rcu_tasks_rude_
+15	2	15	2	I	process	15	23	2	0	rcu_tasks_trace
+16	2	16	2	S	process	16	24	2	0	ksoftirqd/0
+17	2	17	2	I	process	17	25	2	0	rcu_preempt
+18	2	18	2	S	process	18	26	2	0	migration/0
+19	2	19	2	S	process	19	27	2	0	idle_inject/0
+20	2	20	2	S	process	20	28	2	0	cpuhp/0
+21	2	21	2	S	process	21	29	2	0	cpuhp/1
+22	2	22	2	S	process	22	30	2	0	idle_inject/1
+23	2	23	2	S	process	23	31	2	0	migration/1
+24	2	24	2	S	process	24	32	2	0	ksoftirqd/1
+25	2	25	2	I	process	25	33	2	0	kworker/1:0
+26	2	26	2	I	process	26	34	2	0	kworker/1:0H
+27	2	27	2	S	process	27	35	2	0	kdevtmpfs
+28	2	28	2	I	process	28	36	2	0	kworker/R-inet_
+29	2	29	2	I	process	29	37	2	0	kworker/u4:1
+30	2	30	2	S	process	30	38	2	0	kauditd
+31	2	31	2	S	process	31	39	2	0	khungtaskd
+32	2	32	2	I	process	32	40	2	0	kworker/u4:2
+33	2	33	2	S	process	33	41	2	0	oom_reaper
+34	2	34	2	I	process	34	42	2	0	kworker/R-write
+35	2	35	2	S	process	35	43	2	0	kcompactd0
+36	2	36	2	S	process	36	44	2	0	ksmd
+37	2	37	2	I	process	37	45	2	0	kworker/1:1
+38	2	38	2	I	process	38	46	2	0	kworker/R-kinte
+39	2	39	2	I	process	39	47	2	0	kworker/R-kbloc
+40	2	40	2	I	process	40	48	2	0	kworker/R-blkcg
+41	2	41	2	S	process	41	49	2	0	irq/9-acpi
+42	2	42	2	I	process	42	50	2	0	kworker/R-tpm_d
+43	2	43	2	I	process	43	51	2	0	kworker/R-ata_s
+44	2	44	2	I	process	44	52	2	0	kworker/R-md
+45	2	45	2	I	process	45	53	2	0	kworker/R-md_bi
+46	2	46	2	I	process	46	54	2	0	kworker/R-edac-
+47	2	47	2	I	process	47	55	2	0	kworker/R-devfr
+48	2	48	2	S	process	48	56	2	0	watchdogd
+49	2	49	2	I	process	49	57	2	0	kworker/0:1H
+50	2	50	2	S	process	50	58	2	0	kswapd0
+51	2	51	2	S	process	51	59	2	0	ecryptfs-kthrea
+52	2	52	2	I	process	52	60	2	0	kworker/R-kthro
+53	2	53	2	I	process	53	61	2	0	kworker/R-acpi_
+54	2	54	2	S	process	54	62	2	0	scsi_eh_0
+55	2	55	2	I	process	55	63	2	0	kworker/R-scsi_
+56	2	56	2	S	process	56	64	2	0	scsi_eh_1
+57	2	57	2	I	process	57	65	2	0	kworker/R-scsi_
+58	2	58	2	I	process	58	66	2	0	kworker/u4:3
+59	2	59	2	I	process	59	67	2	0	kworker/R-mld
+60	2	60	2	I	process	60	68	2	0	kworker/1:1H
+61	2	61	2	I	process	61	69	2	0	kworker/R-ipv6_
+68	2	68	2	I	process	62	70	2	0	kworker/R-kstrp
+70	2	70	2	I	process	63	71	2	0	kworker/u5:0
+83	2	83	2	I	process	64	72	2	0	kworker/R-charg
+90	1	90	1	S	process	65	2	2	0	tg-root
+95	1	90	90	S	thread	66	3	3	0	tg-worker
+96	1	90	90	S	thread	67	4	3	0	tg-worker
+91	90	91	90	S	process	68	5	3	0	tg-child
+92	90	92	90	S	process	69	7	3	0	tg-child
+93	91	93	91	S	process	70	6	4	0	tg-leaf
+94	92	94	92	S	process	71	8	4	0	tg-leaf
+97	1	97	1	R	process	72	9	2	0	cat
+END_SNAPSHOT_CREATED
+BEGIN_SNAPSHOT_STOPPED
+# taskgraph version=1 source=kernel count=73 cap=4096 truncated=0 boot_ns=3703954171 duration_ns=187350
+pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
+0	0	0	0	R	root	0	0	0	0	swapper/0
+1	0	1	0	S	process	1	1	1	0	init
+2	0	2	0	S	process	2	10	1	0	kthreadd
+3	2	3	2	S	process	3	11	2	0	pool_workqueue_
+4	2	4	2	I	process	4	12	2	0	kworker/R-rcu_g
+5	2	5	2	I	process	5	13	2	0	kworker/R-rcu_p
+6	2	6	2	I	process	6	14	2	0	kworker/R-slub_
+7	2	7	2	I	process	7	15	2	0	kworker/R-netns
+8	2	8	2	I	process	8	16	2	0	kworker/0:0
+9	2	9	2	I	process	9	17	2	0	kworker/0:0H
+10	2	10	2	I	process	10	18	2	0	kworker/u4:0
+11	2	11	2	I	process	11	19	2	0	kworker/R-mm_pe
+12	2	12	2	I	process	12	20	2	0	kworker/0:1
+13	2	13	2	I	process	13	21	2	0	rcu_tasks_kthre
+14	2	14	2	I	process	14	22	2	0	rcu_tasks_rude_
+15	2	15	2	I	process	15	23	2	0	rcu_tasks_trace
+16	2	16	2	S	process	16	24	2	0	ksoftirqd/0
+17	2	17	2	I	process	17	25	2	0	rcu_preempt
+18	2	18	2	S	process	18	26	2	0	migration/0
+19	2	19	2	S	process	19	27	2	0	idle_inject/0
+20	2	20	2	S	process	20	28	2	0	cpuhp/0
+21	2	21	2	S	process	21	29	2	0	cpuhp/1
+22	2	22	2	S	process	22	30	2	0	idle_inject/1
+23	2	23	2	S	process	23	31	2	0	migration/1
+24	2	24	2	S	process	24	32	2	0	ksoftirqd/1
+25	2	25	2	I	process	25	33	2	0	kworker/1:0
+26	2	26	2	I	process	26	34	2	0	kworker/1:0H
+27	2	27	2	S	process	27	35	2	0	kdevtmpfs
+28	2	28	2	I	process	28	36	2	0	kworker/R-inet_
+29	2	29	2	I	process	29	37	2	0	kworker/u4:1
+30	2	30	2	S	process	30	38	2	0	kauditd
+31	2	31	2	S	process	31	39	2	0	khungtaskd
+32	2	32	2	I	process	32	40	2	0	kworker/u4:2
+33	2	33	2	S	process	33	41	2	0	oom_reaper
+34	2	34	2	I	process	34	42	2	0	kworker/R-write
+35	2	35	2	S	process	35	43	2	0	kcompactd0
+36	2	36	2	S	process	36	44	2	0	ksmd
+37	2	37	2	I	process	37	45	2	0	kworker/1:1
+38	2	38	2	I	process	38	46	2	0	kworker/R-kinte
+39	2	39	2	I	process	39	47	2	0	kworker/R-kbloc
+40	2	40	2	I	process	40	48	2	0	kworker/R-blkcg
+41	2	41	2	S	process	41	49	2	0	irq/9-acpi
+42	2	42	2	I	process	42	50	2	0	kworker/R-tpm_d
+43	2	43	2	I	process	43	51	2	0	kworker/R-ata_s
+44	2	44	2	I	process	44	52	2	0	kworker/R-md
+45	2	45	2	I	process	45	53	2	0	kworker/R-md_bi
+46	2	46	2	I	process	46	54	2	0	kworker/R-edac-
+47	2	47	2	I	process	47	55	2	0	kworker/R-devfr
+48	2	48	2	S	process	48	56	2	0	watchdogd
+49	2	49	2	I	process	49	57	2	0	kworker/0:1H
+50	2	50	2	S	process	50	58	2	0	kswapd0
+51	2	51	2	S	process	51	59	2	0	ecryptfs-kthrea
+52	2	52	2	I	process	52	60	2	0	kworker/R-kthro
+53	2	53	2	I	process	53	61	2	0	kworker/R-acpi_
+54	2	54	2	S	process	54	62	2	0	scsi_eh_0
+55	2	55	2	I	process	55	63	2	0	kworker/R-scsi_
+56	2	56	2	S	process	56	64	2	0	scsi_eh_1
+57	2	57	2	I	process	57	65	2	0	kworker/R-scsi_
+58	2	58	2	I	process	58	66	2	0	kworker/u4:3
+59	2	59	2	I	process	59	67	2	0	kworker/R-mld
+60	2	60	2	I	process	60	68	2	0	kworker/1:1H
+61	2	61	2	I	process	61	69	2	0	kworker/R-ipv6_
+68	2	68	2	I	process	62	70	2	0	kworker/R-kstrp
+70	2	70	2	I	process	63	71	2	0	kworker/u5:0
+83	2	83	2	I	process	64	72	2	0	kworker/R-charg
+90	1	90	1	T	process	65	2	2	0	tg-root
+95	1	90	90	T	thread	66	3	3	0	tg-worker
+96	1	90	90	T	thread	67	4	3	0	tg-worker
+91	90	91	90	S	process	68	5	3	0	tg-child
+92	90	92	90	S	process	69	7	3	0	tg-child
+93	91	93	91	S	process	70	6	4	0	tg-leaf
+94	92	94	92	S	process	71	8	4	0	tg-leaf
+98	1	98	1	R	process	72	9	2	0	cat
+END_SNAPSHOT_STOPPED
+BEGIN_SNAPSHOT_AFTER
+# taskgraph version=1 source=kernel count=66 cap=4096 truncated=0 boot_ns=4767242611 duration_ns=84550
+pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
+0	0	0	0	R	root	0	0	0	0	swapper/0
+1	0	1	0	S	process	1	1	1	0	init
+2	0	2	0	S	process	2	3	1	0	kthreadd
+3	2	3	2	S	process	3	4	2	0	pool_workqueue_
+4	2	4	2	I	process	4	5	2	0	kworker/R-rcu_g
+5	2	5	2	I	process	5	6	2	0	kworker/R-rcu_p
+6	2	6	2	I	process	6	7	2	0	kworker/R-slub_
+7	2	7	2	I	process	7	8	2	0	kworker/R-netns
+8	2	8	2	I	process	8	9	2	0	kworker/0:0
+9	2	9	2	I	process	9	10	2	0	kworker/0:0H
+10	2	10	2	I	process	10	11	2	0	kworker/u4:0
+11	2	11	2	I	process	11	12	2	0	kworker/R-mm_pe
+12	2	12	2	I	process	12	13	2	0	kworker/0:1
+13	2	13	2	I	process	13	14	2	0	rcu_tasks_kthre
+14	2	14	2	I	process	14	15	2	0	rcu_tasks_rude_
+15	2	15	2	I	process	15	16	2	0	rcu_tasks_trace
+16	2	16	2	S	process	16	17	2	0	ksoftirqd/0
+17	2	17	2	I	process	17	18	2	0	rcu_preempt
+18	2	18	2	S	process	18	19	2	0	migration/0
+19	2	19	2	S	process	19	20	2	0	idle_inject/0
+20	2	20	2	S	process	20	21	2	0	cpuhp/0
+21	2	21	2	S	process	21	22	2	0	cpuhp/1
+22	2	22	2	S	process	22	23	2	0	idle_inject/1
+23	2	23	2	S	process	23	24	2	0	migration/1
+24	2	24	2	S	process	24	25	2	0	ksoftirqd/1
+25	2	25	2	I	process	25	26	2	0	kworker/1:0
+26	2	26	2	I	process	26	27	2	0	kworker/1:0H
+27	2	27	2	S	process	27	28	2	0	kdevtmpfs
+28	2	28	2	I	process	28	29	2	0	kworker/R-inet_
+29	2	29	2	I	process	29	30	2	0	kworker/u4:1
+30	2	30	2	S	process	30	31	2	0	kauditd
+31	2	31	2	S	process	31	32	2	0	khungtaskd
+32	2	32	2	I	process	32	33	2	0	kworker/u4:2
+33	2	33	2	S	process	33	34	2	0	oom_reaper
+34	2	34	2	I	process	34	35	2	0	kworker/R-write
+35	2	35	2	S	process	35	36	2	0	kcompactd0
+36	2	36	2	S	process	36	37	2	0	ksmd
+37	2	37	2	I	process	37	38	2	0	kworker/1:1
+38	2	38	2	I	process	38	39	2	0	kworker/R-kinte
+39	2	39	2	I	process	39	40	2	0	kworker/R-kbloc
+40	2	40	2	I	process	40	41	2	0	kworker/R-blkcg
+41	2	41	2	S	process	41	42	2	0	irq/9-acpi
+42	2	42	2	I	process	42	43	2	0	kworker/R-tpm_d
+43	2	43	2	I	process	43	44	2	0	kworker/R-ata_s
+44	2	44	2	I	process	44	45	2	0	kworker/R-md
+45	2	45	2	I	process	45	46	2	0	kworker/R-md_bi
+46	2	46	2	I	process	46	47	2	0	kworker/R-edac-
+47	2	47	2	I	process	47	48	2	0	kworker/R-devfr
+48	2	48	2	S	process	48	49	2	0	watchdogd
+49	2	49	2	I	process	49	50	2	0	kworker/0:1H
+50	2	50	2	S	process	50	51	2	0	kswapd0
+51	2	51	2	S	process	51	52	2	0	ecryptfs-kthrea
+52	2	52	2	I	process	52	53	2	0	kworker/R-kthro
+53	2	53	2	I	process	53	54	2	0	kworker/R-acpi_
+54	2	54	2	S	process	54	55	2	0	scsi_eh_0
+55	2	55	2	I	process	55	56	2	0	kworker/R-scsi_
+56	2	56	2	S	process	56	57	2	0	scsi_eh_1
+57	2	57	2	I	process	57	58	2	0	kworker/R-scsi_
+58	2	58	2	I	process	58	59	2	0	kworker/u4:3
+59	2	59	2	I	process	59	60	2	0	kworker/R-mld
+60	2	60	2	I	process	60	61	2	0	kworker/1:1H
+61	2	61	2	I	process	61	62	2	0	kworker/R-ipv6_
+68	2	68	2	I	process	62	63	2	0	kworker/R-kstrp
+70	2	70	2	I	process	63	64	2	0	kworker/u5:0
+83	2	83	2	I	process	64	65	2	0	kworker/R-charg
+99	1	99	1	R	process	65	2	2	0	cat
+END_SNAPSHOT_AFTER
+BEGIN_PS
+PID   USER     COMMAND
+    1 0        {init} /bin/sh /init
+    2 0        [kthreadd]
+    3 0        [pool_workqueue_]
+    4 0        [kworker/R-rcu_g]
+    5 0        [kworker/R-rcu_p]
+    6 0        [kworker/R-slub_]
+    7 0        [kworker/R-netns]
+    8 0        [kworker/0:0-rcu]
+    9 0        [kworker/0:0H-ev]
+   10 0        [kworker/u4:0-ev]
+   11 0        [kworker/R-mm_pe]
+   12 0        [kworker/0:1-pm]
+   13 0        [rcu_tasks_kthre]
+   14 0        [rcu_tasks_rude_]
+   15 0        [rcu_tasks_trace]
+   16 0        [ksoftirqd/0]
+   17 0        [rcu_preempt]
+   18 0        [migration/0]
+   19 0        [idle_inject/0]
+   20 0        [cpuhp/0]
+   21 0        [cpuhp/1]
+   22 0        [idle_inject/1]
+   23 0        [migration/1]
+   24 0        [ksoftirqd/1]
+   25 0        [kworker/1:0-mm_]
+   26 0        [kworker/1:0H-ev]
+   27 0        [kdevtmpfs]
+   28 0        [kworker/R-inet_]
+   29 0        [kworker/u4:1-ev]
+   30 0        [kauditd]
+   31 0        [khungtaskd]
+   32 0        [kworker/u4:2-ev]
+   33 0        [oom_reaper]
+   34 0        [kworker/R-write]
+   35 0        [kcompactd0]
+   36 0        [ksmd]
+   37 0        [kworker/1:1]
+   38 0        [kworker/R-kinte]
+   39 0        [kworker/R-kbloc]
+   40 0        [kworker/R-blkcg]
+   41 0        [irq/9-acpi]
+   42 0        [kworker/R-tpm_d]
+   43 0        [kworker/R-ata_s]
+   44 0        [kworker/R-md]
+   45 0        [kworker/R-md_bi]
+   46 0        [kworker/R-edac-]
+   47 0        [kworker/R-devfr]
+   48 0        [watchdogd]
+   49 0        [kworker/0:1H]
+   50 0        [kswapd0]
+   51 0        [ecryptfs-kthrea]
+   52 0        [kworker/R-kthro]
+   53 0        [kworker/R-acpi_]
+   54 0        [scsi_eh_0]
+   55 0        [kworker/R-scsi_]
+   56 0        [scsi_eh_1]
+   57 0        [kworker/R-scsi_]
+   58 0        [kworker/u4:3]
+   59 0        [kworker/R-mld]
+   60 0        [kworker/1:1H-kb]
+   61 0        [kworker/R-ipv6_]
+   68 0        [kworker/R-kstrp]
+   70 0        [kworker/u5:0]
+   83 0        [kworker/R-charg]
+  100 0        {ps} /bin/sh /init
+PID   USER     COMMAND
+    1 0        {init} /bin/sh /init
+    2 0        [kthreadd]
+    3 0        [pool_workqueue_]
+    4 0        [kworker/R-rcu_g]
+    5 0        [kworker/R-rcu_p]
+    6 0        [kworker/R-slub_]
+    7 0        [kworker/R-netns]
+    8 0        [kworker/0:0-rcu]
+    9 0        [kworker/0:0H-ev]
+   10 0        [kworker/u4:0-ev]
+   11 0        [kworker/R-mm_pe]
+   12 0        [kworker/0:1-eve]
+   13 0        [rcu_tasks_kthre]
+   14 0        [rcu_tasks_rude_]
+   15 0        [rcu_tasks_trace]
+   16 0        [ksoftirqd/0]
+   17 0        [rcu_preempt]
+   18 0        [migration/0]
+   19 0        [idle_inject/0]
+   20 0        [cpuhp/0]
+   21 0        [cpuhp/1]
+   22 0        [idle_inject/1]
+   23 0        [migration/1]
+   24 0        [ksoftirqd/1]
+   25 0        [kworker/1:0-mm_]
+   26 0        [kworker/1:0H-ev]
+   27 0        [kdevtmpfs]
+   28 0        [kworker/R-inet_]
+   29 0        [kworker/u4:1-ev]
+   30 0        [kauditd]
+   31 0        [khungtaskd]
+   32 0        [kworker/u4:2-ev]
+   33 0        [oom_reaper]
+   34 0        [kworker/R-write]
+   35 0        [kcompactd0]
+   36 0        [ksmd]
+   37 0        [kworker/1:1]
+   38 0        [kworker/R-kinte]
+   39 0        [kworker/R-kbloc]
+   40 0        [kworker/R-blkcg]
+   41 0        [irq/9-acpi]
+   42 0        [kworker/R-tpm_d]
+   43 0        [kworker/R-ata_s]
+   44 0        [kworker/R-md]
+   45 0        [kworker/R-md_bi]
+   46 0        [kworker/R-edac-]
+   47 0        [kworker/R-devfr]
+   48 0        [watchdogd]
+   49 0        [kworker/0:1H]
+   50 0        [kswapd0]
+   51 0        [ecryptfs-kthrea]
+   52 0        [kworker/R-kthro]
+   53 0        [kworker/R-acpi_]
+   54 0        [scsi_eh_0]
+   55 0        [kworker/R-scsi_]
+   56 0        [scsi_eh_1]
+   57 0        [kworker/R-scsi_]
+   58 0        [kworker/u4:3]
+   59 0        [kworker/R-mld]
+   60 0        [kworker/1:1H-kb]
+   61 0        [kworker/R-ipv6_]
+   68 0        [kworker/R-kstrp]
+   70 0        [kworker/u5:0]
+   83 0        [kworker/R-charg]
+  101 0        {ps} /bin/sh /init
+END_PS
+BEGIN_MODULE_LOG
+[    2.615935] taskgraph: loading out-of-tree module taints kernel.
+[    2.616339] taskgraph: module verification failed: signature and/or required key missing - tainting kernel
+[    2.624966] taskgraph LINEAR pid=1 state=S comm=init
+[    2.625096] taskgraph LINEAR pid=2 state=S comm=kthreadd
+[    2.625204] taskgraph LINEAR pid=3 state=S comm=pool_workqueue_
+[    2.625274] taskgraph LINEAR pid=4 state=I comm=kworker/R-rcu_g
+[    2.625343] taskgraph LINEAR pid=5 state=I comm=kworker/R-rcu_p
+[    2.625410] taskgraph LINEAR pid=6 state=I comm=kworker/R-slub_
+[    2.625562] taskgraph LINEAR pid=7 state=I comm=kworker/R-netns
+[    2.625692] taskgraph LINEAR pid=8 state=I comm=kworker/0:0
+[    2.625767] taskgraph LINEAR pid=9 state=I comm=kworker/0:0H
+[    2.625831] taskgraph LINEAR pid=10 state=I comm=kworker/u4:0
+[    2.625896] taskgraph LINEAR pid=11 state=I comm=kworker/R-mm_pe
+[    2.625963] taskgraph LINEAR pid=12 state=I comm=kworker/0:1
+[    2.626028] taskgraph LINEAR pid=13 state=I comm=rcu_tasks_kthre
+[    2.626095] taskgraph LINEAR pid=14 state=I comm=rcu_tasks_rude_
+[    2.626195] taskgraph LINEAR pid=15 state=I comm=rcu_tasks_trace
+[    2.626260] taskgraph LINEAR pid=16 state=S comm=ksoftirqd/0
+[    2.626323] taskgraph LINEAR pid=17 state=I comm=rcu_preempt
+[    2.626385] taskgraph LINEAR pid=18 state=S comm=migration/0
+[    2.626574] taskgraph LINEAR pid=19 state=S comm=idle_inject/0
+[    2.626646] taskgraph LINEAR pid=20 state=S comm=cpuhp/0
+[    2.626716] taskgraph LINEAR pid=21 state=S comm=cpuhp/1
+[    2.626777] taskgraph LINEAR pid=22 state=S comm=idle_inject/1
+[    2.626841] taskgraph LINEAR pid=23 state=S comm=migration/1
+[    2.627015] taskgraph LINEAR pid=24 state=S comm=ksoftirqd/1
+[    2.627086] taskgraph LINEAR pid=25 state=I comm=kworker/1:0
+[    2.627176] taskgraph LINEAR pid=26 state=I comm=kworker/1:0H
+[    2.627245] taskgraph LINEAR pid=27 state=S comm=kdevtmpfs
+[    2.627306] taskgraph LINEAR pid=28 state=I comm=kworker/R-inet_
+[    2.627460] taskgraph LINEAR pid=29 state=I comm=kworker/u4:1
+[    2.627597] taskgraph LINEAR pid=30 state=S comm=kauditd
+[    2.627661] taskgraph LINEAR pid=31 state=S comm=khungtaskd
+[    2.627787] taskgraph LINEAR pid=32 state=I comm=kworker/u4:2
+[    2.627885] taskgraph LINEAR pid=33 state=S comm=oom_reaper
+[    2.627950] taskgraph LINEAR pid=34 state=I comm=kworker/R-write
+[    2.628013] taskgraph LINEAR pid=35 state=S comm=kcompactd0
+[    2.628077] taskgraph LINEAR pid=36 state=S comm=ksmd
+[    2.628135] taskgraph LINEAR pid=37 state=I comm=kworker/1:1
+[    2.628232] taskgraph LINEAR pid=38 state=I comm=kworker/R-kinte
+[    2.628302] taskgraph LINEAR pid=39 state=I comm=kworker/R-kbloc
+[    2.628371] taskgraph LINEAR pid=40 state=I comm=kworker/R-blkcg
+[    2.628521] taskgraph LINEAR pid=41 state=S comm=irq/9-acpi
+[    2.628590] taskgraph LINEAR pid=42 state=I comm=kworker/R-tpm_d
+[    2.628659] taskgraph LINEAR pid=43 state=I comm=kworker/R-ata_s
+[    2.628726] taskgraph LINEAR pid=44 state=I comm=kworker/R-md
+[    2.628845] taskgraph LINEAR pid=45 state=I comm=kworker/R-md_bi
+[    2.628916] taskgraph LINEAR pid=46 state=I comm=kworker/R-edac-
+[    2.628984] taskgraph LINEAR pid=47 state=I comm=kworker/R-devfr
+[    2.629052] taskgraph LINEAR pid=48 state=S comm=watchdogd
+[    2.629114] taskgraph LINEAR pid=49 state=I comm=kworker/0:1H
+[    2.629214] taskgraph LINEAR pid=50 state=S comm=kswapd0
+[    2.629277] taskgraph LINEAR pid=51 state=S comm=ecryptfs-kthrea
+[    2.629530] taskgraph LINEAR pid=52 state=I comm=kworker/R-kthro
+[    2.629609] taskgraph LINEAR pid=53 state=I comm=kworker/R-acpi_
+[    2.629676] taskgraph LINEAR pid=54 state=S comm=scsi_eh_0
+[    2.629781] taskgraph LINEAR pid=55 state=I comm=kworker/R-scsi_
+[    2.629850] taskgraph LINEAR pid=56 state=S comm=scsi_eh_1
+[    2.629913] taskgraph LINEAR pid=57 state=I comm=kworker/R-scsi_
+[    2.629980] taskgraph LINEAR pid=58 state=I comm=kworker/u4:3
+[    2.630044] taskgraph LINEAR pid=59 state=I comm=kworker/R-mld
+[    2.630111] taskgraph LINEAR pid=60 state=I comm=kworker/1:1H
+[    2.630203] taskgraph LINEAR pid=61 state=I comm=kworker/R-ipv6_
+[    2.630270] taskgraph LINEAR pid=68 state=I comm=kworker/R-kstrp
+[    2.630340] taskgraph LINEAR pid=70 state=I comm=kworker/u5:0
+[    2.630405] taskgraph LINEAR pid=83 state=I comm=kworker/R-charg
+[    2.630524] taskgraph LINEAR pid=88 state=R comm=insmod
+[    2.630668] taskgraph DFS order=0 depth=0 pid=0 ppid=0 state=R comm=swapper/0
+[    2.630776] taskgraph DFS order=1 depth=1 pid=1 ppid=0 state=S comm=init
+[    2.630852] taskgraph DFS order=2 depth=2 pid=88 ppid=1 state=R comm=insmod
+[    2.630929] taskgraph DFS order=3 depth=1 pid=2 ppid=0 state=S comm=kthreadd
+[    2.631008] taskgraph DFS order=4 depth=2 pid=3 ppid=2 state=S comm=pool_workqueue_
+[    2.631091] taskgraph DFS order=5 depth=2 pid=4 ppid=2 state=I comm=kworker/R-rcu_g
+[    2.631197] taskgraph DFS order=6 depth=2 pid=5 ppid=2 state=I comm=kworker/R-rcu_p
+[    2.631281] taskgraph DFS order=7 depth=2 pid=6 ppid=2 state=I comm=kworker/R-slub_
+[    2.631367] taskgraph DFS order=8 depth=2 pid=7 ppid=2 state=I comm=kworker/R-netns
+[    2.631506] taskgraph DFS order=9 depth=2 pid=8 ppid=2 state=I comm=kworker/0:0
+[    2.631590] taskgraph DFS order=10 depth=2 pid=9 ppid=2 state=I comm=kworker/0:0H
+[    2.631673] taskgraph DFS order=11 depth=2 pid=10 ppid=2 state=I comm=kworker/u4:0
+[    2.631757] taskgraph DFS order=12 depth=2 pid=11 ppid=2 state=I comm=kworker/R-mm_pe
+[    2.631846] taskgraph DFS order=13 depth=2 pid=12 ppid=2 state=I comm=kworker/0:1
+[    2.631957] taskgraph DFS order=14 depth=2 pid=13 ppid=2 state=I comm=rcu_tasks_kthre
+[    2.632043] taskgraph DFS order=15 depth=2 pid=14 ppid=2 state=I comm=rcu_tasks_rude_
+[    2.632129] taskgraph DFS order=16 depth=2 pid=15 ppid=2 state=I comm=rcu_tasks_trace
+[    2.632232] taskgraph DFS order=17 depth=2 pid=16 ppid=2 state=S comm=ksoftirqd/0
+[    2.632317] taskgraph DFS order=18 depth=2 pid=17 ppid=2 state=I comm=rcu_preempt
+[    2.632438] taskgraph DFS order=19 depth=2 pid=18 ppid=2 state=S comm=migration/0
+[    2.632522] taskgraph DFS order=20 depth=2 pid=19 ppid=2 state=S comm=idle_inject/0
+[    2.632609] taskgraph DFS order=21 depth=2 pid=20 ppid=2 state=S comm=cpuhp/0
+[    2.632687] taskgraph DFS order=22 depth=2 pid=21 ppid=2 state=S comm=cpuhp/1
+[    2.632765] taskgraph DFS order=23 depth=2 pid=22 ppid=2 state=S comm=idle_inject/1
+[    2.632847] taskgraph DFS order=24 depth=2 pid=23 ppid=2 state=S comm=migration/1
+[    2.632928] taskgraph DFS order=25 depth=2 pid=24 ppid=2 state=S comm=ksoftirqd/1
+[    2.633011] taskgraph DFS order=26 depth=2 pid=25 ppid=2 state=I comm=kworker/1:0
+[    2.633096] taskgraph DFS order=27 depth=2 pid=26 ppid=2 state=I comm=kworker/1:0H
+[    2.633196] taskgraph DFS order=28 depth=2 pid=27 ppid=2 state=S comm=kdevtmpfs
+[    2.633340] taskgraph DFS order=29 depth=2 pid=28 ppid=2 state=I comm=kworker/R-inet_
+[    2.633472] taskgraph DFS order=30 depth=2 pid=29 ppid=2 state=I comm=kworker/u4:1
+[    2.633560] taskgraph DFS order=31 depth=2 pid=30 ppid=2 state=S comm=kauditd
+[    2.633641] taskgraph DFS order=32 depth=2 pid=31 ppid=2 state=S comm=khungtaskd
+[    2.633725] taskgraph DFS order=33 depth=2 pid=32 ppid=2 state=I comm=kworker/u4:2
+[    2.633809] taskgraph DFS order=34 depth=2 pid=33 ppid=2 state=S comm=oom_reaper
+[    2.633891] taskgraph DFS order=35 depth=2 pid=34 ppid=2 state=I comm=kworker/R-write
+[    2.633978] taskgraph DFS order=36 depth=2 pid=35 ppid=2 state=S comm=kcompactd0
+[    2.634058] taskgraph DFS order=37 depth=2 pid=36 ppid=2 state=S comm=ksmd
+[    2.634135] taskgraph DFS order=38 depth=2 pid=37 ppid=2 state=I comm=kworker/1:1
+[    2.634260] taskgraph DFS order=39 depth=2 pid=38 ppid=2 state=I comm=kworker/R-kinte
+[    2.634345] taskgraph DFS order=40 depth=2 pid=39 ppid=2 state=I comm=kworker/R-kbloc
+[    2.634480] taskgraph DFS order=41 depth=2 pid=40 ppid=2 state=I comm=kworker/R-blkcg
+[    2.634572] taskgraph DFS order=42 depth=2 pid=41 ppid=2 state=S comm=irq/9-acpi
+[    2.634655] taskgraph DFS order=43 depth=2 pid=42 ppid=2 state=I comm=kworker/R-tpm_d
+[    2.634741] taskgraph DFS order=44 depth=2 pid=43 ppid=2 state=I comm=kworker/R-ata_s
+[    2.634828] taskgraph DFS order=45 depth=2 pid=44 ppid=2 state=I comm=kworker/R-md
+[    2.635026] taskgraph DFS order=46 depth=2 pid=45 ppid=2 state=I comm=kworker/R-md_bi
+[    2.635120] taskgraph DFS order=47 depth=2 pid=46 ppid=2 state=I comm=kworker/R-edac-
+[    2.635789] taskgraph DFS order=48 depth=2 pid=47 ppid=2 state=I comm=kworker/R-devfr
+[    2.635916] taskgraph DFS order=49 depth=2 pid=48 ppid=2 state=S comm=watchdogd
+[    2.636000] taskgraph DFS order=50 depth=2 pid=49 ppid=2 state=I comm=kworker/0:1H
+[    2.636084] taskgraph DFS order=51 depth=2 pid=50 ppid=2 state=S comm=kswapd0
+[    2.636195] taskgraph DFS order=52 depth=2 pid=51 ppid=2 state=S comm=ecryptfs-kthrea
+[    2.636278] taskgraph DFS order=53 depth=2 pid=52 ppid=2 state=I comm=kworker/R-kthro
+[    2.636362] taskgraph DFS order=54 depth=2 pid=53 ppid=2 state=I comm=kworker/R-acpi_
+[    2.636548] taskgraph DFS order=55 depth=2 pid=54 ppid=2 state=S comm=scsi_eh_0
+[    2.636632] taskgraph DFS order=56 depth=2 pid=55 ppid=2 state=I comm=kworker/R-scsi_
+[    2.636716] taskgraph DFS order=57 depth=2 pid=56 ppid=2 state=S comm=scsi_eh_1
+[    2.636796] taskgraph DFS order=58 depth=2 pid=57 ppid=2 state=I comm=kworker/R-scsi_
+[    2.636881] taskgraph DFS order=59 depth=2 pid=58 ppid=2 state=I comm=kworker/u4:3
+[    2.636967] taskgraph DFS order=60 depth=2 pid=59 ppid=2 state=I comm=kworker/R-mld
+[    2.637052] taskgraph DFS order=61 depth=2 pid=60 ppid=2 state=I comm=kworker/1:1H
+[    2.637136] taskgraph DFS order=62 depth=2 pid=61 ppid=2 state=I comm=kworker/R-ipv6_
+[    2.637473] taskgraph DFS order=63 depth=2 pid=68 ppid=2 state=I comm=kworker/R-kstrp
+[    2.637565] taskgraph DFS order=64 depth=2 pid=70 ppid=2 state=I comm=kworker/u5:0
+[    2.637653] taskgraph DFS order=65 depth=2 pid=83 ppid=2 state=I comm=kworker/R-charg
+[    2.637835] taskgraph loaded count=66 truncated=0; read /proc/taskgraph
+END_MODULE_LOG
+[    4.947750] taskgraph unloaded
+RESULT UNLOAD= 0
+RESULT ENDPOINT_REMOVED=0
+insmod: can't insert '/taskgraph.ko': Invalid argument
+RESULT INVALID_CAP= 22
+[    5.019973] taskgraph loaded count=16 truncated=1; read /proc/taskgraph
+RESULT SMALL_CAP_LOAD= 0
+BEGIN_SNAPSHOT_CAPPED
+# taskgraph version=1 source=kernel count=16 cap=16 truncated=1 boot_ns=4995270271 duration_ns=24900
+pid	ppid	tgid	parent	state	kind	linear	dfs	depth	orphan	comm
+0	0	0	0	R	root	0	0	0	0	swapper/0
+1	0	1	0	S	process	1	1	1	0	init
+2	0	2	0	S	process	2	2	1	0	kthreadd
+3	2	3	2	S	process	3	3	2	0	pool_workqueue_
+4	2	4	2	I	process	4	4	2	0	kworker/R-rcu_g
+5	2	5	2	I	process	5	5	2	0	kworker/R-rcu_p
+6	2	6	2	I	process	6	6	2	0	kworker/R-slub_
+7	2	7	2	I	process	7	7	2	0	kworker/R-netns
+8	2	8	2	I	process	8	8	2	0	kworker/0:0
+9	2	9	2	I	process	9	9	2	0	kworker/0:0H
+10	2	10	2	I	process	10	10	2	0	kworker/u4:0
+11	2	11	2	I	process	11	11	2	0	kworker/R-mm_pe
+12	2	12	2	I	process	12	12	2	0	kworker/0:1
+13	2	13	2	I	process	13	13	2	0	rcu_tasks_kthre
+14	2	14	2	I	process	14	14	2	0	rcu_tasks_rude_
+15	2	15	2	I	process	15	15	2	0	rcu_tasks_trace
+END_SNAPSHOT_CAPPED
+[    5.039708] taskgraph unloaded
+RESULT FINAL_UNLOAD= 0
+SMOKE_DONE
+[    5.060063] ACPI: PM: Preparing to enter system sleep state S5
+[    5.067913] reboot: Power down

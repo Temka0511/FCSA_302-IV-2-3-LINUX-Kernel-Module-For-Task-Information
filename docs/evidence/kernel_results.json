@@ -1,0 +1,62 @@
+[
+  {
+    "test": "K1 module load",
+    "passed": true,
+    "detail": "insmod exit=0"
+  },
+  {
+    "test": "K2 real kernel protocol",
+    "passed": true,
+    "detail": "rows=66; init_task PID=0"
+  },
+  {
+    "test": "K3 linear and DFS init logs",
+    "passed": true,
+    "detail": "Both log streams emitted"
+  },
+  {
+    "test": "K4 DFS ranks and parents",
+    "passed": true,
+    "detail": "Unique contiguous ranks: 73"
+  },
+  {
+    "test": "K5 process tree creation",
+    "passed": true,
+    "detail": "root=90; tasks=7; expected=7"
+  },
+  {
+    "test": "K6 pthread membership",
+    "passed": true,
+    "detail": "thread PIDs=[95, 96]; TGID=90"
+  },
+  {
+    "test": "K7 stop state",
+    "passed": true,
+    "detail": "state=T"
+  },
+  {
+    "test": "K8 exit and cleanup",
+    "passed": true,
+    "detail": "remaining workload tasks=[]"
+  },
+  {
+    "test": "K9 module unload",
+    "passed": true,
+    "detail": "rmmod=0; /proc/taskgraph removed"
+  },
+  {
+    "test": "K10 invalid cap rejected",
+    "passed": true,
+    "detail": "max_tasks=1 rejected"
+  },
+  {
+    "test": "K11 bounded snapshot",
+    "passed": true,
+    "detail": "rows=16; truncated=1"
+  },
+  {
+    "test": "K12 reload and final unload",
+    "passed": true,
+    "detail": "Clean end"
+  }
+]

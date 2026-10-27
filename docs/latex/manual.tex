@@ -1,0 +1,145 @@
+\input{preamble}
+\renewcommand{\docname}{Хэрэглэгчийн болон operational гарын авлага}
+\begin{document}
+\input{Titlepage}
+\pagenumbering{arabic}
+
+\section{Зорилго ба дэмжих орчин}
+TaskGraph нь Linux-ийн process, thread-ийн холбоос, төлөвийг граф болон хүснэгтээр харуулна. Windows дээр жишээ эсвэл хадгалсан snapshot-оор UI-г туршиж болно. Бодит kernel module нь Linux дээр ажиллана.
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}P{3.2cm}Y@{}}\toprule
+Горим & Шаардлагатай орчин \\\midrule
+Windows UI & Python 3, Tcl/Tk; \code{run.bat}. \\
+Linux UI & Python 3, \code{python3-tk}; \code{run.sh}. \\
+Бодит module & Ubuntu 24.04 LTS, GCC/Make, ажиллаж буй kernel-ийн headers. Туршсан target: Linux 6.8.0-31. \\
+Windows дахь Linux VM & VirtualBox; 2 CPU, 4 GB RAM, 40 GB диск санал болгоно. \\\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Суулгах ба ажиллуулах}
+\subsection{Windows дээр UI турших}
+Python 3 (Tcl/Tk)-тай байхад \code{run.bat}-аар UI нээнэ. ZIP-ийг задалж эсвэл дараах командаар repository-г татна. Нэмэлт pip сан шаардахгүй.
+\begin{lstlisting}
+git clone https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information.git taskgraph
+cd taskgraph
+run.bat
+\end{lstlisting}
+Модульгүй үед \textbf{SOURCE: FIXTURE} гэсэн бэлэн жишээ нээгдэнэ. Автомат тестийг \code{test.bat}-аар ажиллуулна. Windows дээр procfs-тэй холбоотой нэг тест алгасагдаж, бусад 22 тест ажиллана.
+
+\subsection{Ubuntu дээр module ажиллуулах}
+Ubuntu Terminal-д dependency суулгаад төслийн хавтас руу орно:
+\begin{lstlisting}
+sudo apt update
+sudo apt install -y build-essential \
+  linux-headers-$(uname -r) python3 python3-tk git
+bash scripts/check_env.sh
+make -C src/kernel
+sudo insmod src/kernel/taskgraph.ko \
+  max_tasks=4096 log_on_load=1
+bash run.sh --kernel
+\end{lstlisting}
+UI-г энгийн хэрэглэгчээр ажиллуулна. Модуль ачаалах, буулгахад sudo хэрэгтэй. Дуусгаад \code{sudo rmmod taskgraph} командаар буулгана.
+\textbf{Параметр:} \code{max\_tasks=16..16384}, анхны утга 4096; \code{log\_on\_load=1} нь LINEAR/DFS log хэвлэнэ. Өөр kernel ашиглавал өөрийн headers-тай дахин build хийнэ.
+
+\clearpage
+\section{UI-ийн удирдлага}
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}P{3.7cm}Y@{}}\toprule
+Удирдлага & Үйлдэл \\\midrule
+Эх үүсвэр & \code{kernel}: module; \code{procfs}: Linux оношилгоо; \code{file}: хадгалсан snapshot. \\
+DFS / LINEAR & Task үзүүлэх дарааллыг солино. \\
+Root PID & Тухайн task ба дэд мод; хоосон бол бүгд. \\
+Threads & Нэмэлт thread-үүдийг харуулна эсвэл нууна. \\
+Зангилааны хязгаар & 1--2000 хүртэл task харуулна. \\
+Шинэчлэх / Авто шинэчлэлт & Эх үүсвэрийг дахин уншина; 500--10000 ms интервалтай. \\
+Өмнөх / Дараах / Тоглуулах & Нэг snapshot-ийн traversal-ийг алхмаар үзүүлнэ. \\
+Reset & Шүүлт, дараалал, playback-ийг эхний байдалд оруулна. \\
+Файл нээх / Хадгалах & Бүтэн TSV snapshot импортлох, экспортлох. \\\bottomrule
+\end{tabularx}
+\end{table}
+Зангилаа дээр дарвал PID, PPID, TGID, төлөв, дарааллын дэлгэрэнгүй гарна. Scroll болон дунд товчоор графыг шилжүүлнэ. Ногоон R, цэнхэр S, шар T/D, саарал I, ягаан Z/X төлөвийг илэрхийлнэ. Улбар хүрээ нь сонгосон task. Тасархай сум нь thread-ийн холбоос.
+
+\section{Ашиглах жишээ}
+\subsection{Жишээ 1: бэлэн модыг судлах}
+\begin{enumerate}
+\item \code{run.bat}-аар нээгээд Reset дарна.
+\item DFS сонгож Тоглуулах дарна. Дараалал: 0, 1, 10, 11, 20, 21, 2.
+\item Root PID=10 оруулаад Хэрэглэх дарна. 10, 11, 20, 21 гэсэн 4 task харагдана.
+\item Threads-ийн чагтыг авахад 11 worker нуугдана.
+\end{enumerate}
+\subsection{Жишээ 2: kernel-ийн хадгалсан хэмжилт}
+Файл нээхээр \code{docs/evidence/created.tsv} сонгож, Root PID=90 оруулна. 7 task бүхий мод гарна. Дараа нь \code{stopped.tsv} нээхэд root-ийн төлөв T болж шарласан байна. \code{after.tsv} нээхээс өмнө Root PID-г цэвэрлэнэ: workload аль хэдийн дууссан тул PID 90 байхгүй.
+File горимын авто шинэчлэлт нь ижил файлыг дахин уншина; бодит процессын шинэ өөрчлөлтийг хэмжихгүй.
+
+\clearpage
+\subsection{Жишээ 3: бодит Linux процессын мод}
+Module болон UI-г kernel горимд ажиллуулсны дараа өөр Terminal-д:
+\begin{lstlisting}
+export PYTHONPATH="$PWD/src"
+python3 -m taskgraph.workload \
+  --depth 2 --fanout 2 --seconds 45
+\end{lstlisting}
+ROOT\_PID мөрийн дугаарыг UI-д оруулж, Шинэчлэх, Хэрэглэх дарна. Энэ workload нь 1+2+4=7 process үүсгэнэ. Авто шинэчлэлтээр хугацаа дуусахад task-ууд алга болохыг ажиглана. Root өөрөө дуусвал талбарыг цэвэрлэнэ.
+Depth=0..3, fanout=1..3, seconds=2..300. SIGSTOP/CONT турших бол зөвхөн өөрийн workload-ийн root PID-д дараах дохиог өгнө:
+\begin{lstlisting}
+kill -STOP ROOT_PID
+kill -CONT ROOT_PID
+\end{lstlisting}
+
+\section{Operational шалгалт}
+\subsection{Үндсэн build ба тест}
+\begin{lstlisting}
+make -C src/kernel
+bash scripts/test.sh
+sudo dmesg | grep 'taskgraph LINEAR' | head
+sudo dmesg | grep 'taskgraph DFS' | head
+ps -el
+ps -eLf
+cat /proc/taskgraph
+\end{lstlisting}
+Python тестийн хүлээгдсэн үр дүн нь Linux дээр 23 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
+\subsection{Нэмэлт live ба QEMU тест}
+\begin{lstlisting}
+PYTHONPATH=src python3 scripts/verify_live.py
+sudo apt install -y qemu-system-x86 busybox-static
+PYTHONPATH=src python3 scripts/qemu_smoke.py \
+  --kernel /boot/vmlinuz-$(uname -r)
+\end{lstlisting}
+Эхний скрипт ачаалсан module дээр 6 live шалгалт хийнэ. Хоёр дахь нь тохирох kernel image, build хийсэн module-оор QEMU дотор 12 шалгалт ажиллуулна. Image нь уншигдах боломжтой байна. Алдаа гарвал exit code 1 буцаана. Туршилтын log, JSON, TSV-г тусад нь хадгална.
+
+\clearpage
+\section{Түгээмэл алдаа ба хязгаарлалт}
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}P{4cm}Y@{}}\toprule
+Алдаа & Шийдэл \\\midrule
+\code{/proc/taskgraph} алга & Module build, \code{sudo insmod} хийсэн эсэхийг шалгана. \\
+Invalid module format & \code{uname -r}-тэй таарсан headers суулгаж clean, build хийнэ. \\
+Key was rejected & VM-ийн Secure Boot, module signing тохиргоог шалгана. \\
+File exists & Хуучин module-ийг \code{sudo rmmod taskgraph}-аар буулгаад ачаална. \\
+\code{tkinter} олдохгүй & Ubuntu-д \code{sudo apt install python3-tk}; Windows-д Python Tcl/Tk бүрэлдэхүүн суулгана. \\
+DISPLAY алдаа & Desktop session-оос UI нээх эсвэл CLI ашиглана. \\
+PID олдохгүй & Дууссан эсвэл тухайн snapshot-д байхгүй PID. Root талбарыг цэвэрлэнэ. \\
+\code{truncated=1} & Capture cap хүрсэн. Module-ийг илүү их \code{max\_tasks}-аар дахин ачаална. \\
+Графын task дутуу & View limit болон Threads шүүлтийг шалгана. \\\bottomrule
+\end{tabularx}
+\end{table}
+Snapshot нь системийн бүх талбарыг нэг агшинд атомикаар хэмжихгүй. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Windows-ийн fixture/file нь UI туршилтын горим юм.
+
+\section{Төслийн файлууд}
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}P{4cm}Y@{}}\toprule
+Зам & Агуулга \\\midrule
+\code{src/kernel/} & C kernel module, Makefile. \\
+\code{src/taskgraph/} & UI, parser, CLI, workload, launcher. \\
+\code{tests/}, \code{examples/} & Автомат тест ба бэлэн өгөгдөл. \\
+\code{scripts/} & Орчин, live болон QEMU шалгах скрипт. \\
+\code{docs/evidence/} & Бодит kernel туршилтын log, JSON, TSV. \\
+\code{docs/latex/} & Тайлан, Manual-ийн LaTeX эх ба ШУТИС-ийн лого. \\\bottomrule
+\end{tabularx}
+\end{table}
+README-ийн Quick Start заавраар програмыг ажиллуулна. Эх код, тест, тайлан, гарын авлага, туршилтын нотолгоог GitHub-д хамт байршуулна.
+\end{document}

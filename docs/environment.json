@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-27",
+  "host": "Ubuntu 24.04 container; kernel module not loaded into host",
+  "target": "Ubuntu 6.8.0-31-generic x86_64",
+  "qemu": "8.2.2 TCG, 2 vCPU, 512 MiB initramfs",
+  "compiler": "GCC 13.3.0; kernel built with GCC 13.2.0",
+  "python": "3.12",
+  "gui": "Tk 8.6 with Xvfb; actual app screenshots",
+  "kernel_headers": "6.8.0-31.31",
+  "note": "Final desktop Ubuntu VM repetition and team metadata remain team tasks"
+}

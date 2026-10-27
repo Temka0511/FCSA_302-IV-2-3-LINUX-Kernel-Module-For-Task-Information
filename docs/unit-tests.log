@@ -1,0 +1,28 @@
+test_01_fixture_fields (test_model.SnapshotTests.test_01_fixture_fields) ... ok
+test_02_dfs_order (test_model.SnapshotTests.test_02_dfs_order) ... ok
+test_03_linear_order (test_model.SnapshotTests.test_03_linear_order) ... ok
+test_04_subtree (test_model.SnapshotTests.test_04_subtree) ... ok
+test_05_hide_threads (test_model.SnapshotTests.test_05_hide_threads) ... ok
+test_06_display_limit_preserves_total (test_model.SnapshotTests.test_06_display_limit_preserves_total) ... ok
+test_07_bad_root (test_model.SnapshotTests.test_07_bad_root) ... ok
+test_08_bad_limits (test_model.SnapshotTests.test_08_bad_limits) ... ok
+test_09_bad_version (test_model.SnapshotTests.test_09_bad_version) ... ok
+test_10_duplicate_pid (test_model.SnapshotTests.test_10_duplicate_pid) ... ok
+test_11_invalid_count (test_model.SnapshotTests.test_11_invalid_count) ... ok
+test_12_invalid_state (test_model.SnapshotTests.test_12_invalid_state) ... ok
+test_13_control_and_unicode_name_roundtrip (test_model.SnapshotTests.test_13_control_and_unicode_name_roundtrip) ... ok
+test_14_snapshot_roundtrip (test_model.SnapshotTests.test_14_snapshot_roundtrip) ... ok
+test_15_truncated_flag (test_model.SnapshotTests.test_15_truncated_flag) ... ok
+test_16_missing_parent_retained (test_model.SnapshotTests.test_16_missing_parent_retained) ... ok
+test_17_cycle_does_not_loop (test_model.SnapshotTests.test_17_cycle_does_not_loop) ... ok
+test_18_deep_tree_without_recursion (test_model.SnapshotTests.test_18_deep_tree_without_recursion) ... ok
+test_19_parent_after_child (test_model.SnapshotTests.test_19_parent_after_child) ... ok
+test_20_bad_dfs_rank (test_model.SnapshotTests.test_20_bad_dfs_rank) ... ok
+test_21_bad_column_count (test_model.SnapshotTests.test_21_bad_column_count) ... ok
+test_22_bad_escape (test_model.SnapshotTests.test_22_bad_escape) ... ok
+test_23_live_procfs (test_model.SnapshotTests.test_23_live_procfs) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.032s
+
+OK

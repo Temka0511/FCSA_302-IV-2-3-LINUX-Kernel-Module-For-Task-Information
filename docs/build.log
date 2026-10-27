@@ -1,0 +1,14 @@
+make: Entering directory '/workspace/scratch/b97fc9a200c8/taskgraph/src/kernel'
+make -C /workspace/scratch/b97fc9a200c8/tmp/sysroot/usr/src/linux-headers-6.8.0-31-generic M=/workspace/scratch/b97fc9a200c8/taskgraph/src/kernel modules
+make[1]: Entering directory '/workspace/scratch/b97fc9a200c8/tmp/sysroot/usr/src/linux-headers-6.8.0-31-generic'
+warning: the compiler differs from the one used to build the kernel
+  The kernel was built by: x86_64-linux-gnu-gcc-13 (Ubuntu 13.2.0-23ubuntu4) 13.2.0
+  You are using:           gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+  CC [M]  /workspace/scratch/b97fc9a200c8/taskgraph/src/kernel/taskgraph.o
+  MODPOST /workspace/scratch/b97fc9a200c8/taskgraph/src/kernel/Module.symvers
+  CC [M]  /workspace/scratch/b97fc9a200c8/taskgraph/src/kernel/taskgraph.mod.o
+  LD [M]  /workspace/scratch/b97fc9a200c8/taskgraph/src/kernel/taskgraph.ko
+  BTF [M] /workspace/scratch/b97fc9a200c8/taskgraph/src/kernel/taskgraph.ko
+Skipping BTF generation for /workspace/scratch/b97fc9a200c8/taskgraph/src/kernel/taskgraph.ko due to unavailability of vmlinux
+make[1]: Leaving directory '/workspace/scratch/b97fc9a200c8/tmp/sysroot/usr/src/linux-headers-6.8.0-31-generic'
+make: Leaving directory '/workspace/scratch/b97fc9a200c8/taskgraph/src/kernel'
