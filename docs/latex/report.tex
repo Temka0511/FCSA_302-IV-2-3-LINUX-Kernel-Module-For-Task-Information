@@ -1,4 +1,6 @@
 \input{preamble}
+\usepackage{colortbl}
+\definecolor{planhead}{HTML}{DCEAF5}
 \begin{document}
 \setlength{\emergencystretch}{8em}
 \input{Titlepage}
@@ -63,7 +65,7 @@ Snapshot бүр \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, 
 \code{tg\_walk()} нь \code{init\_task.children}-аас эхэлж, \code{sibling} холбоосоор хүүхдүүдийг гүнээр туулна. Thread бүрийн children жагсаалтыг шалгадаг тул process leader бус thread-ийн үүсгэсэн хүүхэд орхигдохгүй. Thread-үүдийг TGID-ийн гишүүнчлэлээр нэмнэ. Callback дотор санах ой хуваарилах, хэвлэх, унтуулах үйлдэл хийхгүй; модулийн entry point-оос LINEAR, DFS үр дүнг kernel log-д хэвлэнэ.
 \code{seq\_file} нь нэг нээлттэй файлаас хэсэгчлэн уншихад ижил snapshot ашиглана \cite{seq}. Дахин нээх бүр шинэ өгөгдөл авна. \code{max\_tasks} нь 16--16384, анхны утга 4096. Хязгаар хүрвэл \code{truncated=1} гэж мэдээлнэ. Parser нь формат, PID давхардал, дараалал, төлөв болон оролтын хэмжээг шалгана.
 
-GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1-bd1.\par
+GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.1-bd1.\par
 
 \section{Туршилт ба UI дүрслэл}
 Графын тасралтгүй сум нь process parent-child, тасархай сум нь thread гишүүнчлэлийг заана. Зангилаа сонгоход дэлгэрэнгүй харагдана.
@@ -233,4 +235,48 @@ Kernel ажиллагааг QEMU initramfs орчинд шалгасан. Тай
 \bibitem{kbuild} Linux 6.8. \textit{Building External Modules}. \url{https://docs.kernel.org/6.8/kbuild/modules.html}
 \end{thebibliography}
 \noindent\footnotesize Код, тест, баримт бичгийг боловсруулахад ChatGPT/Codex-ийн туслалцаа ашигласан.
+
+\clearpage
+\normalsize
+\section*{Хавсралт A. Ажлын төлөвлөгөө}
+\addcontentsline{toc}{section}{Хавсралт A. Ажлын төлөвлөгөө}
+\begingroup
+\small
+\def\UrlFont{\ttfamily\scriptsize}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+
+\noindent
+\begin{tabularx}{\textwidth}{|P{3.6cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Талбар} & \textbf{Мэдээлэл} \\\hline
+Хуваарилалтын код & IV-2-3 \\\hline
+Төсөл & Linux Kernel Module for Listing Tasks \\\hline
+Repository & \url{https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information} \\\hline
+Хэл/сан/орчин & C, Python 3, Tkinter; Ubuntu 24.04 LTS, Linux 6.8, GCC/Make \\\hline
+Үндсэн дүрслэл & Процессын parent-child болон process-thread холбоосын граф \\\hline
+\end{tabularx}
+
+\vspace{0.6cm}
+\noindent
+\begin{tabularx}{\textwidth}{|P{3.5cm}|Y|P{4.5cm}|}\hline
+\rowcolor{planhead}\textbf{Гишүүн} & \textbf{Хариуцах ажил} & \textbf{Commit/file} \\\hline
+А.Тэмүүлэн\par {\scriptsize B242270063} & Kernel module, LINEAR болон children/sibling DFS хэрэгжилт & \path{src/kernel/taskgraph.c}\par\path{src/kernel/Makefile} \\\hline
+Ч.Балгандамба\par {\scriptsize B232270142} & Snapshot формат, parser, оролтын шалгалт, нэгж тест & \path{src/taskgraph/model.py}\par\path{tests/test_model.py} \\\hline
+Д.Азмаа\par {\scriptsize B241940101} & Процессын граф, хүснэгт, шүүлт болон UI удирдлага & \path{src/taskgraph/gui.py}\par\path{src/taskgraph/cli.py} \\\hline
+Н.Билэгт-Очир\par {\scriptsize B231910009} & Workload, STOP/CONT туршилт, ps харьцуулалт & \path{tests/guest_workload.c}\par\path{scripts/verify_live.py} \\\hline
+Т.Түвшинтөр\par {\scriptsize B190910820} & Орчин, build/run, QEMU болон boundary/error шалгалт & \path{scripts/check_env.sh}\par\path{scripts/qemu_smoke.py} \\\hline
+Б.Өсөхбаяр\par {\scriptsize B210930901} & Тайлан, хэрэглэгчийн гарын авлага, туршилтын нотолгоог нэгтгэх & \path{docs/latex/report.tex}\par\path{docs/latex/manual.tex} \\\hline
+\end{tabularx}
+
+\vspace{0.6cm}
+\noindent
+\begin{tabularx}{\textwidth}{|P{1.2cm}|P{6.0cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Тест} & \textbf{Оролт/нөхцөл} & \textbf{Хүлээгдсэн үр дүн} \\\hline
+1 & Build, insmod; \code{max\_tasks=4096}, \code{log\_on\_load=1} & Модуль ачаалагдаж, proc файл болон LINEAR/DFS log үүснэ. \\\hline
+2 & 5 process + 2 thread бүхий workload; \code{ps -el}, \code{ps -eLf} & 7 task-ийн PID, PPID, TGID, нэр, төлөв таарна. \\\hline
+3 & Жишээ файл; Root PID=10; Threads асаах/унтраах & 4 task харагдана; thread нуухад 3 process үлдэнэ. \\\hline
+4 & Workload-ийн root-д SIGSTOP, SIGCONT өгөх; дараа нь дуусгах & T төлөвт орж, үргэлжлүүлсний дараа хэвийн ажиллана; дуусвал жагсаалтаас алга болно. \\\hline
+5 & \code{max\_tasks=1}, дараа нь 16; Root PID-д abc оруулах & Буруу cap, PID-г мэдээлнэ; cap=16 үед \code{truncated=1} гарна. \\\hline
+\end{tabularx}
+\endgroup
 \end{document}

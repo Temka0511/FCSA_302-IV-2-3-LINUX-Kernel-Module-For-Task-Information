@@ -1,6 +1,8 @@
-# TaskGraph v1.1-bd1
+# TaskGraph v1.1.1-bd1
 
 Linux Kernel Module for Listing Tasks — F.CSM302, IV-2-3.
+
+- Тайланд Хавсралт A: төслийн мэдээлэл, зургаан гишүүний үүрэг болон таван туршилтын төлөвлөгөөг нэмэв.
 
 - `for_each_process()` шугаман жагсаалт, `init_task`-аас эхэлсэн шууд
   `children/sibling` DFS. Thread-ээс үүсгэсэн хүүхдийг мөн хамруулна.

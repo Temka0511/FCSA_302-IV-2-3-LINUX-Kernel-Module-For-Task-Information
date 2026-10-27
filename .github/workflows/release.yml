@@ -30,13 +30,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git ls-remote --exit-code --tags origin refs/tags/v1.1-bd1; then
-            echo 'v1.1-bd1 has already been published; retaining that version.'
+          if git ls-remote --exit-code --tags origin refs/tags/v1.1.1-bd1; then
+            echo 'v1.1.1-bd1 has already been published; retaining that version.'
             exit 0
           fi
-          git tag v1.1-bd1 "$GITHUB_SHA"
-          git push origin refs/tags/v1.1-bd1
-          gh release create v1.1-bd1 \
+          git tag v1.1.1-bd1 "$GITHUB_SHA"
+          git push origin refs/tags/v1.1.1-bd1
+          gh release create v1.1.1-bd1 \
             docs/TaskGraph_BD1_Report.pdf docs/TaskGraph_Manual.pdf \
-            --verify-tag --title 'TaskGraph v1.1-bd1' \
+            --verify-tag --title 'TaskGraph v1.1.1-bd1' \
             --notes-file docs/RELEASE_NOTES.md

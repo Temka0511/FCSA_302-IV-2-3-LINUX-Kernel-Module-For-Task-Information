@@ -18,3 +18,14 @@
 Шалгасан багш: Г.Ганбат.
 
 Repository: https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information
+
+## Ажлын хуваарилалт
+
+| Гишүүн | Хариуцах ажил | Холбогдох файл |
+|---|---|---|
+| А.Тэмүүлэн /B242270063/ | Kernel module, LINEAR, children/sibling DFS | `src/kernel/taskgraph.c`, `src/kernel/Makefile` |
+| Ч.Балгандамба /B232270142/ | Snapshot формат, parser, оролтын шалгалт, нэгж тест | `src/taskgraph/model.py`, `tests/test_model.py` |
+| Д.Азмаа /B241940101/ | Процессын граф, хүснэгт, UI удирдлага, шүүлт | `src/taskgraph/gui.py`, `src/taskgraph/cli.py` |
+| Н.Билэгт-Очир /B231910009/ | Workload, STOP/CONT, ps харьцуулалт | `tests/guest_workload.c`, `scripts/verify_live.py` |
+| Т.Түвшинтөр /B190910820/ | Орчин, build/run, QEMU, boundary/error шалгалт | `scripts/check_env.sh`, `scripts/qemu_smoke.py` |
+| Б.Өсөхбаяр /B210930901/ | Тайлан, гарын авлага, нотолгоог нэгтгэх | `docs/latex/report.tex`, `docs/latex/manual.tex` |
