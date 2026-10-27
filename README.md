@@ -92,7 +92,7 @@ UI-д `Шинэчлэх` дарахад root-ийн төлөв `T` болж ша
 kill -CONT ROOT_PID
 ```
 
-Дахин шинэчлэхэд root үргэлжлүүлэн ажиллана. Доорх workload зөвхөн process
+Дахин шинэчлэхэд root үргэлжлүүлэн ажиллана. Дээрх workload зөвхөн process
 үүсгэдэг тул thread шүүлтийг шалгахад олон thread-тэй task эсвэл хадгалсан
 `docs/evidence/created.tsv` snapshot ашиглана.
 
@@ -216,6 +216,5 @@ docs/                   report, manual, evidence and team metadata
 - Kbuild: https://docs.kernel.org/6.8/kbuild/modules.html
 - Python standard library: tkinter, dataclasses, unittest, subprocess.
 - F.CSM302 Бие даалт 1-ийн удирдамж (2026).
-- Код, тест, баримт бичгийг боловсруулахад ChatGPT/Codex-ийн туслалцаа ашигласан.
 
 Kernel source: SPDX GPL-2.0; бусад төслийн эх код мөн GPL-2.0-only.
