@@ -8,6 +8,9 @@
 \tableofcontents
 \clearpage
 \pagenumbering{arabic}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\extrarowheight}{2pt}
+\setlength{\tabcolsep}{6pt}
 
 \section*{Хураангуй}
 \addcontentsline{toc}{section}{Хураангуй}
@@ -21,13 +24,13 @@ Linux системийн процесс, thread-ийн мэдээллийг kern
 \begin{table}[H]
 \centering\small
 \caption{Үндсэн шаардлага ба хэрэгжилт}
-\begin{tabularx}{\textwidth}{@{}P{3.25cm}Y@{}}\toprule
-Шаардлага & Хэрэгжилт \\\midrule
-Шугаман жагсаалт & \code{for\_each\_process()} ашиглаж process leader бүрийн PID, state, comm-ийг kernel log-д хэвлэнэ. \\
-DFS жагсаалт & \code{init\_task}-аас эхэлсэн модыг kernel дотор стекээр туулж, дараалал ба гүнийг гаргана. \\
-Зөв ажиллагааг шалгах & Process жагсаалтыг \code{ps -el}, thread-үүдийг \code{ps -eLf}-тэй харьцуулж болно. \\
-Task graph UI & Parent-child болон process-thread холбоосыг дүрсэлж, дахин уншихад шинэчилнэ. \\
-Өөрчилж турших & Root PID, thread шүүлт, харагдах тоо, шинэчлэх хугацааг өөрчилнө. Буруу оролтыг мэдээлнэ. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{3.25cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Шаардлага} & \textbf{Хэрэгжилт} \\\hline
+Шугаман жагсаалт & \code{for\_each\_process()} ашиглаж process leader бүрийн PID, state, comm-ийг kernel log-д хэвлэнэ. \\\hline
+DFS жагсаалт & \code{init\_task}-аас эхэлсэн модыг kernel дотор стекээр туулж, дараалал ба гүнийг гаргана. \\\hline
+Зөв ажиллагааг шалгах & Process жагсаалтыг \code{ps -el}, thread-үүдийг \code{ps -eLf}-тэй харьцуулж болно. \\\hline
+Task graph UI & Parent-child болон process-thread холбоосыг дүрсэлж, дахин уншихад шинэчилнэ. \\\hline
+Өөрчилж турших & Root PID, thread шүүлт, харагдах тоо, шинэчлэх хугацааг өөрчилнө. Буруу оролтыг мэдээлнэ. \\\hline
 \end{tabularx}
 \end{table}
 Номын Part I-ийг \code{for\_each\_process()}, Part II-ийг \code{init\_task}-аас эхэлсэн \code{children/sibling} холбоосоор шууд хэрэгжүүлсэн. Хүүхэд зангилааг \code{list\_entry()}-ээр авч, стек дээр эцэг зангилааны iterator-ийг хадгална. Kernel stack дээр рекурс ашиглахгүй.
@@ -49,12 +52,12 @@ Linux-ийн \code{task\_struct} нь task-ийн PID, төлөв, нэр бол
 \begin{table}[H]
 \centering\small
 \caption{Компонентуудын үүрэг}
-\begin{tabularx}{\textwidth}{@{}P{3.4cm}Y@{}}\toprule
-Компонент & Үүрэг \\\midrule
-\code{taskgraph.c} & Шугаман жагсаалт, шууд children/sibling DFS, proc snapshot үүсгэнэ. \\
-\code{model.py} & TSV өгөгдлийг шалгаж, дэд мод болон thread шүүлт хийнэ. \\
-\code{gui.py}, \code{cli.py} & Нэг өгөгдлийг график болон командын мөрөөр үзүүлнэ. \\
-\code{workload.py} & Өөр өөр гүн, салаалалттай туршилтын процессын мод үүсгэнэ. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Компонент} & \textbf{Үүрэг} \\\hline
+\code{taskgraph.c} & Шугаман жагсаалт, шууд children/sibling DFS, proc snapshot үүсгэнэ. \\\hline
+\code{model.py} & TSV өгөгдлийг шалгаж, дэд мод болон thread шүүлт хийнэ. \\\hline
+\code{gui.py}, \code{cli.py} & Нэг өгөгдлийг график болон командын мөрөөр үзүүлнэ. \\\hline
+\code{workload.py} & Өөр өөр гүн, салаалалттай туршилтын процессын мод үүсгэнэ. \\\hline
 \end{tabularx}
 \end{table}
 Snapshot бүр \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, orphan, comm} баганатай. \code{count}, \code{cap}, \code{truncated} нь хэмжилт бүтэн эсэхийг мэдээлнэ.
@@ -65,21 +68,21 @@ Snapshot бүр \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, 
 \code{tg\_walk()} нь \code{init\_task.children}-аас эхэлж, \code{sibling} холбоосоор хүүхдүүдийг гүнээр туулна. Thread бүрийн children жагсаалтыг шалгадаг тул process leader бус thread-ийн үүсгэсэн хүүхэд орхигдохгүй. Thread-үүдийг TGID-ийн гишүүнчлэлээр нэмнэ. Callback дотор санах ой хуваарилах, хэвлэх, унтуулах үйлдэл хийхгүй; модулийн entry point-оос LINEAR, DFS үр дүнг kernel log-д хэвлэнэ.
 \code{seq\_file} нь нэг нээлттэй файлаас хэсэгчлэн уншихад ижил snapshot ашиглана \cite{seq}. Дахин нээх бүр шинэ өгөгдөл авна. \code{max\_tasks} нь 16--16384, анхны утга 4096. Хязгаар хүрвэл \code{truncated=1} гэж мэдээлнэ. Parser нь формат, PID давхардал, дараалал, төлөв болон оролтын хэмжээг шалгана.
 
-GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.1-bd1.\par
+GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.2-bd1.\par
 
 \section{Туршилт ба UI дүрслэл}
 Графын тасралтгүй сум нь process parent-child, тасархай сум нь thread гишүүнчлэлийг заана. Зангилаа сонгоход дэлгэрэнгүй харагдана.
 \begin{table}[H]
 \centering\small
 \caption{Өөрчилж турших удирдлагууд}
-\begin{tabularx}{\textwidth}{@{}P{3.5cm}Y@{}}\toprule
-Удирдлага & Үйлдэл \\\midrule
-DFS / LINEAR & Task үзүүлэх дарааллыг солино. \\
-Root PID / Threads & Дэд мод сонгож, нэмэлт thread-үүдийг харуулна эсвэл нууна. \\
-Зангилааны хязгаар & 1--2000 хүртэл task харуулна; бүтэн snapshot-ийг өөрчлөхгүй. \\
-Шинэчлэх / Авто шинэчлэлт & Эх үүсвэрийг дахин уншина. Интервал 500--10000 ms. \\
-Өмнөх / Дараах / Тоглуулах & Нэг snapshot дотор traversal-ийг алхмаар харуулна. \\
-Файл нээх / Хадгалах / Reset & Snapshot импортлох, экспортлох, view тохиргоо сэргээх. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{3.5cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Удирдлага} & \textbf{Үйлдэл} \\\hline
+DFS / LINEAR & Task үзүүлэх дарааллыг солино. \\\hline
+Root PID / Threads & Дэд мод сонгож, нэмэлт thread-үүдийг харуулна эсвэл нууна. \\\hline
+Зангилааны хязгаар & 1--2000 хүртэл task харуулна; бүтэн snapshot-ийг өөрчлөхгүй. \\\hline
+Шинэчлэх / Авто шинэчлэлт & Эх үүсвэрийг дахин уншина. Интервал 500--10000 ms. \\\hline
+Өмнөх / Дараах / Тоглуулах & Нэг snapshot дотор traversal-ийг алхмаар харуулна. \\\hline
+Файл нээх / Хадгалах / Reset & Snapshot импортлох, экспортлох, view тохиргоо сэргээх. \\\hline
 \end{tabularx}
 \end{table}
 Kernel горим бодит модулиас, File горим хадгалсан snapshot-оос, Fixture горим тестийн жишээнээс уншина. File горимын авто шинэчлэлт ижил файлыг дахин уншина.
@@ -89,11 +92,11 @@ Kernel горим бодит модулиас, File горим хадгалса�
 \begin{table}[H]
 \centering\small
 \caption{Туршсан орчин}
-\begin{tabularx}{\textwidth}{@{}P{3.2cm}Y@{}}\toprule
-Хэсэг & Орчин \\\midrule
-Build & Ubuntu 24.04, GCC 13.3.0, Linux 6.8.0-31 headers. \\
-Kernel ажиллагаа & QEMU 8.2.2 TCG, 2 vCPU, 512 MiB RAM, Linux 6.8.0-31-generic, initramfs. \\
-UI, автомат тест & Python 3.12, Tk 8.6, unittest, Xvfb. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{3.2cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Хэсэг} & \textbf{Орчин} \\\hline
+Build & Ubuntu 24.04, GCC 13.3.0, Linux 6.8.0-31 headers. \\\hline
+Kernel ажиллагаа & QEMU 8.2.2 TCG, 2 vCPU, 512 MiB RAM, Linux 6.8.0-31-generic, initramfs. \\\hline
+UI, автомат тест & Python 3.12, Tk 8.6, unittest, Xvfb. \\\hline
 \end{tabularx}
 \end{table}
 Python тестээр оролт шалгах, LINEAR/DFS, дэд мод, thread шүүлт, импорт/экспорт, буруу оролт болон 5000 гүн модыг шалгав. Kernel тестээр модулийг ачаалж, процесс ба thread үүсгэн \code{before}, \code{created}, \code{stopped}, \code{after}, \code{capped} үеийн snapshot авсан.
@@ -105,37 +108,37 @@ Python-ийн \textbf{28/28 тест}, kernel-ийн \textbf{17/17 шалгал�
 \begin{table}[H]
 \centering\small
 \caption{Бодит kernel дээрх шалгалтын үр дүн}
-\begin{tabularx}{\textwidth}{@{}P{0.8cm}YP{2.0cm}@{}}\toprule
-Код & Ажигласан үр дүн & Төлөв \\\midrule
-K1 & Модуль ачаалагдав; \code{insmod} exit=0. & Тэнцсэн \\
-K2 & Kernel эх үүсвэртэй 66 task; PID 0 багтсан. & Тэнцсэн \\
-K3 & LINEAR болон DFS log хоёулаа хэвлэгдсэн. & Тэнцсэн \\
-K4 & 73 task-ийн DFS rank давхцаагүй; parent нь child-ээс өмнө. & Тэнцсэн \\
-K5 & Root PID 90-ийн дэд мод 7 task-тай. & Тэнцсэн \\
-K6 & PID 95, 96 thread-үүд TGID 90-тай холбогдсон. & Тэнцсэн \\
-K7 & SIGSTOP дараа root-ийн state=T болсон. & Тэнцсэн \\
-K8 & Workload дууссаны дараа \code{tg-*} task үлдээгүй. & Тэнцсэн \\
-K9 & Модуль буухад \code{/proc/taskgraph} устсан. & Тэнцсэн \\
-K10 & \code{max\_tasks=1} буруу утгыг хүлээж аваагүй. & Тэнцсэн \\
-K11 & \code{max\_tasks=16}: count=16, truncated=1. & Тэнцсэн \\
-K12 & Дахин ачаалах, буулгах үйлдэл амжилттай. & Тэнцсэн \\
-K13 & children/sibling шууд traversal ашигласан snapshot. & Тэнцсэн \\
-K14 & Туршилтын 7 task procps-ийн гаралттай таарсан. & Тэнцсэн \\
-K15 & Процесс үүсэх/дуусах үед 10 удаа snapshot уншсан. & Тэнцсэн \\
-K16 & Kernel log-д BUG, Oops, WARNING, lockup гараагүй. & Тэнцсэн \\
-K17 & Thread-ээс үүсгэсэн хүүхэдтэй 8 task бүрэн харагдсан. & Тэнцсэн \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{1.0cm}|Y|P{2.0cm}|}\hline
+\rowcolor{planhead}\textbf{Код} & \textbf{Ажигласан үр дүн} & \textbf{Төлөв} \\\hline
+K1 & Модуль ачаалагдав; \code{insmod} exit=0. & Тэнцсэн \\\hline
+K2 & Kernel эх үүсвэртэй 66 task; PID 0 багтсан. & Тэнцсэн \\\hline
+K3 & LINEAR болон DFS log хоёулаа хэвлэгдсэн. & Тэнцсэн \\\hline
+K4 & 73 task-ийн DFS rank давхцаагүй; parent нь child-ээс өмнө. & Тэнцсэн \\\hline
+K5 & Root PID 90-ийн дэд мод 7 task-тай. & Тэнцсэн \\\hline
+K6 & PID 95, 96 thread-үүд TGID 90-тай холбогдсон. & Тэнцсэн \\\hline
+K7 & SIGSTOP дараа root-ийн state=T болсон. & Тэнцсэн \\\hline
+K8 & Workload дууссаны дараа \code{tg-*} task үлдээгүй. & Тэнцсэн \\\hline
+K9 & Модуль буухад \code{/proc/taskgraph} устсан. & Тэнцсэн \\\hline
+K10 & \code{max\_tasks=1} буруу утгыг хүлээж аваагүй. & Тэнцсэн \\\hline
+K11 & \code{max\_tasks=16}: count=16, truncated=1. & Тэнцсэн \\\hline
+K12 & Дахин ачаалах, буулгах үйлдэл амжилттай. & Тэнцсэн \\\hline
+K13 & children/sibling шууд traversal ашигласан snapshot. & Тэнцсэн \\\hline
+K14 & Туршилтын 7 task procps-ийн гаралттай таарсан. & Тэнцсэн \\\hline
+K15 & Процесс үүсэх/дуусах үед 10 удаа snapshot уншсан. & Тэнцсэн \\\hline
+K16 & Kernel log-д BUG, Oops, WARNING, lockup гараагүй. & Тэнцсэн \\\hline
+K17 & Thread-ээс үүсгэсэн хүүхэдтэй 8 task бүрэн харагдсан. & Тэнцсэн \\\hline
 \end{tabularx}
 \end{table}
 \begin{table}[H]
 \centering\small
 \caption{UI болон өгөгдлийн боловсруулалтын шалгалт}
-\begin{tabularx}{\textwidth}{@{}P{4.3cm}Y@{}}\toprule
-Туршилт & Хүлээгдсэн ба гарсан үр дүн \\\midrule
-Жишээний DFS & 0, 1, 10, 11, 20, 21, 2. \\
-Root PID=10 & 10, 11, 20, 21 гэсэн 4 task харагдсан. \\
-Threads нуух & PID 11 нуугдсан. \\
-Байхгүй PID, буруу хязгаар & Ойлгомжтой алдаа гарсан. \\
-Импорт/экспорт & Snapshot-ийн task өгөгдөл өөрчлөгдөөгүй. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{4.3cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Туршилт} & \textbf{Хүлээгдсэн ба гарсан үр дүн} \\\hline
+Жишээний DFS & 0, 1, 10, 11, 20, 21, 2. \\\hline
+Root PID=10 & 10, 11, 20, 21 гэсэн 4 task харагдсан. \\\hline
+Threads нуух & PID 11 нуугдсан. \\\hline
+Байхгүй PID, буруу хязгаар & Ойлгомжтой алдаа гарсан. \\\hline
+Импорт/экспорт & Snapshot-ийн task өгөгдөл өөрчлөгдөөгүй. \\\hline
 \end{tabularx}
 \end{table}
 Kernel тестийн дэлгэрэнгүй нь \code{kernel\_results.json}, serial log нь \code{qemu-serial.log}, Python тестийн гаралт нь \code{docs/unit-tests.log} файлд бий. PID нь дахин ажиллуулахад өөрчлөгдөх тул тест root PID-г тухайн run-оос уншдаг.
@@ -146,28 +149,28 @@ Kernel тестийн дэлгэрэнгүй нь \code{kernel\_results.json}, s
 \begin{table}[H]
 \centering\small
 \caption{Бүх системийн жагсаалтын харьцуулалт}
-\begin{tabularx}{\textwidth}{@{}P{4.9cm}P{1.6cm}P{1.6cm}Y@{}}\toprule
-Үзүүлэлт & LINEAR & DFS & Тайлбар \\\midrule
-Entry log-ийн task & 70 & 73 & DFS-д PID 0 орно. \\
-\code{ps -el} / \code{ps -eLf} & 70 & 72 & PID 0 орохгүй. \\
-Log ба ps-д нийтлэг ID & 69 & 71 & Түр task ялгаатай. \\
-Snapshot-ийн нийтлэг ID & 69 & 71 & PID 0-ийг хассан. \\
-PPID, TGID таарсан & 69/69 & 71/71 & Бүх нийтлэг ID. \\
-Төлөв яг таарсан & 67/69 & 69/71 & Хэмжилтийн агшин өөр. \\
-Богино нэр яг таарсан & 54/69 & 56/71 & Kernel нэрийн урт ялгаатай. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{4.9cm}|P{1.8cm}|P{1.6cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Үзүүлэлт} & \textbf{LINEAR} & \textbf{DFS} & \textbf{Тайлбар} \\\hline
+Entry log-ийн task & 70 & 73 & DFS-д PID 0 орно. \\\hline
+\code{ps -el} / \code{ps -eLf} & 70 & 72 & PID 0 орохгүй. \\\hline
+Log ба ps-д нийтлэг ID & 69 & 71 & Түр task ялгаатай. \\\hline
+Snapshot-ийн нийтлэг ID & 69 & 71 & PID 0-ийг хассан. \\\hline
+PPID, TGID таарсан & 69/69 & 71/71 & Бүх нийтлэг ID. \\\hline
+Төлөв яг таарсан & 67/69 & 69/71 & Хэмжилтийн агшин өөр. \\\hline
+Богино нэр яг таарсан & 54/69 & 56/71 & Kernel нэрийн урт ялгаатай. \\\hline
 \end{tabularx}
 \end{table}
 Snapshot-д PID 102 нь \code{cat}, харин нэмэлт ps хэмжилтэд PID 106, 107 нь \code{ps} байв. Entry log-д тухайн үеийн \code{insmod}, raw ps гаралт бүрт өөрийн \code{ps} процесс ордог. Эдгээр нь дараалсан хэмжилтийн хүлээгдсэн зөрүү юм. Kernel thread-ийн урт болон нэмэлт тайлбартай нэрийг procps дэлгэрүүлж харуулдаг; модуль \code{TASK\_COMM\_LEN}-ийн богино нэр авна. Төлөвийн хоёр зөрүү нь ажиллаж буй kernel task-ууд хэмжилтийн хооронд өөрчлөгдсөнөөс үүссэн.
 \begin{table}[H]
 \centering\small
 \caption{Тогтвортой workload-ийн нарийвчилсан тулгалт}
-\begin{tabularx}{\textwidth}{@{}P{1.9cm}P{1.2cm}P{1.2cm}YP{1.5cm}@{}}\toprule
-PID/LWP & PPID & TGID & Нэр & Төлөв \\\midrule
-90 & 1 & 90 & \code{tg-root} & S = S \\
-91, 92 & 90 & 91, 92 & \code{tg-child} & S = S \\
-93 & 91 & 93 & \code{tg-leaf} & S = S \\
-94 & 92 & 94 & \code{tg-leaf} & S = S \\
-95, 96 & 1 & 90 & \code{tg-worker} & S = S \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{1.9cm}|P{1.2cm}|P{1.2cm}|Y|P{1.5cm}|}\hline
+\rowcolor{planhead}\textbf{PID/LWP} & \textbf{PPID} & \textbf{TGID} & \textbf{Нэр} & \textbf{Төлөв} \\\hline
+90 & 1 & 90 & \code{tg-root} & S = S \\\hline
+91, 92 & 90 & 91, 92 & \code{tg-child} & S = S \\\hline
+93 & 91 & 93 & \code{tg-leaf} & S = S \\\hline
+94 & 92 & 94 & \code{tg-leaf} & S = S \\\hline
+95, 96 & 1 & 90 & \code{tg-worker} & S = S \\\hline
 \end{tabularx}
 \end{table}
 Туршилтын бүх 7 task-ийн нэр, төлөв, PPID, TGID таарсан. 5 process LINEAR log, \code{ps -el}-д; бүх 7 task DFS log, \code{ps -eLf}-д багтсан. Thread-ийн бодит PPID=1, харин графын parent=TGID=90 болохыг ялгаж шалгасан. Дэлгэрэнгүй: \code{docs/evidence/ps\_comparison.json}, \code{ps-el.txt}, \code{ps-eLf.txt}, \code{comparison-kernel.log}.
@@ -183,12 +186,12 @@ Root PID 90-ийн дэд модонд 7 task байна. PID 95, 96 нь thread
 \begin{table}[H]
 \centering\small
 \caption{Зурагт харагдаж буй task-ууд}
-\begin{tabularx}{\textwidth}{@{}P{1.8cm}P{2.8cm}P{2.8cm}Y@{}}\toprule
-PID & Графын parent & Төрөл & Нэр \\\midrule
-90 & 1 & Process & \code{tg-root} \\
-95, 96 & 90 & Thread & \code{tg-worker} \\
-91, 92 & 90 & Process & \code{tg-child} \\
-93, 94 & 91, 92 & Process & \code{tg-leaf} \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{1.8cm}|P{2.8cm}|P{2.8cm}|Y|}\hline
+\rowcolor{planhead}\textbf{PID} & \textbf{Графын parent} & \textbf{Төрөл} & \textbf{Нэр} \\\hline
+90 & 1 & Process & \code{tg-root} \\\hline
+95, 96 & 90 & Thread & \code{tg-worker} \\\hline
+91, 92 & 90 & Process & \code{tg-child} \\\hline
+93, 94 & 91, 92 & Process & \code{tg-leaf} \\\hline
 \end{tabularx}
 \end{table}
 Зургийн өгөгдлийг QEMU дахь бодит Linux kernel module-оос авч, \code{created.tsv} файлаар UI-д импортолсон. Графын холбоос, хүснэгтийн мөрүүд нэг snapshot-д тулгуурлана.
@@ -204,13 +207,13 @@ SIGSTOP өгсний дараа PID 90 шар өнгөөр дүрслэгдэв.
 \begin{table}[H]
 \centering\small
 \caption{Хэмжилтүүдийн харьцуулалт}
-\begin{tabularx}{\textwidth}{@{}P{3cm}Y@{}}\toprule
-Үе шат & Үр дүн \\\midrule
-Created & Root-ийн дэд мод: 5 process + 2 thread. \\
-Stopped & Root-ийн state=T. \\
-After & Workload-ийн task үлдээгүй. \\
-Capped & 16 мөр; snapshot дутууг тэмдэглэсэн. \\
-Unloaded & Proc файл устсан. \\\bottomrule
+\begin{tabularx}{\textwidth}{|P{3cm}|Y|}\hline
+\rowcolor{planhead}\textbf{Үе шат} & \textbf{Үр дүн} \\\hline
+Created & Root-ийн дэд мод: 5 process + 2 thread. \\\hline
+Stopped & Root-ийн state=T. \\\hline
+After & Workload-ийн task үлдээгүй. \\\hline
+Capped & 16 мөр; snapshot дутууг тэмдэглэсэн. \\\hline
+Unloaded & Proc файл устсан. \\\hline
 \end{tabularx}
 \end{table}
 
@@ -244,6 +247,7 @@ Kernel ажиллагааг QEMU initramfs орчинд шалгасан. Тай
 \small
 \def\UrlFont{\ttfamily\scriptsize}
 \renewcommand{\arraystretch}{1.2}
+\setlength{\extrarowheight}{0pt}
 \setlength{\tabcolsep}{5pt}
 
 \noindent
