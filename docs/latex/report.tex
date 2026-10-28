@@ -1,6 +1,10 @@
 \input{preamble}
 \usepackage{colortbl}
 \definecolor{planhead}{HTML}{DCEAF5}
+\definecolor{reportblue}{HTML}{193F64}
+\titleformat{\section}{\large\bfseries\color{reportblue}}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{reportblue}}{\thesubsection.}{0.6em}{}
+\captionsetup{font=small,labelfont={bf,color=reportblue},justification=raggedright,singlelinecheck=false}
 \begin{document}
 \setlength{\emergencystretch}{8em}
 \input{Titlepage}
@@ -11,6 +15,7 @@
 \renewcommand{\arraystretch}{1.25}
 \setlength{\extrarowheight}{2pt}
 \setlength{\tabcolsep}{6pt}
+\setlength{\intextsep}{8pt}
 
 \section*{Хураангуй}
 \addcontentsline{toc}{section}{Хураангуй}
@@ -37,18 +42,43 @@ Task graph UI & Parent-child болон process-thread холбоосыг дүр
 
 \clearpage
 \section{Онолын үндэс}
-Linux-ийн \code{task\_struct} нь task-ийн PID, төлөв, нэр болон холбоосыг агуулна. Нэг процесс олон thread-тэй байж болно.
-\begin{itemize}
-\item \textbf{PID}: task-ийн дугаар; \textbf{TGID}: thread group-ийн дугаар. Process leader-ийн PID ба TGID ижил.
-\item \textbf{PPID}: эцэг процессын дугаар. Графт process-ийг PPID-тай, нэмэлт thread-ийг өөрийн TGID-тай холбоно.
-\item \textbf{LINEAR}: process жагсаалтыг дарааллаар унших арга.
-\item \textbf{DFS}: эхлээд эцэг зангилаа, дараа нь хүүхдийн дэд модыг бүрэн туулна.
-\end{itemize}
-Төлөвийн тэмдэг: R --- ажиллаж байгаа эсвэл бэлэн; S --- унтаж байгаа; I --- idle kernel thread; D --- uninterruptible sleep; T/t --- зогсоосон; Z/X --- zombie/dead.
+Linux-ийн \code{task\_struct} бүтэц нь нэг task-ийн PID, төлөв, нэр болон бусад task-тай холбогдох жагсаалтын холбоосыг агуулдаг. Процесс ба thread хоёулаа энэ бүтцээр дүрслэгддэг ч бүлэгт харьяалагдах байдлаараа ялгаатай. \textbf{PID} нь тухайн task-ийн дугаар, \textbf{TGID} нь thread group-ийн дугаар юм. Process leader-ийн PID ба TGID ижил; нэмэлт thread-ийн PID өөр боловч TGID нь leader-ийн PID-тай тэнцэнэ.
 
+\textbf{PPID} нь эцэг процессын дугаарыг илэрхийлнэ. Гэвч thread-ийн бүлгийн гишүүнчлэл нь эцэг-хүүхдийн холбоотой адил биш. Иймээс графт process-ийг PPID руу нь, нэмэлт thread-ийг TGID руу нь холбоно. Бодит PPID-г тусдаа баганад хадгалснаар дүрслэхэд хэрэглэсэн \code{parent} утгыг үйлдлийн системийн эцэг процессын дугаартай андуурахгүй.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/task_tree.pdf}
+\caption{Бодит created snapshot-ийн 7 task: бүтэн сум нь эцэг-хүүхэд, тасархай сум нь thread гишүүнчлэл.}\label{fig:tree}
+\end{figure}
+
+Зураг~\ref{fig:tree}-т PID 90 нь үндсэн процесс, PID 91, 92 нь түүний хүүхэд, PID 93, 94 нь дараагийн үеийн хүүхэд байна. PID 95, 96 нь TGID 90-той thread-үүд бөгөөд тусдаа хүүхэд процесс гэж тооцогдохгүй. \textbf{LINEAR} жагсаалт нь process leader-уудыг kernel-ийн process жагсаалтаар уншина. \textbf{DFS} нь эцгийг үзсэний дараа хүүхдийн дэд модыг бүрэн туулж, дараагийн ах дүү рүү шилжинэ. Манай өргөтгөл leader-ийн дараа түүний нэмэлт thread-үүдийг оруулдаг тул зурагт буй DFS дараалал 90, 95, 96, 91, 93, 92, 94 болсон.
+
+Төлөвийн тэмдэг нь хэмжилтийн агшныг илэрхийлнэ: R --- ажиллаж байгаа эсвэл бэлэн; S --- унтаж байгаа; I --- idle kernel thread; D --- тасалдуулж болохгүй хүлээлт; T/t --- зогсоосон; Z/X --- zombie/dead. Дараагийн хэмжилтэд төлөв өөрчлөгдөж болно.
+
+\clearpage
 \section{Системийн зохиомж}
-Өгөгдөл \code{task\_struct} $\rightarrow$ kernel snapshot $\rightarrow$ \code{/proc/taskgraph} $\rightarrow$ Python parser $\rightarrow$ граф, хүснэгт гэсэн урсгалаар дамжина.
+Системийг Linux цөмөөс мэдээлэл авах хэсэг, тэр мэдээллийг шалгаж дүрслэх хэрэглэгчийн хэсэг гэж зохион байгуулсан. Kernel module нь бодит task-ийн бүтэцтэй ажиллаж, Python програм нь module-ийн гаргасан өгөгдлийг уншина. Ингэснээр граф зурах, шүүлт хэрэглэх болон файл хадгалах үйлдэл kernel-ийн task жагсаалтыг өөрчлөхгүй.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/architecture.pdf}
+\caption{TaskGraph-ийн архитектур ба өгөгдлийн урсгал. Цөм ба хэрэглэгчийн орон зайг тусад нь тэмдэглэв.}\label{fig:architecture}
+\end{figure}
+
+Зураг~\ref{fig:architecture}-ийн дээд хэсэгт \code{taskgraph.c} нь \code{task\_struct}-уудаас өгөгдөл хуулж, LINEAR болон DFS дарааллыг гаргана. Module ачаалах үеийн жагсаалт kernel log-д хэвлэгддэг бол \code{/proc/taskgraph} нь файл нээх бүрд шинэ snapshot өгдөг интерфэйс юм. Иймээс эхний log ба дараа нь уншсан proc файл өөр агшны хэмжилт байж болно.
+
+Доод хэсгийн \code{model.py} нь TSV өгөгдлийг parse хийж, шалгагдсан \code{Snapshot} объект үүсгэнэ. \code{gui.py} ба \code{cli.py} энэ ижил загварыг ашигладаг тул график болон командын мөрийн хувилбар тус тусдаа өгөгдөл тайлбарлах шаардлагагүй. TSV экспорт нь бүтэн snapshot-ийг хадгалж, дараа нь файл импортлох замаар ижил хэмжилтийг дахин шалгах боломж олгоно.
+
+\clearpage
+\subsection{Snapshot унших дараалал ба интерфэйс}
+\textit{Шинэчлэх} үйлдэл \code{/proc/taskgraph}-ийг нээж, \code{tg\_open()}-оос \code{tg\_capture()}-ийг дуудан snapshot үүсгэнэ. Зураг~\ref{fig:lifecycle}-ийн тасархай сум нь буцаах өгөгдөл, ногоон хэсэг нь CPU-уудыг түр саатуулж task мэдээллийг хуулж буй үеийг заана.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/snapshot_lifecycle.pdf}
+\caption{Snapshot авах, унших, чөлөөлөх үйлдлийн дараалал.}\label{fig:lifecycle}
+\end{figure}
 \begin{table}[H]
 \centering\small
 \caption{Компонентуудын үүрэг}
@@ -60,7 +90,9 @@ Linux-ийн \code{task\_struct} нь task-ийн PID, төлөв, нэр бол
 \code{workload.py} & Өөр өөр гүн, салаалалттай туршилтын процессын мод үүсгэнэ. \\\hline
 \end{tabularx}
 \end{table}
-Snapshot бүр \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, orphan, comm} баганатай. \code{count}, \code{cap}, \code{truncated} нь хэмжилт бүтэн эсэхийг мэдээлнэ.
+Snapshot нь \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, orphan, comm} баганатай. \code{linear}, \code{dfs} нь дараалал, \code{depth} нь гүн юм. Header-ийн \code{count}, \code{cap}, \code{truncated} утгаар хэмжилт бүтэн эсэхийг шалгана. Хэсэгчлэн уншихад snapshot өөрчлөгдөхгүй; файл хаахад санах ойг чөлөөлнө.
+
+Root PID, Threads, DFS/LINEAR сонголтууд нь уншсан snapshot-д шүүлт, эрэмбэ хэрэглэнэ. \textit{Шинэчлэх} болон авто шинэчлэлт эх үүсвэрийг дахин уншина. File горимд ижил файлыг дахин унших тул kernel-ийн шинэ өөрчлөлт тэр файлд автоматаар нэмэгдэхгүй.
 
 \clearpage
 \section{Хэрэгжилт}
@@ -68,7 +100,7 @@ Snapshot бүр \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, 
 \code{tg\_walk()} нь \code{init\_task.children}-аас эхэлж, \code{sibling} холбоосоор хүүхдүүдийг гүнээр туулна. Thread бүрийн children жагсаалтыг шалгадаг тул process leader бус thread-ийн үүсгэсэн хүүхэд орхигдохгүй. Thread-үүдийг TGID-ийн гишүүнчлэлээр нэмнэ. Callback дотор санах ой хуваарилах, хэвлэх, унтуулах үйлдэл хийхгүй; модулийн entry point-оос LINEAR, DFS үр дүнг kernel log-д хэвлэнэ.
 \code{seq\_file} нь нэг нээлттэй файлаас хэсэгчлэн уншихад ижил snapshot ашиглана \cite{seq}. Дахин нээх бүр шинэ өгөгдөл авна. \code{max\_tasks} нь 16--16384, анхны утга 4096. Хязгаар хүрвэл \code{truncated=1} гэж мэдээлнэ. Parser нь формат, PID давхардал, дараалал, төлөв болон оролтын хэмжээг шалгана.
 
-GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.2-bd1.\par
+GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.3-bd1.\par
 
 \section{Туршилт ба UI дүрслэл}
 Графын тасралтгүй сум нь process parent-child, тасархай сум нь thread гишүүнчлэлийг заана. Зангилаа сонгоход дэлгэрэнгүй харагдана.
