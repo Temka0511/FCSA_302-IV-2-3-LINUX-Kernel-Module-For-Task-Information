@@ -30,6 +30,6 @@ test_transient_ps_process_is_reported_not_hidden (test_verification.Verification
 test_wrong_state_fails_workload_comparison (test_verification.VerificationTests.test_wrong_state_fails_workload_comparison) ... ok
 
 ----------------------------------------------------------------------
-Ran 30 tests in 0.018s
+Ran 30 tests in 0.016s
 
 OK

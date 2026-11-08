@@ -49,13 +49,13 @@ DFS / LINEAR & Task үзүүлэх дарааллыг солино. \\
 Root PID & Тухайн task ба дэд мод; хоосон бол бүгд. \\
 Threads & Нэмэлт thread-үүдийг харуулна эсвэл нууна. \\
 Зангилааны хязгаар & 1--2000 хүртэл task харуулна. \\
-Шинэчлэх / Авто шинэчлэлт & Эх үүсвэрийг дахин уншина; 500--10000 ms интервалтай. \\
+Шинэчлэх / Авто шинэчлэлт & Эх үүсвэрийг дахин уншина; 500--10000 ms интервалтай. Kernel-ийн 400 ms дотор давтсан нээлт ижил snapshot ашиглана. \\
 Өмнөх / Дараах / Тоглуулах & Нэг snapshot-ийн traversal-ийг алхмаар үзүүлнэ. \\
 Reset & Шүүлт, дараалал, playback-ийг эхний байдалд оруулна. \\
 Файл нээх / Хадгалах & Бүтэн TSV snapshot импортлох, экспортлох. \\\bottomrule
 \end{tabularx}
 \end{table}
-Зангилаа дээр дарвал PID, PPID, TGID, төлөв, дарааллын дэлгэрэнгүй гарна. Scroll болон дунд товчоор графыг шилжүүлнэ. Ногоон R, цэнхэр S, улбар шар T/D, саарал I, ягаан Z/X төлөвийг илэрхийлнэ. Улбар хүрээ нь сонгосон task. Тасархай сум нь thread-ийн холбоос. LINEAR сонголтод хүснэгт, алхам болон зангилааны дугаар LINEAR дарааллаар явна; графын салбарын байршил parent-child холбоог уншихад зориулж DFS дарааллаар хэвээр байрлана.
+Зангилаа дээр дарвал PID, PPID, TGID, төлөв, дарааллын дэлгэрэнгүй гарна. Scroll болон дунд товчоор графыг шилжүүлнэ. Ногоон R, цэнхэр S, улбар шар T/D, саарал I, ягаан Z/X төлөвийг илэрхийлнэ. Нил ягаан хүрээ нь сонгосон task. Тасархай сум нь thread-ийн холбоос. LINEAR сонголтод хүснэгт, алхам болон зангилааны дугаар LINEAR дарааллаар явна; графын салбарын байршил parent-child холбоог уншихад зориулж DFS дарааллаар хэвээр байрлана.
 
 \section{Ашиглах жишээ}
 \subsection{Жишээ 1: бэлэн модыг судлах}
@@ -121,7 +121,7 @@ sudo apt install -y qemu-system-x86 busybox-static procps
 PYTHONPATH=src python3 scripts/qemu_smoke.py \
   --kernel /boot/vmlinuz-$(uname -r)
 \end{lstlisting}
-Эхний скрипт ачаалсан module дээр 8 live шалгалт хийнэ. Хоёр дахь нь тохирох kernel image, build хийсэн module-оор QEMU дотор 17 шалгалт ажиллуулна. Image нь уншигдах боломжтой байна. Алдаа гарвал exit code 1 буцаана. Live тест нь \code{evidence/ps-el.txt}, \code{ps-eLf.txt}, \code{ps\_comparison.json} үүсгэнэ. QEMU тестийн ижил нотолгоо \code{docs/evidence/}-д хадгалагдана. Туршилтын task-уудын PID, PPID, TGID, нэр, төлөв бүгд таарвал comparison-ийн \code{passed=true} байна. PID 0 болон хэмжилтийн үеийн cat/ps/insmod процессын зөрүүг JSON-д тусад нь харуулна.
+Эхний скрипт ачаалсан module дээр 8 live шалгалт хийнэ. Хоёр дахь нь тохирох kernel image, build хийсэн module-оор QEMU дотор 18 шалгалт ажиллуулна. Image нь уншигдах боломжтой байна. Алдаа гарвал exit code 1 буцаана. Live тест нь \code{evidence/ps-el.txt}, \code{ps-eLf.txt}, \code{ps\_comparison.json} үүсгэнэ. QEMU тестийн ижил нотолгоо \code{docs/evidence/}-д хадгалагдана. Туршилтын task-уудын PID, PPID, TGID, нэр, төлөв бүгд таарвал comparison-ийн \code{passed=true} байна. PID 0 болон хэмжилтийн үеийн cat/ps/insmod процессын зөрүүг JSON-д тусад нь харуулна.
 
 \clearpage
 \section{Түгээмэл алдаа ба хязгаарлалт}
@@ -155,15 +155,16 @@ sudo mokutil --import "$HOME/taskgraph-mok/MOK.der"
 \end{lstlisting}
 Сүүлчийн командын дараа нууц үг тохируулж, VM-ээ restart хийнэ. Ачаалах үеийн цэнхэр \textit{MokManager} дэлгэцээс \textit{Enroll MOK}-г сонгон дээрх нууц үгээр баталгаажуулж дахин ачаална. Тэгээд төслийн хавтас дотор:\par
 \begin{lstlisting}
+mokutil --test-key "$HOME/taskgraph-mok/MOK.der"
 sudo /lib/modules/$(uname -r)/build/scripts/sign-file \
   sha256 "$HOME/taskgraph-mok/MOK.priv" \
   "$HOME/taskgraph-mok/MOK.der" src/kernel/taskgraph.ko
 sudo insmod src/kernel/taskgraph.ko \
   max_tasks=4096 log_on_load=1
 \end{lstlisting}
-Module-ийг дахин build хийвэл дахин sign хийнэ. Энэ нь өөрийн үүсгэсэн түлхүүрийг системд итгэмжлүүлэх үйлдэл тул зөвхөн өөрийн VM дээр хийнэ.\par
+Module-ийг дахин build хийвэл дахин sign хийнэ. Энэ нь өөрийн үүсгэсэн түлхүүрийг системд итгэмжлүүлэх үйлдэл тул зөвхөн өөрийн VM дээр хийнэ. \code{bash scripts/check\_signing.sh} нь түр түлхүүр үүсгээд модулийн хуулбарт sign хийж шалгадаг, дараа нь түлхүүрийг устгадаг. UEFI дээр Enroll MOK хийх хэсгийг тусдаа Secure Boot VM-д давтах шаардлагатай.\par
 
-Snapshot авахад \code{stop\_machine()} CPU-уудыг түр саатуулж children/sibling жагсаалтыг хамгаална. \code{/proc/taskgraph}-ийг бүх хэрэглэгч унших эрхтэй (0444) бөгөөд унших бүрд capture хийдэг: зөвхөн итгэмжлэгдсэн сургалтын VM-д ажиллуулж, давтамжтай уншихаас зайлсхий. Latency мэдрэмтгий production орчинд зориулаагүй. Тусдаа snapshot болон ps хэмжилтүүдийн хооронд төлөв өөрчлөгдөнө. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Хадгалсан файл нь бодит хугацааны өөрчлөлтийг хэмжихгүй.
+Snapshot авахад \code{stop\_machine()} CPU-уудыг түр саатуулж children/sibling жагсаалтыг хамгаална. \code{/proc/taskgraph}-ийг бүх хэрэглэгч унших эрхтэй (0444). Ойролцоо нээлтүүд 400 ms хугацаанд нэг snapshot-ийг хуваалцаж, шинэ capture-ийг mutex-ээр цуваалуулан секундэд дээд тал нь ойролцоогоор 2.5 удаа хийдэг. Нээлттэй файл өөрийн snapshot-ийг хаатал тогтвортой хадгална. Зөвхөн итгэмжлэгдсэн сургалтын VM-д ашиглана; latency мэдрэмтгий production орчинд зориулаагүй. Тусдаа snapshot болон ps хэмжилтүүдийн хооронд төлөв өөрчлөгдөнө. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Хадгалсан файл нь бодит хугацааны өөрчлөлтийг хэмжихгүй.
 
 \section{Төслийн файлууд}
 \begin{table}[H]

@@ -1,0 +1,2 @@
+# taskgraph version=1 source=kernel count=72 cap=4096 truncated=0 boot_ns=8413421910 duration_ns=6319240 traversal=children_sibling synchronization=stop_machine
+# taskgraph version=1 source=kernel count=72 cap=4096 truncated=0 boot_ns=8413421910 duration_ns=6319240 traversal=children_sibling synchronization=stop_machine

@@ -47,7 +47,7 @@ def main():
         check("L7 textbook ps comparison", comparison["passed"], "Seven workload processes match ps")
         check("L8 DFS subtree contiguity", not dfs_errors(current), "All subtrees are contiguous")
         os.kill(child.pid, signal.SIGSTOP)
-        time.sleep(.15)
+        time.sleep(.45)  # Wait beyond the kernel's 400 ms snapshot cache.
         stopped = read_snapshot("/proc/taskgraph")
         states = {t.pid: t.state for t in stopped.tasks}
         check("L4 stopped state", states.get(child.pid) in ("T", "t"), str(states.get(child.pid)))
@@ -62,6 +62,7 @@ def main():
             os.kill(child.pid, signal.SIGCONT)
             child.terminate()
             child.wait(timeout=10)
+    time.sleep(.45)
     after = read_snapshot("/proc/taskgraph")
     check("L6 process exit", child.pid not in {t.pid for t in after.tasks}, f"PID {child.pid} removed")
     (out / "after.tsv").write_text(after.dump(), encoding="utf-8")

@@ -16,9 +16,13 @@
 #include <linux/ktime.h>
 #include <linux/stop_machine.h>
 #include <linux/err.h>
+#include <linux/mutex.h>
+#include <linux/refcount.h>
 
 #define TG_NAME "taskgraph"
 #define TG_MAX 16384U
+/* Reuse an immutable capture briefly to bound stop_machine() calls to 2.5/s. */
+#define TG_CACHE_NS 400000000ULL
 static unsigned int max_tasks = 4096;
 module_param(max_tasks, uint, 0444);
 MODULE_PARM_DESC(max_tasks, "Maximum rows including PID 0 (16..16384)");
@@ -39,6 +43,7 @@ struct tg_frame {
 	unsigned int depth;
 };
 struct tg_snapshot {
+	refcount_t refs;
 	struct tg_row *rows;
 	struct tg_frame *stack;
 	unsigned int *order;
@@ -48,6 +53,9 @@ struct tg_snapshot {
 	DECLARE_HASHTABLE(index, 10);
 };
 static struct proc_dir_entry *tg_entry;
+static DEFINE_MUTEX(tg_cache_lock);
+static struct tg_snapshot *tg_cache;
+static u64 tg_cache_ns;
 
 static struct tg_row *tg_lookup(struct tg_snapshot *s, pid_t pid)
 {
@@ -89,6 +97,12 @@ static void tg_free(struct tg_snapshot *s)
 	kvfree(s->stack);
 	kvfree(s->order);
 	kvfree(s);
+}
+
+static void tg_put(struct tg_snapshot *s)
+{
+	if (refcount_dec_and_test(&s->refs))
+		tg_free(s);
 }
 
 /* Enter a process, then its thread members. Child processes are visited by
@@ -221,6 +235,33 @@ static struct tg_snapshot *tg_capture(void)
 		tg_free(s);
 		return ERR_PTR(ret);
 	}
+	refcount_set(&s->refs, 1);
+	return s;
+}
+
+/* One capture at a time; readers keep their own reference while cache rotates. */
+static struct tg_snapshot *tg_cached_capture(void)
+{
+	struct tg_snapshot *s, *old = NULL;
+	u64 now;
+
+	mutex_lock(&tg_cache_lock);
+	now = ktime_get_boottime_ns();
+	if (tg_cache && now - tg_cache_ns < TG_CACHE_NS) {
+		s = tg_cache;
+		refcount_inc(&s->refs);
+	} else {
+		s = tg_capture();
+		if (!IS_ERR(s)) {
+			old = tg_cache;
+			tg_cache = s; /* The initial reference belongs to the cache. */
+			tg_cache_ns = ktime_get_boottime_ns();
+			refcount_inc(&s->refs); /* This open owns a separate reference. */
+		}
+	}
+	mutex_unlock(&tg_cache_lock);
+	if (old)
+		tg_put(old);
 	return s;
 }
 
@@ -256,20 +297,20 @@ static int tg_show(struct seq_file *m, void *v)
 
 static int tg_open(struct inode *inode, struct file *file)
 {
-	struct tg_snapshot *s = tg_capture();
+	struct tg_snapshot *s = tg_cached_capture();
 	int ret;
 	if (IS_ERR(s))
 		return PTR_ERR(s);
 	ret = single_open(file, tg_show, s);
 	if (ret)
-		tg_free(s);
+		tg_put(s);
 	return ret;
 }
 
 static int tg_release(struct inode *inode, struct file *file)
 {
 	struct seq_file *m = file->private_data;
-	tg_free(m->private);
+	tg_put(m->private);
 	return single_release(inode, file);
 }
 
@@ -313,13 +354,21 @@ static int __init tg_init(void)
 	}
 	pr_info("taskgraph loaded count=%u truncated=%u; read /proc/taskgraph\n",
 		s->count, s->truncated);
-	tg_free(s);
+	tg_put(s);
 	return 0;
 }
 
 static void __exit tg_exit(void)
 {
+	struct tg_snapshot *s;
+
 	proc_remove(tg_entry);
+	mutex_lock(&tg_cache_lock);
+	s = tg_cache;
+	tg_cache = NULL;
+	mutex_unlock(&tg_cache_lock);
+	if (s)
+		tg_put(s);
 	pr_info("taskgraph unloaded\n");
 }
 module_init(tg_init);
@@ -327,4 +376,4 @@ module_exit(tg_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("F.CSM302 Project 3 team");
 MODULE_DESCRIPTION("Task listing and real process graph snapshot");
-MODULE_VERSION("1.1.5");
+MODULE_VERSION("1.1.6");

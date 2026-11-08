@@ -6,6 +6,7 @@ The task-tree labels and DFS order are read from the recorded kernel evidence.
 from pathlib import Path
 import math
 import sys
+from unittest.mock import Mock
 
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -15,6 +16,7 @@ from reportlab.lib.colors import HexColor, Color
 DOCS = Path(__file__).resolve().parent
 sys.path.insert(0, str(DOCS.parent / "src"))
 from taskgraph.model import parse
+from taskgraph.gui import App, COLORS
 
 OUT = DOCS / "latex" / "figures"
 NAVY, BLUE, TEAL = "#193F64", "#356C9B", "#167D83"
@@ -80,7 +82,7 @@ def architecture():
     box(c, 18, 255, 150, 53, "task_struct", "PID · PPID · TGID · state")
     box(c, 215, 255, 244, 53, "taskgraph.c", "LINEAR + children/sibling DFS")
     arrow(c, [(168, 282), (215, 282)])
-    box(c, 215, 199, 244, 38, "/proc/taskgraph", "snapshot / TSV", size=10)
+    box(c, 215, 199, 244, 38, "/proc/taskgraph", "400 ms cache / TSV", size=10)
     arrow(c, [(337, 255), (337, 237)])
     arrow(c, [(337, 199), (337, 129), (301, 129)])
     text(c, 347, 181, "open / read", 8, BLUE, align="left")
@@ -109,16 +111,16 @@ def lifecycle():
         text(c, (x1+x2)/2, y+6, label, 8.2, TEAL if dashed else BLUE)
         arrow(c, [(x1,y), (x2,y)], TEAL if dashed else BLUE, dashed)
     msg(51,178,206,"Шинэчлэх: open()")
-    msg(178,316,180,"tg_open() / tg_capture()")
+    msg(178,316,180,"tg_open() / cache")
     # The shaded band denotes the bounded capture only, not the read lifetime.
     c.setFillColor(Color(.92,.96,.96)); c.rect(289,105,174,62,stroke=0,fill=1)
-    text(c, 376, 154, "stop_machine() + RCU", 8.4, TEAL, True)
+    text(c, 376, 154, "miss: stop_machine() + RCU", 8.1, TEAL, True)
     msg(316,430,132,"хуулбарлах + DFS")
     msg(430,316,112,"rows / order / depth",True)
     msg(316,178,86,"single_open(snapshot)",True)
     msg(51,178,61,"read() / seq_read()")
     msg(178,51,36,"TSV → parse() → дүрслэл",True)
-    text(c, 240, 4, "close(): tg_release() санах ойг чөлөөлнө. Дараагийн open() шинэ snapshot авна.", 8.4, MUTED)
+    text(c, 240, 4, "close(): reader ref дуусна; 400 ms дараа шинэ capture.", 8.4, MUTED)
     c.save()
 
 
@@ -147,12 +149,49 @@ def traversal():
     c.save()
 
 
+def linear_layout():
+    """Render the current GUI's actual draw() geometry for a stored kernel snapshot."""
+    snapshot = parse((DOCS / "evidence" / "created.tsv").read_text())
+    rows, _ = snapshot.view("LINEAR", root=90, limit=20)
+    app = App.__new__(App)
+    app.rows, app.step = rows, -1
+    app.mode = Mock(get=lambda: "LINEAR")
+    app.canvas, app.table = Mock(), Mock()
+    app.canvas.bbox.return_value = (0, 0, 1000, 600)
+    app.table.get_children.return_value = []
+    app.draw()
+    ordered = sorted(rows, key=lambda t: t.dfs)
+    rects = {task.pid: call.args for task, call in
+             zip(ordered, app.canvas.create_rectangle.call_args_list)}
+    edges = [task for task in ordered if task.parent in rects and task.parent != task.pid]
+    c = setup("linear_layout.pdf", 480, 265)
+    text(c, 240, 250, "LINEAR: дараалал ба parent холбоо", 10, NAVY, True)
+    scale, left, top = .51, 14, 244
+    def xy(x, y):
+        return (left + x * scale, top - y * scale)
+    for task, call in zip(edges, app.canvas.create_line.call_args_list):
+        coords = call.args
+        points = [xy(coords[i], coords[i+1]) for i in range(0, 8, 2)]
+        arrow(c, points, TEAL if task.kind == "thread" else BLUE,
+              task.kind == "thread")
+    for task in ordered:
+        x1, y1, x2, y2 = rects[task.pid]
+        x, y = xy(x1, y2)
+        c.setFillColor(HexColor(COLORS.get(task.state, PALE)))
+        c.setStrokeColor(HexColor(TEAL if task.kind == "thread" else BLUE))
+        c.roundRect(x, y, (x2-x1)*scale, (y2-y1)*scale, 3, stroke=1, fill=1)
+        text(c, x+4, y+11, f"{task.pid} {task.comm}", 7.5, NAVY, True, "left")
+        text(c, x+4, y+3, f"LINEAR {task.linear} · PPID {task.ppid}",
+             6.3, MUTED, align="left")
+    c.save()
+
+
 def main():
     font_dir = Path("/usr/share/fonts/truetype/dejavu")
     for name, filename in [("DV","DejaVuSans.ttf"),("DVB","DejaVuSans-Bold.ttf")]:
         pdfmetrics.registerFont(TTFont(name,str(font_dir / filename)))
-    architecture(); lifecycle(); traversal()
-    print("Created architecture.pdf, snapshot_lifecycle.pdf, task_tree.pdf")
+    architecture(); lifecycle(); traversal(); linear_layout()
+    print("Created architecture.pdf, snapshot_lifecycle.pdf, task_tree.pdf, linear_layout.pdf")
 
 
 if __name__ == "__main__":

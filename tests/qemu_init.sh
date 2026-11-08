@@ -21,6 +21,8 @@ insmod /taskgraph.ko max_tasks=4096 log_on_load=1
 echo BEGIN_COMPARISON_LOG
 dmesg | grep taskgraph
 echo END_COMPARISON_LOG
+# Let the workload settle before comparing its states to successive ps calls.
+sleep 1
 echo BEGIN_SNAPSHOT_CREATED
 cat /proc/taskgraph
 echo END_SNAPSHOT_CREATED
@@ -72,6 +74,14 @@ while test "$i" -lt 10; do
   i=$((i + 1))
 done
 echo RESULT CHURN=$CHURN
+echo BEGIN_CACHE_HEADERS
+/bin/busybox head -n 1 /proc/taskgraph
+/bin/busybox head -n 1 /proc/taskgraph
+echo END_CACHE_HEADERS
+sleep 1
+echo BEGIN_CACHE_EXPIRED
+/bin/busybox head -n 1 /proc/taskgraph
+echo END_CACHE_EXPIRED
 echo BEGIN_MODULE_LOG
 dmesg | grep taskgraph
 echo END_MODULE_LOG

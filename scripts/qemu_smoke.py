@@ -100,6 +100,17 @@ def inspect(log, out):
     check("K17 child forked by non-leader thread", thread_count == 8 and len(special) == 1
           and special[0].parent == threaded_root and not dfs_errors(threaded),
           f"root={threaded_root}; tasks={thread_count}; thread-owned child retained")
+    cache_headers = section("CACHE_HEADERS", "cache_headers.txt").splitlines()
+    fresh_headers = section("CACHE_EXPIRED", "cache_expired.txt").splitlines()
+    def boot_ns(header):
+        match = re.search(r"\bboot_ns=(\d+)\b", header)
+        return match.group(1) if match else None
+    reused = (len(cache_headers) == 2 and all(boot_ns(h) for h in cache_headers)
+              and boot_ns(cache_headers[0]) == boot_ns(cache_headers[1]))
+    expired = (reused and len(fresh_headers) == 1 and boot_ns(fresh_headers[0])
+               and boot_ns(fresh_headers[0]) != boot_ns(cache_headers[0]))
+    check("K18 bounded capture and expiry", bool(reused and expired),
+          "Immediate opens share a capture; after 1 s a new capture appears")
     (out / "kernel_results.json").write_text(json.dumps(result, ensure_ascii=False, indent=2))
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return all(x["passed"] for x in result)

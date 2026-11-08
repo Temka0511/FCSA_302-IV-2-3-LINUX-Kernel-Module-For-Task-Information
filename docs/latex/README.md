@@ -10,6 +10,7 @@
 - figures/architecture.pdf: цөм ба хэрэглэгчийн орон зайн архитектур.
 - figures/snapshot_lifecycle.pdf: snapshot унших дуудлагын дараалал.
 - figures/task_tree.pdf: бодит kernel snapshot-ийн процесс/thread мод.
+- figures/linear_layout.pdf: одоогийн GUI кодын LINEAR зангилаа, parent сумны байрлал.
 - ../images/: UI-ийн нотолгооны зургууд.
 
 XeLaTeX ашиглан хоёр удаа compile хийнэ. Төслийн үндсэн хавтсаас:

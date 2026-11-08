@@ -19,7 +19,7 @@
 
 \section*{Хураангуй}
 \addcontentsline{toc}{section}{Хураангуй}
-Linux системийн процесс, thread-ийн мэдээллийг kernel module-оор уншиж, холбоосыг графаар харуулах TaskGraph програм хэрэгжүүлэв. Модуль нь PID, төлөв, нэрийг LINEAR болон DFS дарааллаар хэвлэж, \code{/proc/taskgraph} файлаар шинэ хэмжилт өгнө. UI-аас дэд мод сонгох, thread шүүх, дарааллаар үзэх, мэдээлэл хадгалах боломжтой. Python-ийн 30, бодит Linux kernel-ийн 17 шалгалт нийт 47/47 тэнцсэн. Туршилтын 7 task-ийн нэр, төлөв, parent болон thread group нь procps-ийн гаралттай таарсан.
+Linux системийн процесс, thread-ийн мэдээллийг kernel module-оор уншиж, холбоосыг графаар харуулах TaskGraph програм хэрэгжүүлэв. Модуль нь PID, төлөв, нэрийг LINEAR болон DFS дарааллаар хэвлэж, \code{/proc/taskgraph} файлаар хэмжилт өгнө. UI-аас дэд мод сонгох, thread шүүх, дарааллаар үзэх, мэдээлэл хадгалах боломжтой. Python-ийн 30, бодит Linux kernel-ийн 18 шалгалт нийт 48/48 тэнцсэн. Туршилтын 7 task-ийн нэр, төлөв, parent болон thread group нь procps-ийн гаралттай таарсан.
 
 \section{Удиртгал}
 Зорилго нь Linux-ийн процессын бүтэц, эцэг-хүүхэд холбоо болон DFS аргыг бодит өгөгдөл дээр судлах юм. Процесс үүсэх, зогсох, дуусах өөрчлөлтийг граф, хүснэгтээр ажиглана. Хэрэгжилт нь C kernel module, Python parser, Tkinter UI гэсэн гурван хэсэгтэй.
@@ -66,13 +66,13 @@ Linux-ийн \code{task\_struct} бүтэц нь нэг task-ийн PID, төл�
 \caption{TaskGraph-ийн архитектур ба өгөгдлийн урсгал. Цөм ба хэрэглэгчийн орон зайг тусад нь тэмдэглэв.}\label{fig:architecture}
 \end{figure}
 
-Зураг~\ref{fig:architecture}-ийн дээд хэсэгт \code{taskgraph.c} нь \code{task\_struct}-уудаас өгөгдөл хуулж, LINEAR болон DFS дарааллыг гаргана. Module ачаалах үеийн жагсаалт kernel log-д хэвлэгддэг бол \code{/proc/taskgraph} нь файл нээх бүрд шинэ snapshot өгдөг интерфэйс юм. Иймээс эхний log ба дараа нь уншсан proc файл өөр агшны хэмжилт байж болно.
+Зураг~\ref{fig:architecture}-ийн дээд хэсэгт \code{taskgraph.c} нь \code{task\_struct}-уудаас өгөгдөл хуулж, LINEAR болон DFS дарааллыг гаргана. Module ачаалах үеийн жагсаалт kernel log-д хэвлэгддэг. \code{/proc/taskgraph} 400 ms доторх ойролцоо нээлтүүдэд ижил snapshot өгч, хугацаа дууссаны дараа шинэ хэмжилт авна. Эхний log ба дараах proc файл өөр агшны хэмжилт байж болно.
 
 Доод хэсгийн \code{model.py} нь TSV өгөгдлийг parse хийж, шалгагдсан \code{Snapshot} объект үүсгэнэ. \code{gui.py} ба \code{cli.py} энэ ижил загварыг ашигладаг тул график болон командын мөрийн хувилбар тус тусдаа өгөгдөл тайлбарлах шаардлагагүй. TSV экспорт нь бүтэн snapshot-ийг хадгалж, дараа нь файл импортлох замаар ижил хэмжилтийг дахин шалгах боломж олгоно.
 
 \clearpage
 \subsection{Snapshot унших дараалал ба интерфэйс}
-\textit{Шинэчлэх} үйлдэл \code{/proc/taskgraph}-ийг нээж, \code{tg\_open()}-оос \code{tg\_capture()}-ийг дуудан snapshot үүсгэнэ. Зураг~\ref{fig:lifecycle}-ийн тасархай сум нь буцаах өгөгдөл, ногоон хэсэг нь CPU-уудыг түр саатуулж task мэдээллийг хуулж буй үеийг заана.
+\textit{Шинэчлэх} үйлдэл \code{/proc/taskgraph}-ийг нээж, \code{tg\_open()}-оос \code{tg\_cached\_capture()}-ийг дуудна. Cache 400 ms дотор хүчинтэй бол өмнөх immutable snapshot-ийн reference авна; эсрэг тохиолдолд mutex дор \code{tg\_capture()}-ээр шинэ хэмжилт үүсгэнэ. Зураг~\ref{fig:lifecycle}-ийн тасархай сум нь буцаах өгөгдөл, ногоон хэсэг нь зөвхөн шинэ хэмжилтэд CPU-уудыг түр саатуулж буй үеийг заана.
 
 \begin{figure}[H]
 \centering
@@ -90,17 +90,16 @@ Linux-ийн \code{task\_struct} бүтэц нь нэг task-ийн PID, төл�
 \code{workload.py} & Өөр өөр гүн, салаалалттай туршилтын процессын мод үүсгэнэ. \\\hline
 \end{tabularx}
 \end{table}
-Snapshot нь \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, orphan, comm} баганатай. \code{linear}, \code{dfs} нь дараалал, \code{depth} нь гүн юм. Header-ийн \code{count}, \code{cap}, \code{truncated} утгаар хэмжилт бүтэн эсэхийг шалгана. Хэсэгчлэн уншихад snapshot өөрчлөгдөхгүй; файл хаахад санах ойг чөлөөлнө.
+Snapshot нь \code{pid, ppid, tgid, parent, state, kind, linear, dfs, depth, orphan, comm} баганатай. \code{linear}, \code{dfs} нь дараалал, \code{depth} нь гүн юм. Header-ийн \code{count}, \code{cap}, \code{truncated} утгаар хэмжилт бүтэн эсэхийг шалгана. Хэсэгчлэн уншихад snapshot өөрчлөгдөхгүй; файл хаахад уншигчийн reference чөлөөлөгдөнө. Cache-ийн хугацаа дууссан ч уншигч хаахаас өмнө өгөгдөл устахгүй.
 
 Root PID, Threads, DFS/LINEAR сонголтууд нь уншсан snapshot-д шүүлт, эрэмбэ хэрэглэнэ. \textit{Шинэчлэх} болон авто шинэчлэлт эх үүсвэрийг дахин уншина. File горимд ижил файлыг дахин унших тул kernel-ийн шинэ өөрчлөлт тэр файлд автоматаар нэмэгдэхгүй.
 
-\clearpage
 \section{Хэрэгжилт}
 \code{tg\_capture()} нь мөр, стек, индексийн санах ойг урьдчилан хуваарилна. \code{stop\_machine()} дотор CPU-уудыг түр саатуулж, процессын холбоос өөрчлөгдөхгүй үед мэдээллийг хуулна. Энэ нь module-д export хийгдээгүй \code{tasklist\_lock}-ийг шууд ашиглахгүйгээр жагсаалтыг хамгаална \cite{stop}. RCU уншилтын хамгаалалтыг мөн хэрэглэнэ \cite{rcu}.\par
 \code{tg\_walk()} нь \code{init\_task.children}-аас эхэлж, \code{sibling} холбоосоор хүүхдүүдийг гүнээр туулна. Thread бүрийн children жагсаалтыг шалгадаг тул process leader бус thread-ийн үүсгэсэн хүүхэд орхигдохгүй. Thread-үүдийг TGID-ийн гишүүнчлэлээр нэмнэ. Callback дотор санах ой хуваарилах, хэвлэх, унтуулах үйлдэл хийхгүй; модулийн entry point-оос LINEAR, DFS үр дүнг kernel log-д хэвлэнэ.
-\code{seq\_file} нь нэг нээлттэй файлаас хэсэгчлэн уншихад ижил snapshot ашиглана \cite{seq}. Дахин нээх бүр шинэ өгөгдөл авна. \code{max\_tasks} нь 16--16384, анхны утга 4096. Хязгаар хүрвэл \code{truncated=1} гэж мэдээлнэ. Parser нь формат, PID давхардал, дараалал, төлөв болон оролтын хэмжээг шалгана.
+\code{seq\_file} нь нэг нээлттэй файлаас хэсэгчлэн уншихад ижил snapshot ашиглана \cite{seq}. Mutex нь зэрэгцсэн шинэ capture-уудыг цуваалуулж, reference count нь cache солигдсон ч нээлттэй уншигчийн өгөгдлийг хадгална. 400 ms cache давтан уншилтын \code{stop\_machine()} давтамжийг ойролцоогоор 2.5/секундээр хязгаарлана. \code{max\_tasks} нь 16--16384, анхны утга 4096. Хязгаар хүрвэл \code{truncated=1} гэж мэдээлнэ. Parser нь формат, PID давхардал, дараалал, төлөв болон оролтын хэмжээг шалгана.
 
-GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.5-bd1.\par
+GitHub-ийн main салбарт эх код, тест, баримтыг commit-оор хадгалсан. Түүхэнд хэрэгжилт, Ubuntu заавар, багийн мэдээлэл, тайлангийн засварууд тусдаа бүртгэлтэй. Хувилбар: v1.1.6-bd1.\par
 
 \section{Туршилт ба UI дүрслэл}
 Графын тасралтгүй сум нь process parent-child, тасархай сум нь thread гишүүнчлэлийг заана. Зангилаа сонгоход дэлгэрэнгүй харагдана. Графын мөрүүдийг DFS дарааллаар байрлуулж, parent-аас child руу чиглэсэн шугамыг багануудын завсраар зурдаг. LINEAR сонгосон үед хүснэгт болон алхамчилсан удирдлага LINEAR дарааллаар явж, зангилаан дээр LINEAR дугаар харагдана; модны салбарын байршил parent-child холбоог тодорхой байлгахын тулд тогтвортой үлдэнэ.\par
@@ -136,7 +135,7 @@ C workload нь 5 process, нэмэлт 2 thread буюу 7 task үүсгэнэ.
 
 \clearpage
 \section{Үр дүн}
-Python-ийн \textbf{30/30 тест}, kernel-ийн \textbf{17/17 шалгалт} тэнцэв. Модуль амжилттай хөрвөж, Linux 6.8.0-31 дээр ачаалагдсан.
+Python-ийн \textbf{30/30 тест}, kernel-ийн \textbf{18/18 шалгалт} тэнцэв. Модуль амжилттай хөрвөж, Linux 6.8.0-31 дээр ачаалагдсан.
 \begin{table}[H]
 \centering\small
 \caption{Бодит kernel дээрх шалгалтын үр дүн}
@@ -159,6 +158,7 @@ K14 & Туршилтын 7 task procps-ийн гаралттай таарсан.
 K15 & Процесс үүсэх/дуусах үед 10 удаа snapshot уншсан. & Тэнцсэн \\\hline
 K16 & Kernel log-д BUG, Oops, WARNING, lockup гараагүй. & Тэнцсэн \\\hline
 K17 & Thread-ээс үүсгэсэн хүүхэдтэй 8 task бүрэн харагдсан. & Тэнцсэн \\\hline
+K18 & 400 ms доторх хоёр нээлт нэг хэмжилт, хугацаа дуусахад шинэ хэмжилт авсан. & Тэнцсэн \\\hline
 \end{tabularx}
 \end{table}
 \begin{table}[H]
@@ -175,7 +175,6 @@ Threads нуух & PID 11 нуугдсан. \\\hline
 \end{table}
 Kernel тестийн дэлгэрэнгүй нь \code{kernel\_results.json}, serial log нь \code{qemu-serial.log}, Python тестийн гаралт нь \code{docs/unit-tests.log} файлд бий. PID нь дахин ажиллуулахад өөрчлөгдөх тул тест root PID-г тухайн run-оос уншдаг.
 
-\clearpage
 \subsection{\texttt{ps} командтай харьцуулсан үр дүн}
 Харьцуулалтыг Linux 6.8.0-31 дээр procps-ng 4.0.4-өөр гүйцэтгэсэн. Workload ажиллаж байх үед модулийг дахин ачаалж entry point-ийн LINEAR, DFS log-ийг авсан. Дараа нь snapshot болон номын хоёр командыг хадгалсан. PID, нэр, төлөв, холбоосыг parse хийхийн тулд нэмэлт \code{ps -e -o ...}, \code{ps -eL -o ...} гаралт ашиглав.
 \begin{table}[H]
@@ -205,7 +204,7 @@ Snapshot-д PID 102 нь \code{cat}, харин нэмэлт ps хэмжилтэ
 95, 96 & 1 & 90 & \code{tg-worker} & S = S \\\hline
 \end{tabularx}
 \end{table}
-Туршилтын бүх 7 task-ийн нэр, төлөв, PPID, TGID таарсан. 5 process LINEAR log, \code{ps -el}-д; бүх 7 task DFS log, \code{ps -eLf}-д багтсан. Thread-ийн бодит PPID=1, харин графын parent=TGID=90 болохыг ялгаж шалгасан. Дэлгэрэнгүй: \code{docs/evidence/ps\_comparison.json}, \code{ps-el.txt}, \code{ps-eLf.txt}, \code{comparison-kernel.log}.
+Тогтвортой 7 task-ийн нэр, төлөв, PPID, TGID бүрэн таарсан. 5 process LINEAR log болон \code{ps -el}-д, 7 task DFS log болон \code{ps -eLf}-д багтсан. Thread-ийн бодит PPID=1, графын parent=TGID=90 гэдгийг ялгаж шалгав. Бүтэн тулгалт \code{docs/evidence/ps\_comparison.json}-д бий.
 
 \clearpage
 \subsection{Процесс ба thread-ийн граф}
@@ -227,8 +226,13 @@ Root PID 90-ийн дэд модонд 7 task байна. PID 95, 96 нь thread
 \end{tabularx}
 \end{table}
 Зургийн өгөгдлийг QEMU дахь бодит Linux kernel module-оос авч, \code{created.tsv} файлаар UI-д импортолсон. Графын холбоос, хүснэгтийн мөрүүд нэг snapshot-д тулгуурлана.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/linear_layout.pdf}
+\caption{Одоогийн \code{draw()} кодоос авсан LINEAR байрлал: зангилааны дугаар LINEAR, parent сум нь DFS байршлаар зөрөлдөхгүй гарна. Энэ нь хадгалсан бодит kernel snapshot-ийн вектор дүрслэл; дэлгэцийн screenshot биш.}\label{fig:linear-layout}
+\end{figure}
+Зураг~\ref{fig:linear-layout}-т LINEAR дараалал ба графын физик байршлыг ялгасан. Дээрх DFS дэлгэцийн screenshot нь өмнөх UI хувилбарт авсан бодит snapshot-ийн зураг бөгөөд энэ шинэ байрлалын шууд screenshot биш.
 
-\clearpage
 \subsection{Төлөвийн өөрчлөлт}
 \begin{figure}[H]
 \centering
@@ -252,11 +256,11 @@ Unloaded & Proc файл устсан. \\\hline
 \clearpage
 \section{Хэлэлцүүлэг}
 Граф болон хүснэгт нь kernel-ийн PID, parent, төлөвийн мэдээлэлтэй тохирч байв. Тестээр process-thread ялгалт, DFS дараалал, STOP төлөв, буруу параметр болон модулийн цэвэрлэгээг шалгасан.
-\code{stop\_machine()} ашигласнаар бүтэц өөрчлөгдөхгүй үед children/sibling холбоосыг уншина. Гэхдээ CPU-уудыг түр саатуулдаг тул энэ хэрэгжилт сургалтын Linux VM-д зориулагдсан; бага latency шаардсан системд тохиромжгүй. Snapshot хооронд PID, төлөв өөрчлөгдөнө. Хэмжээний хязгаараас болж parent багтаагүй бол root-д холбоод \code{orphan=1} гэж тэмдэглэнэ. \code{comm} нь богино нэр; бүтэн командын мөр биш. Том системд \code{max\_tasks}-ийг өсгөнө.
-Kernel ажиллагааг QEMU initramfs орчинд шалгасан. Тайлангийн UI зураг нь тэндээс авсан snapshot-ийн дүрслэл юм. Хадгалсан snapshot нь өмнөх хэмжилтийг давтан үзэхэд зориулагдсан; бодит Linux хэмжилтийг \code{--kernel} горимоор ажиллуулна.
+\code{stop\_machine()} ашигласнаар бүтэц өөрчлөгдөхгүй үед children/sibling холбоосыг уншина. 400 ms cache давтан уншилтын давтамжийг бууруулдаг ч \code{/proc/taskgraph} 0444 эрхтэй хэвээр. Иймээс энэ хэрэгжилт итгэмжлэгдсэн сургалтын Linux VM-д зориулагдсан; олон хэрэглэгчтэй, бага latency шаардсан системд тохиромжгүй. Snapshot хооронд PID, төлөв өөрчлөгдөнө. Хэмжээний хязгаараас болж parent багтаагүй бол root-д холбоод \code{orphan=1} гэж тэмдэглэнэ. \code{comm} нь богино нэр; бүтэн командын мөр биш. Том системд \code{max\_tasks}-ийг өсгөнө.
+Kernel ажиллагааг QEMU initramfs орчинд шалгасан. Тайлангийн UI зураг нь тэндээс авсан snapshot-ийн дүрслэл юм. Гарын үсгийн offline шалгалтаар түр MOK certificate үүсгэж, модулийн хуулбарт \code{sign-file}-аар signature хавсарсныг батлав; UEFI-д түлхүүр бүртгэн Secure Boot-той ачаалахыг энэ QEMU туршилт батлахгүй. Хадгалсан snapshot нь өмнөх хэмжилтийг давтан үзэхэд зориулагдсан; бодит Linux хэмжилтийг \code{--kernel} горимоор ажиллуулна.
 
 \section{Дүгнэлт}
-Процессын жагсаалтыг LINEAR болон DFS аргаар гаргах kernel module, task graph UI, snapshot хадгалах болон дахин үзэх боломжийг хэрэгжүүлэв. Нийт 47 автомат шалгалт тэнцсэн. Номын хоёр traversal болон procps-тэй харьцуулах шаардлагыг туршилтын нотолгоогоор баталгаажуулсан. Төслөөр Linux-ийн task бүтэц, process-thread холбоо, төлөв болон DFS-ийг бодит өгөгдөлтэй холбон судалсан.
+Процессын жагсаалтыг LINEAR болон DFS аргаар гаргах kernel module, task graph UI, snapshot хадгалах болон дахин үзэх боломжийг хэрэгжүүлэв. Нийт 48 автомат шалгалт тэнцсэн. Номын хоёр traversal болон procps-тэй харьцуулах шаардлагыг туршилтын нотолгоогоор баталгаажуулсан. Төслөөр Linux-ийн task бүтэц, process-thread холбоо, төлөв болон DFS-ийг бодит өгөгдөлтэй холбон судалсан.
 
 \renewcommand{\refname}{Ашигласан материал}
 \begin{thebibliography}{9}

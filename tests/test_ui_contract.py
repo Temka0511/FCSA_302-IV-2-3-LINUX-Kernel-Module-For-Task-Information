@@ -41,6 +41,12 @@ class DisplayContractTests(TestCase):
         tree_rows = sorted(rows, key=lambda task: task.dfs)
         boxes = {task.pid: call.args for task, call in
                  zip(tree_rows, app.canvas.create_rectangle.call_args_list)}
+        outlines = {task.pid: call.kwargs["outline"] for task, call in
+                    zip(tree_rows, app.canvas.create_rectangle.call_args_list)}
+        fills = {task.pid: call.kwargs["fill"] for task, call in
+                 zip(tree_rows, app.canvas.create_rectangle.call_args_list)}
+        self.assertEqual(outlines[2], "#563b8c")
+        self.assertNotEqual(outlines[2], fills[21])  # T-state's orange fill.
         edges = [call.args for call in app.canvas.create_line.call_args_list]
         expected_children = [task for task in tree_rows
                              if task.parent in boxes and task.parent != task.pid]

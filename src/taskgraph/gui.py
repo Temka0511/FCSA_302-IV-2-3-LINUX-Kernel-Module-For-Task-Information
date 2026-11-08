@@ -120,7 +120,7 @@ class App:
         ttk.Button(controls, text="Дараах", command=lambda: self.advance(1)).pack(side="left", padx=4)
         self.play_button = ttk.Button(controls, text="Тоглуулах", command=self.play)
         self.play_button.pack(side="left", padx=4)
-        ttk.Label(controls, text="  Ногоон R | Цэнхэр S | Улбар шар T/D | Ягаан Z | Улбар хүрээ = сонгосон",
+        ttk.Label(controls, text="  Ногоон R | Цэнхэр S | Улбар шар T/D | Ягаан Z | Нил ягаан хүрээ = сонгосон",
                   font=("DejaVu Sans", 9)).pack(side="left", padx=8)
         ttk.Label(outer, textvariable=self.detail, wraplength=1210).pack(anchor="w", pady=5)
         self.status_label = ttk.Label(outer, textvariable=self.status, foreground="#2f526b", wraplength=1210)
@@ -241,7 +241,7 @@ class App:
             x, y = positions[t.pid]
             tag = f"pid_{t.pid}"
             self.canvas.create_rectangle(x, y, x + 258, y + 42, fill=COLORS.get(t.state, "#e4eaf1"),
-                outline="#e68b21" if t.pid == selected_pid else "#9ab0c6",
+                outline="#563b8c" if t.pid == selected_pid else "#9ab0c6",
                 width=3 if t.pid == selected_pid else 1, tags=tag)
             self.canvas.create_text(x + 10, y + 12, anchor="w", text=f"{t.pid}  {t.comm[:22]}",
                 font=("DejaVu Sans", 10, "bold"), fill="#15324d", tags=tag)
