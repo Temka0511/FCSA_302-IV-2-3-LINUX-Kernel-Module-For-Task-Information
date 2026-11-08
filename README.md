@@ -2,7 +2,7 @@
 
 F.CSM302 Үйлдлийн систем / Бие даалт 1 / **IV-2-3** / Chapter 3, Project 3.
 
-Хувилбар: **v1.1.4-bd1**. Тайлан, гарын авлага: [docs/](docs/).
+Хувилбар: **v1.1.5-bd1**. Тайлан, гарын авлага: [docs/](docs/).
 
 Багийн бүрэлдэхүүн: [docs/TEAM.md](docs/TEAM.md). Шалгасан багш: **Г.Ганбат**.
 
@@ -90,7 +90,7 @@ Workload-ийг эхлүүлсэн тэр Terminal-д дараах команд�
 kill -STOP "$ROOT_PID"
 ```
 
-UI-д `Шинэчлэх` дарахад root-ийн төлөв `T` болж шарлана. Дараа нь:
+UI-д `Шинэчлэх` дарахад root-ийн төлөв `T` болж улбар шар болно. Дараа нь:
 
 ```bash
 kill -CONT "$ROOT_PID"
@@ -123,16 +123,18 @@ python3 scripts/verify_live.py
 ```
 
 Эхний команд parser, DFS, subtree, boundary/error, export/import болон бодит
-procfs уншилтын 28 тест ажиллуулна. Хоёр дахь команд нь ачаалагдсан kernel
+procfs уншилт ба UI/CLI дарааллын 30 тест ажиллуулна. Хоёр дахь команд нь ачаалагдсан kernel
 module шаардсан 8 интеграцийн шалгалт хийж `evidence/` хавтсанд үр дүнг хадгална.
 Үр дүнг үүссэн JSON болон log файлаас харна.
 
-Бэлтгэх үед 28/28 автомат тест, Linux 6.8.0-31 дээр QEMU TCG-ийн 17/17
+Бэлтгэх үед 30/30 автомат тест, Linux 6.8.0-31 дээр QEMU TCG-ийн 17/17
 бодит kernel шалгалт тэнцсэн. Бүтэн нотолгоо: `docs/evidence/kernel_results.json`,
 `docs/evidence/qemu-serial.log`, `docs/unit-tests.log`. QEMU туршилт нь initramfs
 орчин; Desktop VM дээр UI-г шууд `/proc/taskgraph`-тай ажиллуулан давтахыг
 хэрэглэгчийн гарын авлагад заасан. Тайлангийн kernel UI зураг нь энэ QEMU-аас
 авсан бодит snapshot-ийг импортолсон дэлгэц юм.
+Сүүлийн 17/17 дахин шалгалтын log болон JSON нь
+`docs/evidence/recheck-v1.1.5/` дотор тусдаа хадгалагдсан.
 
 
 ### `ps`-тэй тулгасан нотолгоо
@@ -194,7 +196,7 @@ bash run.sh --procfs
 - `Snapshot хадгалах / Файл нээх`: бүтэн TSV-г экспорт/импорт хийнэ.
 - Graph scroll болон дунд товчоор чирэх боломжтой; click хийвэл дэлгэрэнгүй гарна.
 
-Ногоон R, цэнхэр S, шар T/D, ягаан Z. Тасралтгүй сум нь process parenthood,
+Ногоон R, цэнхэр S, улбар шар T/D, ягаан Z. Тасралтгүй сум нь process parenthood,
 тасархай сум нь thread group membership. PPID (бодит parent process) ба graph
 parent (thread-ийн хувьд TGID) нь зориуд тусдаа багана.
 

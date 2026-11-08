@@ -24,9 +24,10 @@ def main():
             write_json(a.json, s)
         print("SOURCE:", s.meta.get("source"), "SHOWN:", len(rows), "/", total,
               "TRUNCATED:", s.meta.get("truncated"))
-        print("PID\tPPID\tTGID\tSTATE\tKIND\tDFS\tCOMM")
+        print(f"PID\tPPID\tTGID\tSTATE\tKIND\t{a.mode}\tCOMM")
         for t in rows:
-            print(f"{t.pid}\t{t.ppid}\t{t.tgid}\t{t.state}\t{t.kind}\t{t.dfs}\t{t.comm!r}")
+            rank = t.dfs if a.mode == "DFS" else t.linear
+            print(f"{t.pid}\t{t.ppid}\t{t.tgid}\t{t.state}\t{t.kind}\t{rank}\t{t.comm!r}")
     except (OSError, ValueError) as exc:
         p.exit(1, f"TaskGraph: {exc}\n")
 

@@ -113,7 +113,7 @@ ps -el
 ps -eLf
 cat /proc/taskgraph
 \end{lstlisting}
-Python тестийн хүлээгдсэн үр дүн нь Linux дээр 28 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
+Python тестийн хүлээгдсэн үр дүн нь Linux дээр 30 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
 \subsection{Нэмэлт live ба QEMU тест}
 \begin{lstlisting}
 PYTHONPATH=src python3 scripts/verify_live.py
