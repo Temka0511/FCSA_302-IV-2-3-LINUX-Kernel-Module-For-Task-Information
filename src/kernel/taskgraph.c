@@ -285,8 +285,10 @@ static int __init tg_init(void)
 	struct tg_snapshot *s;
 	struct tg_row *r;
 	unsigned int i;
-	if (max_tasks < 16 || max_tasks > TG_MAX)
+	if (max_tasks < 16 || max_tasks > TG_MAX) {
+		pr_err("taskgraph: max_tasks=%u must be in 16..%u\n", max_tasks, TG_MAX);
 		return -EINVAL;
+	}
 	/* Make the capture even if logging is disabled: detect allocation errors. */
 	s = tg_capture();
 	if (IS_ERR(s))
@@ -325,4 +327,4 @@ module_exit(tg_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("F.CSM302 Project 3 team");
 MODULE_DESCRIPTION("Task listing and real process graph snapshot");
-MODULE_VERSION("1.1");
+MODULE_VERSION("1.1.4");

@@ -120,7 +120,7 @@ class App:
         ttk.Button(controls, text="Дараах", command=lambda: self.advance(1)).pack(side="left", padx=4)
         self.play_button = ttk.Button(controls, text="Тоглуулах", command=self.play)
         self.play_button.pack(side="left", padx=4)
-        ttk.Label(controls, text="  Ногоон R | Цэнхэр S | Шар T/D | Ягаан Z | Улбар хүрээ = сонгосон",
+        ttk.Label(controls, text="  Ногоон R | Цэнхэр S | Улбар шар T/D | Ягаан Z | Улбар хүрээ = сонгосон",
                   font=("DejaVu Sans", 9)).pack(side="left", padx=8)
         ttk.Label(outer, textvariable=self.detail, wraplength=1210).pack(anchor="w", pady=5)
         self.status_label = ttk.Label(outer, textvariable=self.status, foreground="#2f526b", wraplength=1210)
@@ -196,7 +196,7 @@ class App:
             if self.snapshot.meta.get("truncated") == "1":
                 text += " АНХААР: capture cap хүрсэн, snapshot дутуу. max_tasks-ийг өсгөж дахин ачаална."
             elif len(self.rows) < total:
-                text += " Графын хязгаараас зарим зангилаа харагдахгүй; snapshot бүтэн."
+                text += " Графын хязгаарын улмаас зарим зангилаа харагдахгүй; snapshot бүтэн."
             self.status.set(text)
             self.draw()
         except ValueError as exc:
@@ -222,27 +222,34 @@ class App:
             for pid in reversed(chain):
                 depth += 1
                 depths[pid] = depth
-        positions = {t.pid: (30 + depths[t.pid] * 55, 28 + i * 63)
-                     for i, t in enumerate(self.rows)}
-        for t in self.rows:
+        # Keep tree branches contiguous even when the table/playback uses LINEAR.
+        # Reserve the gap between columns for connectors so no line crosses a box.
+        tree_rows = sorted(self.rows, key=lambda t: t.dfs)
+        positions = {t.pid: (30 + depths[t.pid] * 300, 28 + i * 63)
+                     for i, t in enumerate(tree_rows)}
+        for t in tree_rows:
             if t.parent in positions and t.parent != t.pid:
                 x, y = positions[t.pid]
                 px, py = positions[t.parent]
-                self.canvas.create_line(px + 12, py + 36, px + 12, y + 18,
-                    x, y + 18, fill="#8ba4bb", width=2, arrow="last",
+                self.canvas.create_line(px + 258, py + 21, px + 279, py + 21,
+                    px + 279, y + 21, x, y + 21, fill="#8ba4bb", width=2, arrow="last",
                     dash=(4, 3) if t.kind == "thread" else ())
-        for i, t in enumerate(self.rows):
+        selected_pid = self.rows[self.step].pid if 0 <= self.step < len(self.rows) else None
+        row_indices = {t.pid: i for i, t in enumerate(self.rows)}
+        mode = self.mode.get()
+        for t in tree_rows:
             x, y = positions[t.pid]
             tag = f"pid_{t.pid}"
             self.canvas.create_rectangle(x, y, x + 258, y + 42, fill=COLORS.get(t.state, "#e4eaf1"),
-                outline="#e68b21" if i == self.step else "#9ab0c6",
-                width=3 if i == self.step else 1, tags=tag)
+                outline="#e68b21" if t.pid == selected_pid else "#9ab0c6",
+                width=3 if t.pid == selected_pid else 1, tags=tag)
             self.canvas.create_text(x + 10, y + 12, anchor="w", text=f"{t.pid}  {t.comm[:22]}",
                 font=("DejaVu Sans", 10, "bold"), fill="#15324d", tags=tag)
             self.canvas.create_text(x + 10, y + 30, anchor="w",
-                text=f"{t.state}  |  {t.kind}  |  PPID {t.ppid}  |  DFS {t.dfs}",
+                text=f"{t.state}  |  {t.kind}  |  PPID {t.ppid}  |  {mode} {t.dfs if mode == 'DFS' else t.linear}",
                 font=("DejaVu Sans", 8), fill="#36556f", tags=tag)
-            self.canvas.tag_bind(tag, "<Button-1>", lambda _, idx=i: self.select(idx))
+            self.canvas.tag_bind(tag, "<Button-1>", lambda _, idx=row_indices[t.pid]: self.select(idx))
+        for t in self.rows:
             self.table.insert("", "end", iid=str(t.pid), values=(t.pid, t.ppid, t.state, t.kind, t.comm))
         bounds = self.canvas.bbox("all")
         self.canvas.configure(scrollregion=(0, 0, max(600, bounds[2] + 30) if bounds else 600,

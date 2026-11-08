@@ -23,7 +23,10 @@ Ubuntu Terminal-д dependency суулгаад төслийн хавтас ру�
 sudo apt update
 sudo apt install -y build-essential \
   linux-headers-$(uname -r) python3 python3-tk git procps
-git clone https://github.com/Temka0511/FCSA_302-IV-2-3-LINUX-Kernel-Module-For-Task-Information.git taskgraph
+REPO=https://github.com/Temka0511/
+REPO="${REPO}FCSA_302-IV-2-3-LINUX-"
+REPO="${REPO}Kernel-Module-For-Task-Information.git"
+git clone "$REPO" taskgraph
 cd taskgraph
 bash scripts/check_env.sh
 make -C src/kernel
@@ -52,7 +55,7 @@ Reset & Шүүлт, дараалал, playback-ийг эхний байдалд 
 Файл нээх / Хадгалах & Бүтэн TSV snapshot импортлох, экспортлох. \\\bottomrule
 \end{tabularx}
 \end{table}
-Зангилаа дээр дарвал PID, PPID, TGID, төлөв, дарааллын дэлгэрэнгүй гарна. Scroll болон дунд товчоор графыг шилжүүлнэ. Ногоон R, цэнхэр S, шар T/D, саарал I, ягаан Z/X төлөвийг илэрхийлнэ. Улбар хүрээ нь сонгосон task. Тасархай сум нь thread-ийн холбоос.
+Зангилаа дээр дарвал PID, PPID, TGID, төлөв, дарааллын дэлгэрэнгүй гарна. Scroll болон дунд товчоор графыг шилжүүлнэ. Ногоон R, цэнхэр S, улбар шар T/D, саарал I, ягаан Z/X төлөвийг илэрхийлнэ. Улбар хүрээ нь сонгосон task. Тасархай сум нь thread-ийн холбоос. LINEAR сонголтод хүснэгт, алхам болон зангилааны дугаар LINEAR дарааллаар явна; графын салбарын байршил parent-child холбоог уншихад зориулж DFS дарааллаар хэвээр байрлана.
 
 \section{Ашиглах жишээ}
 \subsection{Жишээ 1: бэлэн модыг судлах}
@@ -66,7 +69,7 @@ bash run.sh --source examples/small_tree.tsv
 \item Threads-ийн чагтыг авахад 11 worker нуугдана.
 \end{enumerate}
 \subsection{Жишээ 2: kernel-ийн хадгалсан хэмжилт}
-Файл нээхээр \code{docs/evidence/created.tsv} сонгож, Root PID=90 оруулна. 7 task бүхий мод гарна. Дараа нь \code{stopped.tsv} нээхэд root-ийн төлөв T болж шарласан байна. \code{after.tsv} нээхээс өмнө Root PID-г цэвэрлэнэ: workload аль хэдийн дууссан тул PID 90 байхгүй.
+Файл нээхээр \code{docs/evidence/created.tsv} сонгож, Root PID=90 оруулна. 7 task бүхий мод гарна. Дараа нь \code{stopped.tsv} нээхэд root-ийн төлөв T болж улбар шар болно. \code{after.tsv} нээхээс өмнө Root PID-г цэвэрлэнэ: workload аль хэдийн дууссан тул PID 90 байхгүй.
 File горимын авто шинэчлэлт нь ижил файлыг дахин уншина; бодит процессын шинэ өөрчлөлтийг хэмжихгүй.
 
 \clearpage
@@ -87,7 +90,7 @@ kill -STOP "$ROOT_PID"
 kill -CONT "$ROOT_PID"
 \end{lstlisting}
 
-Дээрх хувьсагчийг үүсгэсэн тэр Terminal-д STOP/CONT командыг ажиллуулна. \code{"\$ROOT\_PID"} нь процессын дугаарыг автоматаар авна; UI-ийн Root PID талбарт хэвлэгдсэн тоог оруулна. STOP өгөөд Шинэчлэх дарахад root-ийн төлөв T болж шарлана. CONT өгсний дараа дахин шинэчлэхэд task үргэлжлэн ажиллана. Бусад системийн task-д дохио өгөхгүй.
+Дээрх хувьсагчийг үүсгэсэн тэр Terminal-д STOP/CONT командыг ажиллуулна. \code{"\$ROOT\_PID"} нь процессын дугаарыг автоматаар авна; UI-ийн Root PID талбарт хэвлэгдсэн тоог оруулна. STOP өгөөд Шинэчлэх дарахад root-ийн төлөв T болж улбар шар болно. CONT өгсний дараа дахин шинэчлэхэд task үргэлжлэн ажиллана. Бусад системийн task-д дохио өгөхгүй.
 
 \section{Үйлдлүүдийг шалгах}
 \begin{enumerate}
@@ -128,7 +131,7 @@ PYTHONPATH=src python3 scripts/qemu_smoke.py \
 Алдаа & Шийдэл \\\midrule
 \code{/proc/taskgraph} алга & Module build, \code{sudo insmod} хийсэн эсэхийг шалгана. \\
 Invalid module format & \code{uname -r}-тэй таарсан headers суулгаж clean, build хийнэ. \\
-Key was rejected & VM-ийн Secure Boot, module signing тохиргоог шалгана. \\
+Key was rejected & Secure Boot идэвхтэй үед module-д MOK гарын үсэг зурна; доорх зааврыг дагана. \\
 File exists & Модуль ачаалагдсан байна. Шинэ код суулгаж байгаа бол UI-г хааж, \code{sudo rmmod taskgraph} хийгээд дахин ачаална. \\
 \code{tkinter} олдохгүй & Ubuntu-д \code{sudo apt install python3-tk}. \\
 DISPLAY алдаа & Desktop session-оос UI нээх эсвэл CLI ашиглана. \\
@@ -137,7 +140,30 @@ PID олдохгүй & Дууссан эсвэл тухайн snapshot-д бай
 Графын task дутуу & View limit болон Threads шүүлтийг шалгана. \\\bottomrule
 \end{tabularx}
 \end{table}
-Snapshot авахад \code{stop\_machine()} CPU-уудыг түр саатуулж children/sibling жагсаалтыг хамгаална. Иймээс тусдаа сургалтын VM-д ашиглана; latency мэдрэмтгий production орчинд зориулаагүй. Тусдаа snapshot болон ps хэмжилтүүдийн хооронд төлөв өөрчлөгдөнө. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Хадгалсан файл нь бодит хугацааны өөрчлөлтийг хэмжихгүй.
+\subsection{Secure Boot идэвхтэй үед module-д гарын үсэг зурах}
+\code{Key was rejected by service} алдаа гарвал \code{mokutil --sb-state} гэж шалгана. Өөрийн эрхтэй Ubuntu/Debian VM-д дараах алхмыг хийж болно. Түлхүүрээ repository-д оруулахгүй, бусдад дамжуулахгүй.\par
+\begin{lstlisting}
+sudo apt install -y mokutil openssl
+mkdir -m 700 -p "$HOME/taskgraph-mok"
+openssl req -new -x509 -newkey rsa:2048 -nodes \
+  -days 3650 -subj "/CN=TaskGraph module/" \
+  -addext "extendedKeyUsage=codeSigning,1.3.6.1.4.1.2312.16.1.2" \
+  -keyout "$HOME/taskgraph-mok/MOK.priv" \
+  -outform DER -out "$HOME/taskgraph-mok/MOK.der"
+chmod 600 "$HOME/taskgraph-mok/MOK.priv"
+sudo mokutil --import "$HOME/taskgraph-mok/MOK.der"
+\end{lstlisting}
+Сүүлчийн командын дараа нууц үг тохируулж, VM-ээ restart хийнэ. Ачаалах үеийн цэнхэр \textit{MokManager} дэлгэцээс \textit{Enroll MOK}-г сонгон дээрх нууц үгээр баталгаажуулж дахин ачаална. Тэгээд төслийн хавтас дотор:\par
+\begin{lstlisting}
+sudo /lib/modules/$(uname -r)/build/scripts/sign-file \
+  sha256 "$HOME/taskgraph-mok/MOK.priv" \
+  "$HOME/taskgraph-mok/MOK.der" src/kernel/taskgraph.ko
+sudo insmod src/kernel/taskgraph.ko \
+  max_tasks=4096 log_on_load=1
+\end{lstlisting}
+Module-ийг дахин build хийвэл дахин sign хийнэ. Энэ нь өөрийн үүсгэсэн түлхүүрийг системд итгэмжлүүлэх үйлдэл тул зөвхөн өөрийн VM дээр хийнэ.\par
+
+Snapshot авахад \code{stop\_machine()} CPU-уудыг түр саатуулж children/sibling жагсаалтыг хамгаална. \code{/proc/taskgraph}-ийг бүх хэрэглэгч унших эрхтэй (0444) бөгөөд унших бүрд capture хийдэг: зөвхөн итгэмжлэгдсэн сургалтын VM-д ажиллуулж, давтамжтай уншихаас зайлсхий. Latency мэдрэмтгий production орчинд зориулаагүй. Тусдаа snapshot болон ps хэмжилтүүдийн хооронд төлөв өөрчлөгдөнө. Task-ийн нэр нь богино \code{comm} утга. PID нь init namespace-ийнх тул module-ийг тусдаа Linux VM-д ашиглана. Хадгалсан файл нь бодит хугацааны өөрчлөлтийг хэмжихгүй.
 
 \section{Төслийн файлууд}
 \begin{table}[H]
