@@ -1,0 +1,1 @@
+# taskgraph version=1 source=kernel count=67 cap=4096 truncated=0 boot_ns=8532628470 duration_ns=95150 traversal=children_sibling synchronization=stop_machine

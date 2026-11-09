@@ -11,6 +11,7 @@ from taskgraph.model import read_snapshot
 
 
 EXAMPLE = Path(__file__).resolve().parents[1] / "examples" / "small_tree.tsv"
+CREATED = Path(__file__).resolve().parents[1] / "docs" / "evidence" / "created.tsv"
 
 
 class DisplayContractTests(TestCase):
@@ -68,3 +69,16 @@ class DisplayContractTests(TestCase):
         self.assertTrue(all("LINEAR " in label and "DFS " not in label for label in labels))
         self.assertEqual([call.kwargs["values"][0] for call in
                           app.table.insert.call_args_list], [task.pid for task in rows])
+
+    def test_seven_task_kernel_tree_fits_default_graph_viewport(self):
+        rows, count = read_snapshot(CREATED).view("LINEAR", root=90, limit=20)
+        self.assertEqual(count, 7)
+        app = App.__new__(App)
+        app.rows, app.step = rows, -1
+        app.mode = Mock(get=lambda: "LINEAR")
+        app.canvas, app.table = Mock(), Mock()
+        app.canvas.bbox.return_value = (0, 0, 700, 600)
+        app.table.get_children.return_value = []
+        app.draw()
+        self.assertLessEqual(max(call.args[2] for call in
+                                 app.canvas.create_rectangle.call_args_list), 650)

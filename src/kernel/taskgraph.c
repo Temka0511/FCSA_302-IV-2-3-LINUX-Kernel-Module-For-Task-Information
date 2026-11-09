@@ -376,4 +376,4 @@ module_exit(tg_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("F.CSM302 Project 3 team");
 MODULE_DESCRIPTION("Task listing and real process graph snapshot");
-MODULE_VERSION("1.1.6");
+MODULE_VERSION("1.1.7");

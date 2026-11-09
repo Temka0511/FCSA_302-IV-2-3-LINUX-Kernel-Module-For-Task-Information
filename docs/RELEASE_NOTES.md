@@ -1,6 +1,16 @@
-# TaskGraph v1.1.6-bd1
+# TaskGraph v1.1.7-bd1
 
 Linux Kernel Module for Listing Tasks — F.CSM302, IV-2-3.
+
+- Одоогийн Tk 8.6 UI-г хадгалсан бодит kernel snapshot-аар ажиллуулж,
+  DFS, LINEAR, STOP төлөвийн гурван дэлгэцийн зургийг шинээр авав.
+  `scripts/capture_ui_evidence.py`-аар дахин авах боломжтой.
+- Графын баганын хэмжээг засаж, 7 task-ийн гурван түвшний parent сум,
+  зангилаа, хүснэгтийг анхны 1280×850 цонхонд бүтнээр харуулна.
+  Viewport-ийн шинэ regression тест нэмэгдэж Python шалгалт 31/31 болсон.
+- Тайланд одоогийн UI-ийн зургуудыг оруулж, өмнөх хувилбарын зураг болон
+  вектор дүрслэлийн тайлбарыг сольсон. Шинэ модуль дээр QEMU-ийн 18/18
+  шалгалтыг давтаж, `docs/evidence/recheck-v1.1.7/`-д хадгалав.
 
 - `/proc/taskgraph`-ийн давтан ба зэрэгцсэн нээлтийг mutex, reference count,
   400 ms immutable cache-аар хязгаарлав. Хэт ойр нээлтүүд CPU-г дахин дахин
@@ -13,7 +23,7 @@ Linux Kernel Module for Listing Tasks — F.CSM302, IV-2-3.
 
 - Бие даасан шалгалтаар CLI-ийн LINEAR горимын баганын нэр ба rank буруу
   тайлбарлагдаж байсныг засав. LINEAR графын бодит parent сум, харагдах
-  дарааллыг шалгах хоёр regression тест нэмэв (30/30).
+  дарааллыг шалгах хоёр regression тест нэмэв.
 - README болон тайлангийн T төлөвийн өнгөний тайлбарыг бодит улбар шар өнгөтэй
   тааруулав. Шинэ шалгалтын log, JSON: `docs/evidence/recheck-v1.1.6/`.
 
@@ -37,7 +47,7 @@ Linux Kernel Module for Listing Tasks — F.CSM302, IV-2-3.
   `children/sibling` DFS. Thread-ээс үүсгэсэн хүүхдийг мөн хамруулна.
 - Snapshot-ийн жагсаалтыг `stop_machine()` хамгаална. Сургалтын Linux VM-д
   ашиглана; snapshot авах бүр CPU-ууд түр саатна.
-- Linux 6.8.0-31 дээр 18 kernel шалгалт, Python 3.12 дээр 30 тест тэнцсэн.
+- Linux 6.8.0-31 дээр 18 kernel шалгалт, Python 3.12 дээр 31 тест тэнцсэн.
 - Procps-ng 4.0.4-ийн `ps -el`, `ps -eLf` гаралт болон task бүрийн
   харьцуулсан нотолгоо `docs/evidence/` хавтсанд бий.
 - Шинэчилсэн тайлан, хэрэглэгчийн болон ажиллагааны гарын авлага хавсаргав.

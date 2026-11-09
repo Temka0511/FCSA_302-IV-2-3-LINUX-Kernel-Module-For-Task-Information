@@ -1,0 +1,3 @@
+MOK certificate: code signing EKU OK
+Kernel module copy: signature appended OK
+UEFI enrollment and Secure Boot loading require a separate VM test.

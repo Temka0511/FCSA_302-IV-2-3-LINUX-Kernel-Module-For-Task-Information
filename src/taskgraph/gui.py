@@ -225,14 +225,15 @@ class App:
         # Keep tree branches contiguous even when the table/playback uses LINEAR.
         # Reserve the gap between columns for connectors so no line crosses a box.
         tree_rows = sorted(self.rows, key=lambda t: t.dfs)
-        positions = {t.pid: (30 + depths[t.pid] * 300, 28 + i * 63)
+        node_width, column_step = 180, 200
+        positions = {t.pid: (30 + depths[t.pid] * column_step, 28 + i * 63)
                      for i, t in enumerate(tree_rows)}
         for t in tree_rows:
             if t.parent in positions and t.parent != t.pid:
                 x, y = positions[t.pid]
                 px, py = positions[t.parent]
-                self.canvas.create_line(px + 258, py + 21, px + 279, py + 21,
-                    px + 279, y + 21, x, y + 21, fill="#8ba4bb", width=2, arrow="last",
+                self.canvas.create_line(px + node_width, py + 21, px + node_width + 10, py + 21,
+                    px + node_width + 10, y + 21, x, y + 21, fill="#8ba4bb", width=2, arrow="last",
                     dash=(4, 3) if t.kind == "thread" else ())
         selected_pid = self.rows[self.step].pid if 0 <= self.step < len(self.rows) else None
         row_indices = {t.pid: i for i, t in enumerate(self.rows)}
@@ -240,13 +241,13 @@ class App:
         for t in tree_rows:
             x, y = positions[t.pid]
             tag = f"pid_{t.pid}"
-            self.canvas.create_rectangle(x, y, x + 258, y + 42, fill=COLORS.get(t.state, "#e4eaf1"),
+            self.canvas.create_rectangle(x, y, x + node_width, y + 42, fill=COLORS.get(t.state, "#e4eaf1"),
                 outline="#563b8c" if t.pid == selected_pid else "#9ab0c6",
                 width=3 if t.pid == selected_pid else 1, tags=tag)
-            self.canvas.create_text(x + 10, y + 12, anchor="w", text=f"{t.pid}  {t.comm[:22]}",
+            self.canvas.create_text(x + 10, y + 12, anchor="w", text=f"{t.pid}  {t.comm[:16]}",
                 font=("DejaVu Sans", 10, "bold"), fill="#15324d", tags=tag)
             self.canvas.create_text(x + 10, y + 30, anchor="w",
-                text=f"{t.state}  |  {t.kind}  |  PPID {t.ppid}  |  {mode} {t.dfs if mode == 'DFS' else t.linear}",
+                text=f"{t.state} | PPID {t.ppid} | {mode} {t.dfs if mode == 'DFS' else t.linear}",
                 font=("DejaVu Sans", 8), fill="#36556f", tags=tag)
             self.canvas.tag_bind(tag, "<Button-1>", lambda _, idx=row_indices[t.pid]: self.select(idx))
         for t in self.rows:
