@@ -195,8 +195,6 @@ class App:
                 text = "FILE: " + Path(self.source_path).name + " | " + text
             if self.snapshot.meta.get("truncated") == "1":
                 text += " АНХААР: capture cap хүрсэн, snapshot дутуу. max_tasks-ийг өсгөж дахин ачаална."
-            elif len(self.rows) < total:
-                text += " Графын хязгаарын улмаас зарим зангилаа харагдахгүй; snapshot бүтэн."
             self.status.set(text)
             self.draw()
         except ValueError as exc:
