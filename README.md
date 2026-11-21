@@ -2,7 +2,7 @@
 
 F.CSM302 Үйлдлийн систем / Бие даалт 1 / **IV-2-3** / Chapter 3, Project 3.
 
-Хувилбар: **v1.1.7-bd1**. Тайлан, гарын авлага: [docs/](docs/).
+Хувилбар: **v1.1.8-bd1** (UI засвар; kernel module v1.1.7). Тайлан, гарын авлага: [docs/](docs/).
 
 Багийн бүрэлдэхүүн: [docs/TEAM.md](docs/TEAM.md). Шалгасан багш: **Г.Ганбат**.
 
@@ -125,12 +125,12 @@ bash scripts/check_signing.sh
 ```
 
 Эхний команд parser, DFS, subtree, boundary/error, export/import болон бодит
-procfs уншилт ба UI/CLI дарааллын 31 тест ажиллуулна. Хоёр дахь команд нь ачаалагдсан kernel
+procfs уншилт ба UI/CLI дарааллын 32 тест ажиллуулна. Хоёр дахь команд нь ачаалагдсан kernel
 module шаардсан 8 интеграцийн шалгалт хийж `evidence/` хавтсанд үр дүнг хадгална.
 Сүүлийн команд нь түр түлхүүрээр модулийн хуулбарт гарын үсэг зурж шалгана;
 UEFI-д түлхүүр бүртгэхгүй, эх модулийг өөрчлөхгүй. Үр дүнг JSON болон log файлаас харна.
 
-Бэлтгэх үед 31/31 автомат тест, Linux 6.8.0-31 дээр QEMU TCG-ийн 18/18
+Энэ засварт 32/32 автомат тест тэнцсэн; өмнөх kernel v1.1.7 хувилбарын Linux 6.8.0-31 дээр QEMU TCG-ийн 18/18
 бодит kernel шалгалт тэнцсэн. Бүтэн нотолгоо: `docs/evidence/kernel_results.json`,
 `docs/evidence/qemu-serial.log`, `docs/unit-tests.log`. QEMU туршилт нь initramfs
 орчин; Desktop VM дээр UI-г шууд `/proc/taskgraph`-тай ажиллуулан давтахыг
@@ -251,7 +251,7 @@ parent (thread-ийн хувьд TGID) нь зориуд тусдаа баган
 ```text
 src/kernel/             C module + Kbuild Makefile
 src/taskgraph/          shared model, GUI, CLI, workload
-tests/                  28 automated checks
+tests/                  32 automated checks (v1.1.8-bd1)
 examples/               explicit fixture data
 scripts/                environment and live verification
 docs/                   report, manual, evidence and team metadata
