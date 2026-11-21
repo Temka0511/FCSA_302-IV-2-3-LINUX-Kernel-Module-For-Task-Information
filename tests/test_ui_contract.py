@@ -12,9 +12,42 @@ from taskgraph.model import read_snapshot
 
 EXAMPLE = Path(__file__).resolve().parents[1] / "examples" / "small_tree.tsv"
 CREATED = Path(__file__).resolve().parents[1] / "docs" / "evidence" / "created.tsv"
+AFTER = Path(__file__).resolve().parents[1] / "docs" / "evidence" / "after.tsv"
 
 
 class DisplayContractTests(TestCase):
+    def test_disappeared_root_clears_old_graph_and_details(self):
+        app = App.__new__(App)
+        app.snapshot = read_snapshot(CREATED)
+        app.rows, _ = app.snapshot.view(root=90)
+        app.step, app.playing = 2, True
+        app.root_pid = Mock(get=lambda: "90")
+        app.mode = Mock(get=lambda: "DFS")
+        app.limit = Mock(get=lambda: "150")
+        app.threads = Mock(get=lambda: True)
+        app.source_kind = Mock(get=lambda: "file")
+        app.interval_value = Mock(return_value=1500)
+        app.play_button, app.summary = Mock(), Mock()
+        app.detail, app.status_label, app.status = Mock(), Mock(), Mock()
+        app.canvas, app.table = Mock(), Mock()
+        app.table.get_children.return_value = ["90", "91"]
+        app.canvas.bbox.return_value = None
+
+        app.snapshot = read_snapshot(AFTER)
+        app.apply()
+
+        self.assertEqual(app.rows, [])
+        self.assertEqual(app.step, -1)
+        self.assertFalse(app.playing)
+        app.canvas.delete.assert_called_with("all")
+        app.table.delete.assert_called_once_with("90", "91")
+        self.assertIn("PID 90", app.status.set.call_args.args[0])
+        self.assertNotIn("90\t", app.snapshot.dump())
+        self.assertEqual(app.summary.set.call_args.args[0].split("  |  ")[0],
+                         "FILE | KERNEL snapshot")
+        app.source_kind.get = lambda: "kernel"
+        self.assertEqual(app.source_label(), "LIVE | /proc/taskgraph")
+
     def test_linear_cli_shows_linear_ranks(self):
         output = StringIO()
         with patch("sys.argv", ["taskgraph.cli", "--source", str(EXAMPLE),
