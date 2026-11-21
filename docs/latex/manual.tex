@@ -57,6 +57,9 @@ Reset & Шүүлт, дараалал, playback-ийг эхний байдалд 
 \end{table}
 Зангилаа дээр дарвал PID, PPID, TGID, төлөв, дарааллын дэлгэрэнгүй гарна. Scroll болон дунд товчоор графыг шилжүүлнэ. Ногоон R, цэнхэр S, улбар шар T/D, саарал I, ягаан Z/X төлөвийг илэрхийлнэ. Нил ягаан хүрээ нь сонгосон task. Тасархай сум нь thread-ийн холбоос. LINEAR сонголтод хүснэгт, алхам болон зангилааны дугаар LINEAR дарааллаар явна; графын салбарын байршил parent-child холбоог уншихад зориулж DFS дарааллаар хэвээр байрлана.
 
+Файл нээхэд дээд мөр \code{FILE | KERNEL snapshot}, шууд module-оос уншихад
+\code{LIVE | /proc/taskgraph} гэж харагдана. Эхнийх нь хадгалсан хэмжилт юм.
+
 \section{Ашиглах жишээ}
 \subsection{Жишээ 1: бэлэн модыг судлах}
 \begin{enumerate}
@@ -69,7 +72,7 @@ bash run.sh --source examples/small_tree.tsv
 \item Threads-ийн чагтыг авахад 11 worker нуугдана.
 \end{enumerate}
 \subsection{Жишээ 2: kernel-ийн хадгалсан хэмжилт}
-Файл нээхээр \code{docs/evidence/created.tsv} сонгож, Root PID=90 оруулна. 7 task бүхий мод гарна. Дараа нь \code{stopped.tsv} нээхэд root-ийн төлөв T болж улбар шар болно. \code{after.tsv} нээхээс өмнө Root PID-г цэвэрлэнэ: workload аль хэдийн дууссан тул PID 90 байхгүй.
+Файл нээхээр \code{docs/evidence/created.tsv} сонгож, Root PID=90 оруулна. 7 task бүхий мод гарна. Дараа нь \code{stopped.tsv} нээхэд root-ийн төлөв T болж улбар шар болно. \code{after.tsv} нээхэд Root PID=90 хэвээр байвал граф ба хүснэгт хоосорч, PID алга гэсэн мэдэгдэл гарна. Бусад task-ийг үзэхийн тулд Root PID-г цэвэрлэнэ.
 File горимын авто шинэчлэлт нь ижил файлыг дахин уншина; бодит процессын шинэ өөрчлөлтийг хэмжихгүй.
 
 \clearpage
@@ -113,7 +116,7 @@ ps -el
 ps -eLf
 cat /proc/taskgraph
 \end{lstlisting}
-Python тестийн хүлээгдсэн үр дүн нь Linux дээр 31 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
+Python тестийн хүлээгдсэн үр дүн нь Linux дээр 32 тест OK. LINEAR log-ийг process leader-уудтай, DFS log-ийг thread-үүдтэй харьцуулна. PID 0 нь \code{init\_task}. Хэмжилтийн агшин өөр учраас түр task, төлөвийн зөрүү гарч болно.
 \subsection{Нэмэлт live ба QEMU тест}
 \begin{lstlisting}
 PYTHONPATH=src python3 scripts/verify_live.py
