@@ -178,12 +178,23 @@ class App:
             root = int(self.root_pid.get()) if self.root_pid.get().strip() else None
             if root is not None and root < 0:
                 raise ValueError("PID сөрөг байж болохгүй.")
+            if root is not None and all(t.pid != root for t in self.snapshot.tasks):
+                self.rows = []
+                self.step = -1
+                self.playing = False
+                self.play_button.config(text="Тоглуулах")
+                self.summary.set(f"{self.source_label()}  |  Snapshot: {len(self.snapshot.tasks)} tasks  |  Харагдаж буй: 0/0")
+                self.detail.set("Сонгосон PID энэ snapshot-д байхгүй.")
+                self.status_label.config(foreground="#a72c47")
+                self.status.set(f"PID {root} энэ snapshot-д алга. Root PID-г цэвэрлэж дахин хэрэглэнэ.")
+                self.draw()
+                return
             self.rows, total = self.snapshot.view(self.mode.get(), root,
                 int(self.limit.get()), self.threads.get())
             self.step = min(self.step, len(self.rows) - 1)
             counts = Counter(t.state for t in self.snapshot.tasks)
             source = self.snapshot.meta.get("source", "unknown")
-            self.summary.set(f"SOURCE: {source.upper()}  |  Snapshot: {len(self.snapshot.tasks)} tasks  |  "
+            self.summary.set(f"{self.source_label()}  |  Snapshot: {len(self.snapshot.tasks)} tasks  |  "
                              f"Харагдаж буй: {len(self.rows)}/{total}  |  " +
                              "  ".join(f"{k}={v}" for k, v in sorted(counts.items())))
             self.status_label.config(foreground="#2f526b")
@@ -201,6 +212,14 @@ class App:
             self.autorefresh.set(False)
             self.status_label.config(foreground="#a72c47")
             self.status.set(f"Оролтын алдаа: {exc}")
+
+    def source_label(self):
+        source = self.snapshot.meta.get("source", "unknown").upper()
+        if self.source_kind.get() == "file":
+            return f"FILE | {source} snapshot"
+        if self.source_kind.get() == "kernel":
+            return "LIVE | /proc/taskgraph"
+        return f"SOURCE: {source}"
 
     def draw(self):
         self.canvas.delete("all")
