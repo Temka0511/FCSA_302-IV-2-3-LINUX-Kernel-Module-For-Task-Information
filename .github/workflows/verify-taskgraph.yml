@@ -1,0 +1,51 @@
+name: Verify TaskGraph on Ubuntu
+on:
+  push:
+    branches: [fix/peer-review-r1-r4]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build and Tk dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y linux-headers-$(uname -r) python3-tk xvfb xauth
+      - name: Build and exercise the module and application
+        env:
+          PYTHONPATH: src
+        run: |
+          /usr/bin/python3 -m unittest discover -s tests
+          make -C src/kernel
+          sudo insmod src/kernel/taskgraph.ko
+          trap 'sudo rmmod taskgraph' EXIT
+          /usr/bin/python3 scripts/verify_live.py
+          /usr/bin/python3 -m taskgraph.cli --source /proc/taskgraph --mode LINEAR --limit 5
+          sudo dmesg > "$RUNNER_TEMP/kernel.log"
+          grep -qm1 'taskgraph DFS' "$RUNNER_TEMP/kernel.log"
+          grep -qm1 'taskgraph LINEAR' "$RUNNER_TEMP/kernel.log"
+          xvfb-run -a /usr/bin/python3 - <<'PY'
+          import tkinter as tk
+          from taskgraph.gui import App
+          root = tk.Tk()
+          app = App(root)
+          root.update()
+          assert app.rows and app.summary.get().startswith("LIVE | /proc/taskgraph")
+          app.source_kind.set("file")
+          app.root_pid.set("90")
+          for name, count in [("created", 7), ("stopped", 7), ("after", 0)]:
+              app.source_path = f"docs/evidence/{name}.tsv"
+              app.refresh()
+              root.update()
+              assert len(app.rows) == len(app.table.get_children()) == count
+              assert app.summary.get().startswith("FILE | KERNEL snapshot")
+              if name == "after":
+                  assert not app.canvas.find_all()
+          root.destroy()
+          PY
+          sudo rmmod taskgraph
+          trap - EXIT
+          test ! -e /proc/taskgraph
